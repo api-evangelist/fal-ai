@@ -1,0 +1,131 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: fal
+providerId: fal-ai
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - AI
+  - Generative AI
+  - Inference
+  - GPU
+  - Per-Output
+description: 'Reconciled plans and pricing for fal Model APIs, Serverless, and Compute. Per-output pricing for
+  image/video/audio model APIs; per-second/per-hour billing for dedicated GPU instances and Serverless apps.
+  Source: fal.ai/pricing.'
+sources:
+  - https://fal.ai/pricing
+  - https://fal.ai/docs/pricing
+  - https://fal.ai/models
+plans:
+  - id: fal-pay-as-you-go
+    name: Pay-as-you-go
+    type: usage-based
+    description: Default account model. No subscription, no minimums. All Model APIs and Serverless/Compute usage
+      billed by output, by GPU-second, or by GPU-hour. Add credits in any amount.
+    entries:
+      - label: Minimum top-up
+        name: credits_minimum
+        type: prepay
+        metric: usd
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '5.00'
+        userMultiplied: false
+        description: Starter credit purchase.
+    elements:
+      - name: Access to 1,000+ generative models
+      - name: Queue, streaming, realtime WebSocket, and webhook delivery
+      - name: 99.99% uptime SLA
+      - name: Standard support (community Discord)
+  - id: fal-enterprise
+    name: Enterprise
+    type: contract
+    description: Custom volume pricing, private endpoints, dedicated capacity, SSO, SOC 2 reports, and named
+      support. Contact sales.
+    entries:
+      - label: Custom
+        name: contract
+        type: contract
+        metric: contract
+        limit: -1
+        timeFrame: contract
+        geo: global
+        unit: 1
+        price: 'Call'
+        userMultiplied: false
+    elements:
+      - name: Volume discounts on Model APIs
+      - name: Private endpoints
+      - name: Reserved GPU capacity
+      - name: SSO and audit logs
+      - name: SOC 2 Type II report
+      - name: Named support
+modelPricing:
+  - category: Image
+    entries:
+      - id: seedream-v4
+        unit: image
+        price: '0.03'
+        notes: 33 images per $1.
+      - id: flux-kontext-pro
+        unit: image
+        price: '0.04'
+        notes: 25 images per $1.
+      - id: nano-banana
+        unit: image
+        price: '0.0398'
+        notes: ~25 images per $1.
+      - id: qwen-image
+        unit: megapixel
+        price: '0.02'
+        notes: 50 MP per $1, normalized.
+      - id: flux-schnell
+        unit: megapixel
+        price: '0.003'
+        notes: Fast 4-step FLUX variant.
+  - category: Video
+    entries:
+      - id: wan-2.5
+        unit: video_second
+        price: '0.05'
+        notes: 20 seconds per $1.
+      - id: kling-2.5-turbo-pro
+        unit: video_second
+        price: '0.07'
+        notes: 14 seconds per $1.
+      - id: veo-3
+        unit: video_second
+        price: '0.40'
+        notes: 3 seconds per $1; flagship Google Veo 3.
+      - id: ovi
+        unit: video
+        price: '0.20'
+        notes: 5 videos per $1.
+  - category: Audio
+    entries:
+      - id: inworld-tts-1.5
+        unit: 1k_characters
+        price: 'see catalog'
+        notes: Per-character pricing.
+gpuPricing:
+  - id: h100
+    name: NVIDIA H100 (80GB)
+    perHour: '1.89'
+    perSecond: '0.0005'
+  - id: h200
+    name: NVIDIA H200 (141GB)
+    perHour: '2.10'
+    perSecond: '0.0006'
+  - id: a100
+    name: NVIDIA A100 (40GB)
+    perHour: '0.99'
+    perSecond: '0.0003'
+  - id: b200
+    name: NVIDIA B200 (184GB)
+    perHour: 'Call'
+    perSecond: 'Call'

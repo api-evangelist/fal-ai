@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://queue.fal.run/fal-ai/veo-3",
+    "headers": {
+      "Authorization": "Key $FAL_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "prompt": "A peregrine falcon dives through cloud layers at sunset, slow motion, 4k cinematic",
+      "duration": 5,
+      "aspect_ratio": "16:9",
+      "seed": 314159
+    }
+  },
+  "queued_response": {
+    "request_id": "5b8e1f02-2c3a-44d8-a7be-9f0c4d6a7e88",
+    "status": "IN_QUEUE",
+    "status_url": "https://queue.fal.run/fal-ai/veo-3/requests/5b8e1f02-2c3a-44d8-a7be-9f0c4d6a7e88/status"
+  },
+  "final_result": {
+    "video": {
+      "url": "https://v3.fal.media/files/falcon/veo3-output.mp4",
+      "duration": 5.0,
+      "fps": 24,
+      "content_type": "video/mp4"
+    },
+    "seed": 314159,
+    "prompt": "A peregrine falcon dives through cloud layers at sunset, slow motion, 4k cinematic"
+  }
+}

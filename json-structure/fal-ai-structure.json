@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-structure.github.io/draft-1/schema.json",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fal-ai/main/json-structure/fal-ai-structure.json",
+  "title": "fal Data Structures",
+  "description": "Core entities exchanged by the fal Model APIs, Storage API, Serverless Platform API, and dashboard.",
+  "types": {
+    "InferenceRequest": {
+      "type": "object",
+      "description": "Job submitted to the queue at https://queue.fal.run/{model_owner}/{model_name}.",
+      "properties": {
+        "model_owner": { "type": "string" },
+        "model_name": { "type": "string" },
+        "body": { "type": "object", "description": "Model-specific input." },
+        "fal_webhook": { "type": "string", "format": "uri" },
+        "sync_mode": { "type": "boolean" }
+      }
+    },
+    "QueueAccepted": {
+      "type": "object",
+      "properties": {
+        "request_id": { "type": "string", "format": "uuid" },
+        "status": { "type": "string" },
+        "status_url": { "type": "string", "format": "uri" },
+        "response_url": { "type": "string", "format": "uri" },
+        "cancel_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "QueueStatus": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["IN_QUEUE", "IN_PROGRESS", "COMPLETED", "FAILED", "CANCELED"] },
+        "queue_position": { "type": "integer" },
+        "logs": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "ImageOutput": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "width": { "type": "integer" },
+        "height": { "type": "integer" },
+        "content_type": { "type": "string" }
+      }
+    },
+    "VideoOutput": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "duration": { "type": "number" },
+        "fps": { "type": "number" },
+        "content_type": { "type": "string" }
+      }
+    },
+    "AudioOutput": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "duration": { "type": "number" },
+        "content_type": { "type": "string" }
+      }
+    },
+    "UploadInitiate": {
+      "type": "object",
+      "properties": {
+        "content_type": { "type": "string" },
+        "file_name": { "type": "string" }
+      }
+    },
+    "UploadIssued": {
+      "type": "object",
+      "properties": {
+        "upload_url": { "type": "string", "format": "uri" },
+        "file_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "ServerlessApp": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "endpoint": { "type": "string", "format": "uri" },
+        "gpu": { "type": "string" },
+        "keep_alive": { "type": "integer" },
+        "min_concurrency": { "type": "integer" },
+        "max_concurrency": { "type": "integer" },
+        "public": { "type": "boolean" }
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["image", "video", "audio", "3d", "multimodal", "text"] },
+        "owner": { "type": "string" },
+        "price_per_output": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,256 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: fal Model APIs — Queue
+  description: 'fal Model APIs — Queue. 4 operations (submit, status, result, cancel) for invoking 1,000+ generative
+    models through the unified https://queue.fal.run REST surface. Self-contained Naftiko capability covering
+    one fal business surface.'
+  tags:
+  - Fal
+  - Generative AI
+  - Queue
+  - Inference
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    FAL_KEY: FAL_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: model-apis-queue
+    baseUri: https://queue.fal.run
+    description: fal Model APIs — Queue business capability. Self-contained, no shared references.
+    resources:
+    - name: model-invocation
+      path: /{model_owner}/{model_name}
+      operations:
+      - name: submitrequest
+        method: POST
+        description: Submit a new inference job and receive a request_id.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: model_owner
+          in: path
+          type: string
+          required: true
+        - name: model_name
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Model-specific JSON input.
+          required: true
+    - name: request-status
+      path: /{model_owner}/{model_name}/requests/{request_id}/status
+      operations:
+      - name: getstatus
+        method: GET
+        description: Get current status (IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED, CANCELED).
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: model_owner
+          in: path
+          type: string
+          required: true
+        - name: model_name
+          in: path
+          type: string
+          required: true
+        - name: request_id
+          in: path
+          type: string
+          required: true
+    - name: request-result
+      path: /{model_owner}/{model_name}/requests/{request_id}
+      operations:
+      - name: getresult
+        method: GET
+        description: Retrieve the final inference output once the request has completed.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: model_owner
+          in: path
+          type: string
+          required: true
+        - name: model_name
+          in: path
+          type: string
+          required: true
+        - name: request_id
+          in: path
+          type: string
+          required: true
+    - name: request-cancel
+      path: /{model_owner}/{model_name}/requests/{request_id}/cancel
+      operations:
+      - name: cancel
+        method: PUT
+        description: Cancel an in-queue or in-progress request.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: model_owner
+          in: path
+          type: string
+          required: true
+        - name: model_name
+          in: path
+          type: string
+          required: true
+        - name: request_id
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: 'Key {{env.FAL_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: model-apis-queue-rest
+    port: 8080
+    description: REST adapter for fal Model APIs — Queue. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/models/{model_owner}/{model_name}/requests
+      name: model-invocation
+      description: REST surface for submitting model inference jobs.
+      operations:
+      - method: POST
+        name: submitrequest
+        description: Submit a new inference job.
+        call: model-apis-queue.submitrequest
+        with:
+          model_owner: rest.path.model_owner
+          model_name: rest.path.model_name
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/models/{model_owner}/{model_name}/requests/{request_id}/status
+      name: request-status
+      description: REST surface for fetching job status.
+      operations:
+      - method: GET
+        name: getstatus
+        description: Get inference job status.
+        call: model-apis-queue.getstatus
+        with:
+          model_owner: rest.path.model_owner
+          model_name: rest.path.model_name
+          request_id: rest.path.request_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/models/{model_owner}/{model_name}/requests/{request_id}
+      name: request-result
+      description: REST surface for fetching final result.
+      operations:
+      - method: GET
+        name: getresult
+        description: Get inference job result.
+        call: model-apis-queue.getresult
+        with:
+          model_owner: rest.path.model_owner
+          model_name: rest.path.model_name
+          request_id: rest.path.request_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/models/{model_owner}/{model_name}/requests/{request_id}/cancel
+      name: request-cancel
+      description: REST surface for canceling jobs.
+      operations:
+      - method: PUT
+        name: cancel
+        description: Cancel an inference job.
+        call: model-apis-queue.cancel
+        with:
+          model_owner: rest.path.model_owner
+          model_name: rest.path.model_name
+          request_id: rest.path.request_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: model-apis-queue-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for fal Model APIs — Queue. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: fal-submit-request
+      description: Submit a generative model inference job to fal.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: model-apis-queue.submitrequest
+      with:
+        model_owner: tools.model_owner
+        model_name: tools.model_name
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fal-get-status
+      description: Get the current status of a fal inference job.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: model-apis-queue.getstatus
+      with:
+        model_owner: tools.model_owner
+        model_name: tools.model_name
+        request_id: tools.request_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fal-get-result
+      description: Retrieve the final output of a completed fal inference job.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: model-apis-queue.getresult
+      with:
+        model_owner: tools.model_owner
+        model_name: tools.model_name
+        request_id: tools.request_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fal-cancel-request
+      description: Cancel an in-queue or in-progress fal inference job.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: model-apis-queue.cancel
+      with:
+        model_owner: tools.model_owner
+        model_name: tools.model_name
+        request_id: tools.request_id
+      outputParameters:
+      - type: object
+        mapping: $.

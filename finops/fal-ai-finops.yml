@@ -1,0 +1,119 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: fal
+providerId: fal-ai
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - FinOps
+  - Cost Management
+  - FOCUS
+  - AI
+  - GPU
+  - Inference
+description: 'FOCUS-aligned FinOps definition for fal — generative media inference. Three distinct billing lanes:
+  per-output Model APIs, per-second/per-hour Serverless and Compute GPU rentals, and stored asset egress from the
+  fal CDN.'
+sources:
+  - https://fal.ai/pricing
+  - https://fal.ai/docs
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: fal (Features and Labels, Inc.)
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+    - Usage
+    - Purchase
+    - Credit
+    - Adjustment
+  primaryUnit: output
+  secondaryUnits:
+    - megapixel
+    - video_second
+    - audio_minute
+    - gpu_second
+    - gpu_hour
+    - cdn_gb
+focusColumns:
+  ServiceName: fal Model APIs
+  ServiceCategory: AI and Machine Learning
+  ProviderName: fal
+  PublisherName: fal
+  InvoiceIssuerName: Features and Labels, Inc.
+  PricingCategory: Usage-Based
+  PricingUnit: output
+  BillingCurrency: USD
+meters:
+  - name: image_outputs
+    unit: image
+    aggregation: sum
+    dimensions:
+      - model_id
+      - api_key
+      - timestamp
+  - name: image_megapixels
+    unit: megapixel
+    aggregation: sum
+    dimensions:
+      - model_id
+      - api_key
+  - name: video_seconds
+    unit: video_second
+    aggregation: sum
+    dimensions:
+      - model_id
+      - api_key
+      - aspect_ratio
+  - name: audio_minutes
+    unit: audio_minute
+    aggregation: sum
+    dimensions:
+      - model_id
+      - api_key
+  - name: gpu_seconds
+    unit: gpu_second
+    aggregation: sum
+    dimensions:
+      - gpu_class
+      - app_id
+      - instance_id
+  - name: gpu_hours
+    unit: gpu_hour
+    aggregation: sum
+    dimensions:
+      - gpu_class
+      - instance_id
+  - name: cdn_egress_gb
+    unit: cdn_gb
+    aggregation: sum
+    dimensions:
+      - file_id
+discounts:
+  - name: Volume / Enterprise
+    description: Negotiated discounts on Model API output prices and reserved GPU capacity for enterprise contracts.
+  - name: Day-zero promo credits
+    description: Promotional credits issued at launch for newly hosted day-zero models.
+exports:
+  - format: CSV
+    surface: Dashboard usage export
+  - format: JSON
+    surface: GET /billing/usage (programmatic)
+  - format: PDF
+    surface: GET /billing/invoices (monthly statements)
+notes:
+  - Model APIs are billed per output (per image, per video-second, per audio-minute, or per megapixel) depending
+    on model; the unit appears in the fal.ai/pricing table.
+  - Serverless apps and dedicated Compute instances are billed per GPU-second (Serverless) and per GPU-hour or
+    GPU-second (Compute) — H100 / H200 / A100 / B200 classes.
+  - CDN delivery from v3.fal.media is included with model output today; egress accounting is being introduced
+    for high-volume serving.

@@ -1,0 +1,83 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: fal Storage API — Files
+  description: 'fal Storage API — Files. 1 operation. Lead operation: Initiate Asset Upload. Self-contained Naftiko
+    capability for uploading binary inputs (images, audio, video, control maps) to fal''s CDN so they can be passed
+    by URL to model APIs.'
+  tags:
+  - Fal
+  - Storage
+  - Files
+  - CDN
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    FAL_KEY: FAL_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: storage-files
+    baseUri: https://rest.alpha.fal.ai
+    description: fal Storage API — Files business capability. Self-contained, no shared references.
+    resources:
+    - name: storage-upload
+      path: /storage/upload/initiate
+      operations:
+      - name: initiateupload
+        method: POST
+        description: Request a signed upload URL and a public CDN URL for an asset.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (`content_type`, `file_name`).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: 'Key {{env.FAL_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: storage-files-rest
+    port: 8080
+    description: REST adapter for fal Storage API — Files.
+    resources:
+    - path: /v1/storage/uploads
+      name: storage-upload
+      description: REST surface for initiating uploads.
+      operations:
+      - method: POST
+        name: initiateupload
+        description: Initiate a new asset upload.
+        call: storage-files.initiateupload
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: storage-files-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for fal Storage API — Files.
+    tools:
+    - name: fal-initiate-upload
+      description: Initiate a signed upload to fal's CDN and return a public URL for use in model APIs.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: storage-files.initiateupload
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

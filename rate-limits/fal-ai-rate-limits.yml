@@ -1,0 +1,60 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: fal
+providerId: fal-ai
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - AI
+  - Rate Limiting
+  - Concurrency
+  - Quota
+description: Reconciled rate limits for fal Model APIs. fal primarily uses per-account concurrency limits (number
+  of concurrently running requests per model class) rather than RPM throttling. Enterprise contracts can lift these
+  limits or reserve capacity.
+sources:
+  - https://fal.ai/docs
+  - https://fal.ai/pricing
+  - https://status.fal.ai
+algorithm: concurrency
+headers:
+  remaining: x-fal-concurrency-remaining
+  limit: x-fal-concurrency-limit
+responseCodes:
+  throttled: 429
+  paymentRequired: 402
+  quotaExceeded: 429
+limits:
+  - tier: Pay-as-you-go (default)
+    surface: Model APIs - Image
+    concurrency: 4
+    note: Number of simultaneous in-flight image generation requests per account. Upgrade via the dashboard.
+  - tier: Pay-as-you-go (default)
+    surface: Model APIs - Video
+    concurrency: 2
+    note: Concurrent video generation jobs per account; video jobs hold GPU for many seconds.
+  - tier: Pay-as-you-go (default)
+    surface: Model APIs - Audio
+    concurrency: 4
+    note: Concurrent audio synthesis jobs per account.
+  - tier: Pay-as-you-go (default)
+    surface: Realtime WebSocket
+    concurrency: 1
+    note: One realtime session per key on default tier.
+  - tier: Enterprise
+    surface: All Model APIs
+    concurrency: negotiated
+    note: Reserved capacity and lifted concurrency per contract.
+quotas:
+  - dimension: storage
+    surface: fal CDN (v3.fal.media)
+    limit: per-account, generous default; signed upload URLs expire shortly after issue.
+  - dimension: file size
+    surface: fal Storage API upload
+    limit: see dashboard
+notes:
+  - 429 indicates concurrency exhaustion. Clients should back off and retry; the queue API itself is the preferred
+    pattern because it eliminates client-side rate limiting concerns by accepting jobs and reporting completion.
+  - 402 indicates the account has insufficient credits.

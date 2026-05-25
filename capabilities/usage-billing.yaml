@@ -1,0 +1,128 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: fal Usage and Billing API — Reporting
+  description: 'fal Usage and Billing API — Reporting. Programmatic access to per-model spend, GPU-second
+    consumption, and invoicing history that powers the fal dashboard.'
+  tags:
+  - Fal
+  - Usage
+  - Billing
+  - FinOps
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    FAL_KEY: FAL_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: usage-billing
+    baseUri: https://rest.alpha.fal.ai
+    description: fal Usage and Billing — Reporting business capability.
+    resources:
+    - name: usage
+      path: /billing/usage
+      operations:
+      - name: getusage
+        method: GET
+        description: Retrieve aggregated usage and spend.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: start
+          in: query
+          type: string
+          required: false
+          description: Start of the reporting window (ISO 8601).
+        - name: end
+          in: query
+          type: string
+          required: false
+          description: End of the reporting window (ISO 8601).
+        - name: group_by
+          in: query
+          type: string
+          required: false
+          description: Dimension to group by (model, app, gpu_class).
+    - name: invoices
+      path: /billing/invoices
+      operations:
+      - name: listinvoices
+        method: GET
+        description: List invoices for the calling organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: 'Key {{env.FAL_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: usage-billing-rest
+    port: 8080
+    description: REST adapter for fal Usage and Billing — Reporting.
+    resources:
+    - path: /v1/billing/usage
+      name: usage
+      description: REST surface for usage reporting.
+      operations:
+      - method: GET
+        name: getusage
+        description: Get fal usage and spend.
+        call: usage-billing.getusage
+        with:
+          start: rest.query.start
+          end: rest.query.end
+          group_by: rest.query.group_by
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/billing/invoices
+      name: invoices
+      description: REST surface for invoices.
+      operations:
+      - method: GET
+        name: listinvoices
+        description: List fal invoices.
+        call: usage-billing.listinvoices
+        outputParameters:
+        - type: array
+          mapping: $.
+  - type: mcp
+    namespace: usage-billing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for fal Usage and Billing — Reporting.
+    tools:
+    - name: fal-get-usage
+      description: Get aggregated fal usage and spend over a time window.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: usage-billing.getusage
+      with:
+        start: tools.start
+        end: tools.end
+        group_by: tools.group_by
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fal-list-invoices
+      description: List fal invoices.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: usage-billing.listinvoices
+      outputParameters:
+      - type: array
+        mapping: $.

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://queue.fal.run/fal-ai/flux/schnell",
+    "headers": {
+      "Authorization": "Key $FAL_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "prompt": "a futuristic cityscape at sunset, cinematic lighting, ultra-detailed",
+      "image_size": "landscape_16_9",
+      "num_inference_steps": 4,
+      "num_images": 1,
+      "enable_safety_checker": true
+    }
+  },
+  "queued_response": {
+    "request_id": "9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234",
+    "status": "IN_QUEUE",
+    "status_url": "https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status",
+    "response_url": "https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234",
+    "cancel_url": "https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel"
+  },
+  "final_result": {
+    "images": [
+      {
+        "url": "https://v3.fal.media/files/lion/abc123.png",
+        "width": 1344,
+        "height": 768,
+        "content_type": "image/png"
+      }
+    ],
+    "seed": 271828,
+    "timings": { "inference": 0.83 },
+    "has_nsfw_concepts": [false],
+    "prompt": "a futuristic cityscape at sunset, cinematic lighting, ultra-detailed"
+  }
+}

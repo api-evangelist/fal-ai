@@ -1,0 +1,106 @@
+vocabulary: API Evangelist Vocabulary
+version: '0.1'
+provider: fal
+providerId: fal-ai
+created: '2026-05-25'
+modified: '2026-05-25'
+description: Operational and capability vocabulary for fal — fast generative media inference.
+tags:
+  - AI
+  - Generative AI
+  - Image
+  - Video
+  - Audio
+  - 3D
+  - Multimodal
+  - Inference
+  - Serverless
+  - GPU
+domains:
+  - name: Generative Inference
+    description: Queue-based and realtime invocation of generative models.
+    terms:
+      - term: Queue Submit
+        definition: POST to https://queue.fal.run/{model_owner}/{model_name} that enqueues a job and returns request_id.
+      - term: Queue Status
+        definition: 'GET .../requests/{request_id}/status — returns IN_QUEUE | IN_PROGRESS | COMPLETED | FAILED | CANCELED.'
+      - term: Queue Result
+        definition: GET .../requests/{request_id} — returns the final model-specific output.
+      - term: Queue Cancel
+        definition: PUT .../requests/{request_id}/cancel — releases GPU capacity if the job has not finished.
+      - term: Webhook
+        definition: Optional `fal_webhook` query parameter that POSTs job completion to a caller-supplied URL.
+      - term: Streaming
+        definition: 'Synchronous SSE endpoint at /{model_owner}/{model_name}/stream emitting `event: progress` and
+          `event: output`.'
+      - term: Realtime
+        definition: WebSocket endpoint at wss://realtime.fal.run for low-latency interactive generation.
+      - term: Sync Mode
+        definition: 'When `sync_mode: true` is supplied to the queue endpoint, the request blocks until completion
+          instead of returning a request_id.'
+  - name: Generative Media Output
+    description: Output asset types produced by fal models.
+    terms:
+      - term: Image
+        definition: PNG/JPEG asset returned via `images[].url` and served from v3.fal.media.
+      - term: Video
+        definition: MP4 asset returned via `video.url`.
+      - term: Audio
+        definition: WAV/MP3 asset returned via `audio.url`.
+      - term: 3D Asset
+        definition: GLB/USD asset returned via `model.url` from TripoSR / Hunyuan3D / similar models.
+      - term: Seed
+        definition: Integer used to make stochastic generation deterministic.
+  - name: Models
+    description: Categories of generative models available through the catalog.
+    terms:
+      - term: Image Model
+        definition: 'Text-to-image, image-to-image, inpainting, and editing models such as FLUX, Seedream, SDXL,
+          Nano Banana, Qwen, Ideogram, Recraft.'
+      - term: Video Model
+        definition: Text-to-video and image-to-video models including Veo 3, Kling 2.5, Wan 2.5, Seedance 2.0, Ovi,
+          Hunyuan.
+      - term: Audio Model
+        definition: Speech, music, and sound-effect models including Inworld TTS-1.5, ElevenLabs, MMAudio, MusicGen,
+          Stable Audio.
+      - term: Realtime Model
+        definition: Low-latency models exposed over WebSocket such as LCM SDXL, LivePortrait, realtime BiRefNet.
+      - term: Day-Zero Model
+        definition: A model fal hosts on the same day the upstream lab releases it.
+  - name: Authentication and Identity
+    description: Auth model and key management.
+    terms:
+      - term: FAL_KEY
+        definition: Personal/organization API key issued from https://fal.ai/dashboard/keys.
+      - term: Authorization Header
+        definition: 'Format `Authorization: Key $FAL_KEY` used by all REST endpoints.'
+      - term: Signed Upload URL
+        definition: Short-lived URL returned by /storage/upload/initiate that accepts a PUT of file bytes.
+  - name: Serverless and Compute
+    description: User-deployed apps and dedicated GPU infrastructure.
+    terms:
+      - term: 'fal.App'
+        definition: Native Python class declaring a Serverless app, its dependencies, and endpoints.
+      - term: '@fal.function'
+        definition: Decorator that deploys a Python function as a serverless GPU endpoint.
+      - term: ContainerImage
+        definition: BYO Docker image reference used as the runtime base for a Serverless app.
+      - term: keep_alive
+        definition: Seconds a warm worker is kept after the last request (latency/cost trade-off).
+      - term: min_concurrency
+        definition: Minimum number of always-warm workers per Serverless app.
+      - term: Dedicated Instance
+        definition: An H100 / H200 / A100 / B200 GPU server provisioned via fal Compute with SSH access.
+  - name: Pricing
+    description: Billing units used across fal products.
+    terms:
+      - term: Per Output
+        definition: Pricing measured per image, per video, or per audio minute produced.
+      - term: Per Megapixel
+        definition: Image pricing normalized to a 1MP unit (e.g. Qwen $0.02 / MP).
+      - term: Per Video Second
+        definition: Video pricing per second of generated footage (e.g. Veo 3 $0.40 / s).
+      - term: GPU Second
+        definition: Per-second billing rate for dedicated or Serverless GPUs.
+      - term: GPU Hour
+        definition: Hourly billing rate for dedicated GPU instances.

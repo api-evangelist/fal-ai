@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fal-ai/main/json-schema/fal-queue-status-schema.json",
+  "title": "fal Queue Status Response",
+  "description": "Response returned by GET /{model_owner}/{model_name}/requests/{request_id}/status.",
+  "type": "object",
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["IN_QUEUE", "IN_PROGRESS", "COMPLETED", "FAILED", "CANCELED"]
+    },
+    "queue_position": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "response_url": { "type": "string", "format": "uri" },
+    "status_url": { "type": "string", "format": "uri" },
+    "cancel_url": { "type": "string", "format": "uri" },
+    "logs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "level": { "type": "string", "enum": ["DEBUG", "INFO", "WARN", "ERROR"] },
+          "message": { "type": "string" }
+        },
+        "required": ["timestamp", "message"]
+      }
+    }
+  }
+}

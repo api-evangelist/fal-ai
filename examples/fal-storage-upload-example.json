@@ -1,0 +1,34 @@
+{
+  "initiate_request": {
+    "method": "POST",
+    "url": "https://rest.alpha.fal.ai/storage/upload/initiate",
+    "headers": {
+      "Authorization": "Key $FAL_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "content_type": "image/png",
+      "file_name": "reference.png"
+    }
+  },
+  "initiate_response": {
+    "upload_url": "https://v3-uploads.fal.media/files/abc/upload?signature=…",
+    "file_url": "https://v3.fal.media/files/abc/reference.png"
+  },
+  "upload_request": {
+    "method": "PUT",
+    "url": "https://v3-uploads.fal.media/files/abc/upload?signature=…",
+    "headers": {
+      "Content-Type": "image/png"
+    },
+    "body_note": "Raw PNG bytes"
+  },
+  "use_in_model_call": {
+    "url": "https://queue.fal.run/fal-ai/flux/dev/image-to-image",
+    "body": {
+      "prompt": "transform into anime style",
+      "image_url": "https://v3.fal.media/files/abc/reference.png",
+      "strength": 0.75
+    }
+  }
+}

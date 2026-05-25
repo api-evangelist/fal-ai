@@ -1,0 +1,111 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://schema.org/",
+    "fal": "https://queue.fal.run/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "InferenceRequest": {
+      "@id": "fal:InferenceRequest",
+      "@context": {
+        "model_owner": { "@id": "fal:InferenceRequest/modelOwner", "@type": "xsd:string" },
+        "model_name": { "@id": "fal:InferenceRequest/modelName", "@type": "xsd:string" },
+        "prompt": { "@id": "fal:InferenceRequest/prompt", "@type": "xsd:string" },
+        "negative_prompt": { "@id": "fal:InferenceRequest/negativePrompt", "@type": "xsd:string" },
+        "image_url": { "@id": "fal:InferenceRequest/imageUrl", "@type": "xsd:anyURI" },
+        "image_size": { "@id": "fal:InferenceRequest/imageSize" },
+        "num_inference_steps": { "@id": "fal:InferenceRequest/numInferenceSteps", "@type": "xsd:integer" },
+        "guidance_scale": { "@id": "fal:InferenceRequest/guidanceScale", "@type": "xsd:decimal" },
+        "seed": { "@id": "fal:InferenceRequest/seed", "@type": "xsd:integer" },
+        "num_images": { "@id": "fal:InferenceRequest/numImages", "@type": "xsd:integer" },
+        "enable_safety_checker": { "@id": "fal:InferenceRequest/enableSafetyChecker", "@type": "xsd:boolean" },
+        "sync_mode": { "@id": "fal:InferenceRequest/syncMode", "@type": "xsd:boolean" }
+      }
+    },
+
+    "QueueAccepted": {
+      "@id": "fal:QueueAccepted",
+      "@context": {
+        "request_id": { "@id": "fal:QueueAccepted/requestId", "@type": "xsd:string" },
+        "status": { "@id": "fal:QueueAccepted/status", "@type": "xsd:string" },
+        "status_url": { "@id": "fal:QueueAccepted/statusUrl", "@type": "xsd:anyURI" },
+        "response_url": { "@id": "fal:QueueAccepted/responseUrl", "@type": "xsd:anyURI" },
+        "cancel_url": { "@id": "fal:QueueAccepted/cancelUrl", "@type": "xsd:anyURI" },
+        "gateway_request_id": { "@id": "fal:QueueAccepted/gatewayRequestId", "@type": "xsd:string" }
+      }
+    },
+
+    "QueueStatus": {
+      "@id": "fal:QueueStatus",
+      "@context": {
+        "status": { "@id": "fal:QueueStatus/status", "@type": "xsd:string" },
+        "queue_position": { "@id": "fal:QueueStatus/queuePosition", "@type": "xsd:integer" },
+        "logs": { "@id": "fal:QueueStatus/logs", "@container": "@list" }
+      }
+    },
+
+    "LogEntry": {
+      "@id": "fal:LogEntry",
+      "@context": {
+        "timestamp": { "@id": "dcterms:date", "@type": "xsd:dateTime" },
+        "level": { "@id": "fal:LogEntry/level", "@type": "xsd:string" },
+        "message": { "@id": "schema:description", "@type": "xsd:string" }
+      }
+    },
+
+    "Image": {
+      "@id": "fal:Image",
+      "@context": {
+        "url": { "@id": "schema:contentUrl", "@type": "xsd:anyURI" },
+        "width": { "@id": "schema:width", "@type": "xsd:integer" },
+        "height": { "@id": "schema:height", "@type": "xsd:integer" },
+        "content_type": { "@id": "schema:encodingFormat", "@type": "xsd:string" }
+      }
+    },
+
+    "Video": {
+      "@id": "fal:Video",
+      "@context": {
+        "url": { "@id": "schema:contentUrl", "@type": "xsd:anyURI" },
+        "duration": { "@id": "schema:duration", "@type": "xsd:decimal" },
+        "fps": { "@id": "fal:Video/fps", "@type": "xsd:decimal" },
+        "content_type": { "@id": "schema:encodingFormat", "@type": "xsd:string" }
+      }
+    },
+
+    "Audio": {
+      "@id": "fal:Audio",
+      "@context": {
+        "url": { "@id": "schema:contentUrl", "@type": "xsd:anyURI" },
+        "duration": { "@id": "schema:duration", "@type": "xsd:decimal" },
+        "content_type": { "@id": "schema:encodingFormat", "@type": "xsd:string" }
+      }
+    },
+
+    "Model": {
+      "@id": "fal:Model",
+      "@context": {
+        "id": { "@id": "schema:identifier", "@type": "xsd:string" },
+        "name": { "@id": "schema:name", "@type": "xsd:string" },
+        "description": { "@id": "schema:description", "@type": "xsd:string" },
+        "category": { "@id": "schema:category", "@type": "xsd:string" },
+        "pricing": { "@id": "fal:Model/pricing" }
+      }
+    },
+
+    "ServerlessApp": {
+      "@id": "fal:ServerlessApp",
+      "@context": {
+        "id": { "@id": "schema:identifier", "@type": "xsd:string" },
+        "name": { "@id": "schema:name", "@type": "xsd:string" },
+        "endpoint": { "@id": "schema:url", "@type": "xsd:anyURI" },
+        "gpu": { "@id": "fal:ServerlessApp/gpu", "@type": "xsd:string" },
+        "keep_alive": { "@id": "fal:ServerlessApp/keepAlive", "@type": "xsd:integer" },
+        "min_concurrency": { "@id": "fal:ServerlessApp/minConcurrency", "@type": "xsd:integer" },
+        "max_concurrency": { "@id": "fal:ServerlessApp/maxConcurrency", "@type": "xsd:integer" }
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+extends:
+  - spectral:oas
+
+functions: []
+
+rules:
+  fal-server-must-be-queue-fal-run:
+    description: fal Model APIs must be served from https://queue.fal.run.
+    message: '{{property}} should use https://queue.fal.run as the canonical Model API host.'
+    severity: warn
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://(queue\.fal\.run|rest\.alpha\.fal\.ai|fal\.ai)(/.*)?$
+
+  fal-security-must-use-key-auth:
+    description: 'fal APIs authenticate with `Authorization: Key $FAL_KEY`.'
+    message: Security scheme must be an apiKey in the `Authorization` header.
+    severity: error
+    given: $.components.securitySchemes[*]
+    then:
+      - field: type
+        function: enumeration
+        functionOptions:
+          values: [apiKey]
+      - field: in
+        function: enumeration
+        functionOptions:
+          values: [header]
+      - field: name
+        function: enumeration
+        functionOptions:
+          values: [Authorization]
+
+  fal-summary-title-case:
+    description: Operation summaries should use Title Case per API Evangelist convention.
+    message: '{{property}} should use Title Case.'
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].summary
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[A-Z][A-Za-z0-9 /:&-]+$'
+
+  fal-operation-id-camel-case:
+    description: operationId should be lowerCamelCase.
+    message: operationId `{{value}}` should be lowerCamelCase.
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].operationId
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[a-z][a-zA-Z0-9]+$'
+
+  fal-queue-path-shape:
+    description: Queue paths should follow /{model_owner}/{model_name}[/requests/{request_id}[/status|/cancel]].
+    severity: info
+    given: $.paths
+    then:
+      function: truthy
+
+  fal-queue-status-enum:
+    description: Queue status must use IN_QUEUE / IN_PROGRESS / COMPLETED / FAILED / CANCELED.
+    message: Queue status enum should match the documented states.
+    severity: warn
+    given: "$.components.schemas[?(@property=='QueueStatusResponse')].properties.status.enum"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            enum: [IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED, CANCELED]
+
+  fal-tag-must-exist:
+    description: Operations must declare at least one tag.
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].tags
+    then:
+      function: length
+      functionOptions:
+        min: 1
+
+  fal-asset-urls-from-fal-media:
+    description: Output asset URLs should be served from v3.fal.media.
+    severity: info
+    given: $.components.schemas..url.example
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://v3\.fal\.media/.*$
