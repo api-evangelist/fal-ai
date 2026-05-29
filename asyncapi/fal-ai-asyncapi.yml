@@ -1,0 +1,388 @@
+asyncapi: '2.6.0'
+id: 'urn:com:fal:event-apis'
+info:
+  title: fal Event-Driven APIs
+  version: '1.0.0'
+  description: >
+    AsyncAPI description of fal's event-driven inference surfaces. fal exposes
+    two real-time channels in addition to its REST queue: (1) a Server-Sent
+    Events stream that pushes incremental status updates for any queued model
+    request, and (2) a bi-directional WebSocket channel used by the Realtime
+    Inference API for ultra-low-latency interactive models such as
+    `fast-lcm-diffusion`, `fast-turbo-diffusion`, and `fast-sdxl`. The
+    WebSocket channel is the same surface driven by the official
+    fal-js / fal-client SDK `realtime` helpers.
+  contact:
+    name: fal Support
+    url: https://fal.ai/docs
+  license:
+    name: Proprietary
+    url: https://fal.ai/legal/terms-of-service
+  x-apis-json:
+    humanURL: https://fal.ai/docs/model-apis/real-time
+    baseURL: wss://fal.run
+defaultContentType: application/json
+servers:
+  queue-sse:
+    url: queue.fal.run
+    protocol: https
+    description: >
+      Queue status streaming server. Emits Server-Sent Events for any submitted
+      queue request until the request reaches the `COMPLETED` status.
+  realtime-ws:
+    url: fal.run
+    protocol: wss
+    description: >
+      Realtime WebSocket inference server. Authenticated either via a
+      server-side proxy URL that injects the `Authorization: Key $FAL_KEY`
+      header, or via a short-lived JWT token passed as the
+      `fal_jwt_token` query parameter.
+channels:
+  '{model_id}/requests/{request_id}/status/stream':
+    description: >
+      Server-Sent Events stream of queue status updates for a single submitted
+      request. The connection remains open and emits one event per state
+      change until the request reaches `COMPLETED`. Enable runner logs by
+      adding `?logs=1` to the query string.
+    servers:
+      - queue-sse
+    parameters:
+      model_id:
+        description: >
+          Fully-qualified fal model identifier (e.g. `fal-ai/flux/dev`,
+          `fal-ai/fast-sdxl`, `fal-ai/veo3`).
+        schema:
+          type: string
+      request_id:
+        description: Queue request identifier returned by the original submit call.
+        schema:
+          type: string
+          format: uuid
+    bindings:
+      http:
+        type: response
+        method: GET
+        headers:
+          type: object
+          properties:
+            Accept:
+              const: text/event-stream
+    subscribe:
+      operationId: subscribeQueueStatusStream
+      summary: Subscribe to queue status events for a submitted request.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/QueueStatusInQueue'
+          - $ref: '#/components/messages/QueueStatusInProgress'
+          - $ref: '#/components/messages/QueueStatusCompleted'
+
+  '{app_id}/realtime':
+    description: >
+      Bi-directional WebSocket channel for realtime inference. Clients send
+      one input message per generation step and receive zero or more partial
+      or final output frames per step. The default path is `/realtime`; some
+      apps expose custom paths configurable through the SDK `path` option.
+      Messages are serialized as JSON by default and MAY be serialized as
+      MessagePack (msgpack) when using the official SDKs, which is more
+      efficient for binary image payloads.
+    servers:
+      - realtime-ws
+    parameters:
+      app_id:
+        description: >
+          Realtime-capable fal app id, e.g. `fal-ai/fast-lcm-diffusion`,
+          `fal-ai/fast-turbo-diffusion`, or `fal-ai/fast-sdxl`.
+        schema:
+          type: string
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+        query:
+          type: object
+          properties:
+            fal_jwt_token:
+              type: string
+              description: >
+                Short-lived JWT minted by your backend via the fal token
+                endpoint. Required when not connecting through a proxy URL.
+            max_buffering:
+              type: integer
+              description: >
+                Optional maximum number of input frames the server may buffer
+                before back-pressuring.
+    publish:
+      operationId: sendRealtimeInput
+      summary: Send an inference input frame.
+      description: >
+        Each message represents a single inference invocation against the
+        connected app. Field names follow the OpenAPI schema of the chosen
+        model (e.g. `prompt`, `image_url`, `seed`, `num_inference_steps`,
+        `strength`, `sync_mode`).
+      message:
+        $ref: '#/components/messages/RealtimeInput'
+    subscribe:
+      operationId: receiveRealtimeOutput
+      summary: Receive inference outputs and connection control messages.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RealtimeResult'
+          - $ref: '#/components/messages/RealtimeError'
+          - $ref: '#/components/messages/RealtimeUnauthorized'
+components:
+  messages:
+    QueueStatusInQueue:
+      name: QueueStatusInQueue
+      title: Queue Status — IN_QUEUE
+      summary: >
+        Request has been received and persisted; waiting for an available
+        runner.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/QueueStatusInQueue'
+
+    QueueStatusInProgress:
+      name: QueueStatusInProgress
+      title: Queue Status — IN_PROGRESS
+      summary: fal's dispatcher has routed the request to a runner.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/QueueStatusInProgress'
+
+    QueueStatusCompleted:
+      name: QueueStatusCompleted
+      title: Queue Status — COMPLETED
+      summary: >
+        Result is stored and available for retrieval at `response_url` (or
+        was POSTed to the configured webhook). This is the terminal event of
+        the stream.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/QueueStatusCompleted'
+
+    RealtimeInput:
+      name: RealtimeInput
+      title: Realtime Inference Input
+      summary: >
+        Inference input frame. The accepted fields are defined by the
+        OpenAPI schema of the target model — see the model's playground page
+        on https://fal.ai/models for the canonical schema.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RealtimeInput'
+
+    RealtimeResult:
+      name: RealtimeResult
+      title: Realtime Inference Result
+      summary: >
+        Inference output frame. Fields are model-specific; image-generation
+        apps return an `images` array. The `request_id` echoes the inference
+        invocation it corresponds to.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RealtimeResult'
+
+    RealtimeError:
+      name: RealtimeError
+      title: Realtime Error (x-fal-error)
+      summary: Inference or framework-level error returned by the realtime runner.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RealtimeError'
+
+    RealtimeUnauthorized:
+      name: RealtimeUnauthorized
+      title: Realtime Unauthorized
+      summary: >
+        Sent when the supplied credentials (proxy headers or JWT) cannot be
+        verified. The connection is closed by the server after this frame.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RealtimeUnauthorized'
+
+  schemas:
+    QueueStatusInQueue:
+      type: object
+      required: [status, request_id]
+      properties:
+        status:
+          type: string
+          const: IN_QUEUE
+        request_id:
+          type: string
+          format: uuid
+          description: Unique request identifier.
+        queue_position:
+          type: integer
+          minimum: 0
+          description: Number of requests ahead of this one in the queue.
+        response_url:
+          type: string
+          format: uri
+          description: URL where the final result will be retrievable.
+
+    QueueStatusInProgress:
+      type: object
+      required: [status, request_id]
+      properties:
+        status:
+          type: string
+          const: IN_PROGRESS
+        request_id:
+          type: string
+          format: uuid
+        response_url:
+          type: string
+          format: uri
+        logs:
+          type: array
+          description: >
+            Runner log lines. Only populated when the stream URL is opened
+            with the `?logs=1` query parameter.
+          items:
+            $ref: '#/components/schemas/QueueLogEntry'
+
+    QueueStatusCompleted:
+      type: object
+      required: [status, request_id]
+      properties:
+        status:
+          type: string
+          const: COMPLETED
+        request_id:
+          type: string
+          format: uuid
+        response_url:
+          type: string
+          format: uri
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueueLogEntry'
+        metrics:
+          type: object
+          properties:
+            inference_time:
+              type: number
+              description: Processing duration in seconds.
+
+    QueueLogEntry:
+      type: object
+      properties:
+        message:
+          type: string
+        level:
+          type: string
+          description: Log level emitted by the runner (e.g. `INFO`, `ERROR`).
+        timestamp:
+          type: string
+          format: date-time
+
+    RealtimeInput:
+      type: object
+      description: >
+        Free-form, model-specific input frame. The exemplar properties below
+        are the most common across realtime image-generation apps; consult
+        the model OpenAPI schema for the complete and authoritative list.
+      additionalProperties: true
+      properties:
+        prompt:
+          type: string
+        negative_prompt:
+          type: string
+        image_url:
+          type: string
+          description: >
+            Reference image URL, or `data:` URI carrying a base64-encoded
+            image when `sync_mode` is `true`.
+        seed:
+          type: integer
+        num_inference_steps:
+          type: integer
+        strength:
+          type: number
+        sync_mode:
+          type: boolean
+          description: >
+            When `true`, responses are returned as base64-encoded payloads
+            on the same WebSocket frame rather than via CDN URLs.
+
+    RealtimeResult:
+      type: object
+      description: >
+        Model-specific output frame. Fields shown reflect the
+        image-generation realtime apps (fast-lcm-diffusion,
+        fast-turbo-diffusion, fast-sdxl). Other modalities return their own
+        modality-specific fields.
+      additionalProperties: true
+      properties:
+        request_id:
+          type: string
+          description: >
+            Echoes the inference invocation this output corresponds to.
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: >
+                  CDN URL of the generated image, or a `data:` URI when
+                  `sync_mode: true` was supplied.
+              width:
+                type: integer
+              height:
+                type: integer
+              content_type:
+                type: string
+        timings:
+          type: object
+          additionalProperties:
+            type: number
+        seed:
+          type: integer
+        has_nsfw_concepts:
+          type: array
+          items:
+            type: boolean
+
+    RealtimeError:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          const: x-fal-error
+        error:
+          type: string
+          description: Short error code or label.
+        reason:
+          type: string
+          description: Human-readable reason describing the failure.
+
+    RealtimeUnauthorized:
+      type: object
+      required: [status, error]
+      properties:
+        status:
+          type: string
+          const: error
+        error:
+          type: string
+          const: Unauthorized
+
+  securitySchemes:
+    falKey:
+      type: httpApiKey
+      in: header
+      name: Authorization
+      description: >
+        `Authorization: Key $FAL_KEY` header. Used on the SSE queue stream
+        and on the realtime WebSocket when the connection is routed through
+        a server-side proxy.
+    falJwt:
+      type: userPassword
+      description: >
+        Short-lived JWT supplied as the `fal_jwt_token` query parameter on
+        the realtime WebSocket URL. Mint via your backend's fal token
+        endpoint.

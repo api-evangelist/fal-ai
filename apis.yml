@@ -51,6 +51,8 @@ apis:
     type: Documentation
   - url: https://github.com/fal-ai/real-time-demo-app
     type: CodeExamples
+  - url: asyncapi/fal-ai-asyncapi.yml
+    type: AsyncAPI
   description: WebSocket-based realtime inference for ultra-low latency interactive generative experiences such as
     LCM/SDXL sketch-to-image, live-portrait, and realtime upscaling. Bi-directional binary/JSON messaging keeps a
     persistent connection open so each frame, prompt, or pose adjustment is processed in milliseconds. Powers
@@ -68,6 +70,8 @@ apis:
   properties:
   - url: https://fal.ai/docs/model-apis/streaming
     type: Documentation
+  - url: asyncapi/fal-ai-asyncapi.yml
+    type: AsyncAPI
   description: HTTP streaming endpoint (`/{model-id}/stream`) that emits progressive partial outputs as a model
     runs — used for LLM/VLM token streams, incremental video frames, and step-by-step image diffusion previews.
     Compatible with Server-Sent Events parsers in the official fal-client SDKs.
