@@ -1,0 +1,100 @@
+arazzo: 1.0.1
+info:
+  title: fal Upload, Run Image-To-Image With Webhook
+  summary: Upload a reference image, submit an image-to-image job with a webhook, and confirm queue acceptance.
+  description: >-
+    Combines the fal Storage and Model APIs for an asynchronous image-to-image
+    pipeline. The workflow obtains a signed upload URL and public CDN file_url
+    for a reference image, then submits an image-to-image inference request that
+    references that file_url and registers a completion webhook, confirming the
+    job was accepted into the queue. The PUT of the image bytes to the signed
+    upload_url and the eventual webhook callback both happen out of band. Every
+    step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falStorageApi
+  url: ../openapi/fal-storage-api-openapi.yml
+  type: openapi
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: image-to-image-with-webhook
+  summary: Register a reference image and queue an image-to-image job with a callback.
+  description: >-
+    Initiates a signed upload for a reference image, submits an image-to-image
+    inference request that passes the CDN file_url as image_url and sets a
+    completion webhook, and confirms the IN_QUEUE acceptance.
+  inputs:
+    type: object
+    required:
+    - fileName
+    - modelOwner
+    - modelName
+    - prompt
+    - webhookUrl
+    properties:
+      fileName:
+        type: string
+        description: Original file name of the reference image (e.g. "reference.png").
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Image-to-image model identifier (e.g. "flux/dev/image-to-image").
+      prompt:
+        type: string
+        description: Natural-language prompt describing the desired transformation.
+      webhookUrl:
+        type: string
+        description: URL that fal will POST to when the job finishes.
+  steps:
+  - stepId: initiateUpload
+    description: >-
+      Request a signed upload URL and public CDN file_url for the PNG reference
+      image. The client PUTs the image bytes to upload_url out of band.
+    operationId: initiateUpload
+    requestBody:
+      contentType: application/json
+      payload:
+        content_type: image/png
+        file_name: $inputs.fileName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      uploadUrl: $response.body#/upload_url
+      fileUrl: $response.body#/file_url
+  - stepId: submitWithWebhook
+    description: >-
+      Submit the image-to-image request referencing the uploaded asset as
+      image_url, register a completion webhook, and confirm IN_QUEUE acceptance.
+    operationId: submitRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: fal_webhook
+      in: query
+      value: $inputs.webhookUrl
+    requestBody:
+      contentType: application/json
+      payload:
+        prompt: $inputs.prompt
+        image_url: $steps.initiateUpload.outputs.fileUrl
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.status == "IN_QUEUE"
+      type: jsonpath
+    outputs:
+      requestId: $response.body#/request_id
+      statusUrl: $response.body#/status_url
+  outputs:
+    fileUrl: $steps.initiateUpload.outputs.fileUrl
+    requestId: $steps.submitWithWebhook.outputs.requestId
+    statusUrl: $steps.submitWithWebhook.outputs.statusUrl

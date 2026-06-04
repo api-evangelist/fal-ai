@@ -1,0 +1,55 @@
+arazzo: 1.0.1
+info:
+  title: fal Serverless App Discovery
+  summary: List deployed Serverless apps, then fetch full metadata and scaling for the first one.
+  description: >-
+    A control-plane introspection pattern for fal Serverless. The workflow
+    lists every Serverless app deployed under the calling key's organization,
+    selects the first returned app, and retrieves its full metadata including
+    endpoint URL and current scaling parameters. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falServerlessPlatformApi
+  url: ../openapi/fal-serverless-platform-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: serverless-app-discovery
+  summary: Enumerate Serverless apps and load detail for the first match.
+  description: >-
+    Lists the organization's Serverless apps and then fetches the endpoint and
+    scaling configuration for the first app in the list.
+  inputs:
+    type: object
+    properties: {}
+  steps:
+  - stepId: listApps
+    description: >-
+      Return every Serverless app deployed under the calling key's organization
+      and capture the first app's identifier.
+    operationId: listApps
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstAppId: $response.body#/0/id
+  - stepId: getAppDetail
+    description: >-
+      Retrieve metadata, endpoint URL, and current scaling parameters for the
+      first listed app.
+    operationId: getApp
+    parameters:
+    - name: app_id
+      in: path
+      value: $steps.listApps.outputs.firstAppId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      appId: $response.body#/id
+      endpoint: $response.body#/endpoint
+      gpu: $response.body#/gpu
+      maxConcurrency: $response.body#/max_concurrency
+  outputs:
+    appId: $steps.getAppDetail.outputs.appId
+    endpoint: $steps.getAppDetail.outputs.endpoint
+    gpu: $steps.getAppDetail.outputs.gpu

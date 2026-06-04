@@ -1,0 +1,137 @@
+arazzo: 1.0.1
+info:
+  title: fal Submit And Conditionally Cancel
+  summary: Submit an inference job, check its status once, and cancel it if it has not finished.
+  description: >-
+    A guardrail pattern for runaway or no-longer-needed jobs. The workflow
+    submits an inference request, reads the request status a single time, and
+    branches: if the job is still IN_QUEUE or IN_PROGRESS it issues a cancel to
+    release the GPU capacity, and if it has already COMPLETED it fetches the
+    result instead. Every step spells out its request inline so the flow can be
+    read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: submit-and-cancel
+  summary: Submit a job and cancel it if it is still running, otherwise return its result.
+  description: >-
+    Submits an inference request, inspects its status, and either cancels the
+    in-flight job to release capacity or retrieves the finished result.
+  inputs:
+    type: object
+    required:
+    - modelOwner
+    - modelName
+    - input
+    properties:
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Model identifier (e.g. "kling-2.5/text-to-video").
+      input:
+        type: object
+        description: Model-specific JSON input (prompt, image_url, seed, etc.).
+  steps:
+  - stepId: submitJob
+    description: >-
+      Submit the inference request and capture the request_id for later status
+      and cancellation calls.
+    operationId: submitRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    requestBody:
+      contentType: application/json
+      payload: $inputs.input
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      requestId: $response.body#/request_id
+  - stepId: checkStatus
+    description: >-
+      Read the current status of the submitted request once to decide whether
+      to cancel it or fetch its result.
+    operationId: getRequestStatus
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onSuccess:
+    - name: stillRunning
+      type: goto
+      stepId: cancelJob
+      criteria:
+      - context: $response.body
+        condition: $.status == "IN_QUEUE" || $.status == "IN_PROGRESS"
+        type: jsonpath
+    - name: alreadyDone
+      type: goto
+      stepId: fetchResult
+      criteria:
+      - context: $response.body
+        condition: $.status == "COMPLETED"
+        type: jsonpath
+  - stepId: cancelJob
+    description: >-
+      Cancel the in-queue or in-progress request to return its reserved GPU
+      capacity to the pool.
+    operationId: cancelRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      cancelStatus: $response.body#/status
+    onSuccess:
+    - name: done
+      type: end
+  - stepId: fetchResult
+    description: >-
+      Retrieve the final inference output when the job had already completed by
+      the time it was checked.
+    operationId: getRequestResult
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      result: $response.body
+  outputs:
+    requestId: $steps.submitJob.outputs.requestId
+    cancelStatus: $steps.cancelJob.outputs.cancelStatus
+    result: $steps.fetchResult.outputs.result

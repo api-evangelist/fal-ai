@@ -1,0 +1,146 @@
+arazzo: 1.0.1
+info:
+  title: fal Upload Asset Then Run Inference
+  summary: Upload a binary reference asset to the fal CDN, then run an image-to-X model against it.
+  description: >-
+    Many fal models accept a reference image, audio clip, or control map by
+    URL. This workflow first requests a signed upload URL from the fal Storage
+    API, then submits an inference request that references the resulting public
+    CDN file_url, polls the queue until the job completes, and returns the
+    output. The actual PUT of the file bytes to the signed upload_url happens
+    outside the orchestrated API steps and is noted where it occurs. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falStorageApi
+  url: ../openapi/fal-storage-api-openapi.yml
+  type: openapi
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: upload-then-inference
+  summary: Register an input asset on the fal CDN and feed its URL into a model.
+  description: >-
+    Initiates a signed upload to obtain a public CDN file_url, then submits an
+    inference request that passes that file_url as the model's image_url input,
+    waits for completion, and returns the result.
+  inputs:
+    type: object
+    required:
+    - contentType
+    - fileName
+    - modelOwner
+    - modelName
+    - prompt
+    properties:
+      contentType:
+        type: string
+        description: MIME type of the asset being uploaded (e.g. "image/png").
+      fileName:
+        type: string
+        description: Original file name used to derive the CDN object name.
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Model identifier (e.g. "flux/dev/image-to-image").
+      prompt:
+        type: string
+        description: Natural-language prompt describing the desired output.
+  steps:
+  - stepId: initiateUpload
+    description: >-
+      Request a short-lived signed upload URL and the public CDN file_url for
+      the asset. The client PUTs the file bytes to upload_url out of band before
+      the asset can be referenced by a model.
+    operationId: initiateUpload
+    requestBody:
+      contentType: application/json
+      payload:
+        content_type: $inputs.contentType
+        file_name: $inputs.fileName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      uploadUrl: $response.body#/upload_url
+      fileUrl: $response.body#/file_url
+  - stepId: submitJob
+    description: >-
+      Submit an inference request that references the uploaded asset by its CDN
+      file_url as the model's image_url input.
+    operationId: submitRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    requestBody:
+      contentType: application/json
+      payload:
+        prompt: $inputs.prompt
+        image_url: $steps.initiateUpload.outputs.fileUrl
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      requestId: $response.body#/request_id
+  - stepId: pollStatus
+    description: >-
+      Poll the request status until the job reaches a terminal COMPLETED state,
+      re-entering itself while still IN_QUEUE or IN_PROGRESS.
+    operationId: getRequestStatus
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onSuccess:
+    - name: completed
+      type: goto
+      stepId: fetchResult
+      criteria:
+      - context: $response.body
+        condition: $.status == "COMPLETED"
+        type: jsonpath
+    - name: stillRunning
+      type: goto
+      stepId: pollStatus
+      criteria:
+      - context: $response.body
+        condition: $.status == "IN_QUEUE" || $.status == "IN_PROGRESS"
+        type: jsonpath
+  - stepId: fetchResult
+    description: >-
+      Retrieve the final inference output for the completed request.
+    operationId: getRequestResult
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      result: $response.body
+  outputs:
+    fileUrl: $steps.initiateUpload.outputs.fileUrl
+    requestId: $steps.submitJob.outputs.requestId
+    result: $steps.fetchResult.outputs.result

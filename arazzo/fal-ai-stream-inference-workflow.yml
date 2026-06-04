@@ -1,0 +1,65 @@
+arazzo: 1.0.1
+info:
+  title: fal Streaming Inference
+  summary: Run a model synchronously over the streaming endpoint to receive progressive output.
+  description: >-
+    For chatty multimodal models and live previews, fal exposes a synchronous
+    streaming endpoint that emits Server-Sent Events as the model produces
+    progressive output. This workflow posts a model-specific input to the
+    stream endpoint and confirms the SSE stream was opened. Because the
+    response is a text/event-stream rather than a JSON document, the workflow
+    treats a 200 response as the successful opening of the stream and leaves
+    incremental event consumption to the client. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stream-inference
+  summary: Open a synchronous SSE stream of progressive model output.
+  description: >-
+    Posts a model-specific input to the streaming endpoint and confirms the
+    Server-Sent Events stream was opened so the client can consume progress and
+    output events.
+  inputs:
+    type: object
+    required:
+    - modelOwner
+    - modelName
+    - input
+    properties:
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Model identifier (e.g. "any-llm").
+      input:
+        type: object
+        description: Model-specific JSON input (prompt, image_url, seed, etc.).
+  steps:
+  - stepId: openStream
+    description: >-
+      Post the model-specific input to the streaming endpoint and confirm the
+      SSE stream was opened with a 200 response. Incremental progress and output
+      events are consumed by the client from the open stream.
+    operationId: streamRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    requestBody:
+      contentType: application/json
+      payload: $inputs.input
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      statusCode: $statusCode
+  outputs:
+    statusCode: $steps.openStream.outputs.statusCode

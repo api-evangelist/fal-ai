@@ -203,6 +203,36 @@ kind: contract
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
+- type: ArazzoWorkflows
+  url: arazzo/
+  workflows:
+  - url: arazzo/fal-ai-image-to-image-result-workflow.yml
+    name: fal Upload, Run Image-To-Image With Webhook
+    summary: Upload a reference image, submit an image-to-image job with a webhook, and confirm queue acceptance.
+  - url: arazzo/fal-ai-queue-inference-workflow.yml
+    name: fal Queue Inference
+    summary: Submit a model inference job, poll the queue until it completes, then fetch the result.
+  - url: arazzo/fal-ai-serverless-app-discovery-workflow.yml
+    name: fal Serverless App Discovery
+    summary: List deployed Serverless apps, then fetch full metadata and scaling for the first one.
+  - url: arazzo/fal-ai-serverless-app-files-workflow.yml
+    name: fal Serverless App Files Inspection
+    summary: Confirm a Serverless app exists, then list files on its persistent /data volume.
+  - url: arazzo/fal-ai-set-and-verify-secret-workflow.yml
+    name: fal Set And Verify Serverless Secret
+    summary: Create or replace a Serverless secret, then list secret names to confirm it is present.
+  - url: arazzo/fal-ai-stream-inference-workflow.yml
+    name: fal Streaming Inference
+    summary: Run a model synchronously over the streaming endpoint to receive progressive output.
+  - url: arazzo/fal-ai-submit-and-cancel-workflow.yml
+    name: fal Submit And Conditionally Cancel
+    summary: Submit an inference job, check its status once, and cancel it if it has not finished.
+  - url: arazzo/fal-ai-upload-then-inference-workflow.yml
+    name: fal Upload Asset Then Run Inference
+    summary: Upload a binary reference asset to the fal CDN, then run an image-to-X model against it.
+  - url: arazzo/fal-ai-webhook-submission-workflow.yml
+    name: fal Webhook-Backed Submission
+    summary: Submit an inference job with a webhook callback and confirm it was accepted into the queue.
 - type: Portal
   url: https://fal.ai
 - type: Documentation

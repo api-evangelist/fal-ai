@@ -1,0 +1,65 @@
+arazzo: 1.0.1
+info:
+  title: fal Serverless App Files Inspection
+  summary: Confirm a Serverless app exists, then list files on its persistent /data volume.
+  description: >-
+    An operations pattern for inspecting persisted artifacts (model weights,
+    caches, fine-tune outputs) produced by a fal Serverless app. The workflow
+    first loads the app's metadata to confirm it exists and capture its
+    endpoint, then lists files on the persistent /data volume under a supplied
+    subdirectory. Every step spells out its request inline so the flow can be
+    read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falServerlessPlatformApi
+  url: ../openapi/fal-serverless-platform-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: serverless-app-files
+  summary: Verify a Serverless app, then browse its persistent /data files.
+  description: >-
+    Fetches a Serverless app by id to confirm it exists, then lists the files
+    under a subdirectory of its persistent /data volume.
+  inputs:
+    type: object
+    required:
+    - appId
+    properties:
+      appId:
+        type: string
+        description: Serverless app identifier (e.g. "my-org/my-flux-finetune").
+      path:
+        type: string
+        description: Subdirectory under /data to list (optional).
+  steps:
+  - stepId: getApp
+    description: >-
+      Load the Serverless app's metadata to confirm it exists and capture its
+      endpoint before inspecting its files.
+    operationId: getApp
+    parameters:
+    - name: app_id
+      in: path
+      value: $inputs.appId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      appId: $response.body#/id
+      endpoint: $response.body#/endpoint
+  - stepId: listFiles
+    description: >-
+      List the files on the persistent /data volume under the supplied
+      subdirectory path.
+    operationId: listFiles
+    parameters:
+    - name: path
+      in: query
+      value: $inputs.path
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstFilePath: $response.body#/0/path
+  outputs:
+    appId: $steps.getApp.outputs.appId
+    endpoint: $steps.getApp.outputs.endpoint
+    firstFilePath: $steps.listFiles.outputs.firstFilePath

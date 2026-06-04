@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: fal Webhook-Backed Submission
+  summary: Submit an inference job with a webhook callback and confirm it was accepted into the queue.
+  description: >-
+    For long-running jobs, fal can POST a callback to a webhook URL when the
+    job finishes instead of requiring the client to poll. This workflow submits
+    an inference request with the fal_webhook query parameter set, verifies the
+    job was accepted into the queue, and reads back the status once to confirm
+    the request is being tracked. The eventual completion is delivered to the
+    supplied webhook out of band. Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: webhook-submission
+  summary: Queue a job with a completion webhook and confirm acceptance.
+  description: >-
+    Submits an inference request configured to call back a webhook on
+    completion, confirms the IN_QUEUE acceptance, and reads the initial status
+    so the caller has a tracking handle while awaiting the webhook.
+  inputs:
+    type: object
+    required:
+    - modelOwner
+    - modelName
+    - input
+    - webhookUrl
+    properties:
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Model identifier (e.g. "veo-3").
+      input:
+        type: object
+        description: Model-specific JSON input (prompt, image_url, seed, etc.).
+      webhookUrl:
+        type: string
+        description: URL that fal will POST to when the job finishes.
+  steps:
+  - stepId: submitWithWebhook
+    description: >-
+      Submit the inference request with the fal_webhook query parameter so fal
+      delivers a completion callback, and confirm the IN_QUEUE acceptance.
+    operationId: submitRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: fal_webhook
+      in: query
+      value: $inputs.webhookUrl
+    requestBody:
+      contentType: application/json
+      payload: $inputs.input
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.status == "IN_QUEUE"
+      type: jsonpath
+    outputs:
+      requestId: $response.body#/request_id
+      status: $response.body#/status
+      statusUrl: $response.body#/status_url
+  - stepId: confirmTracking
+    description: >-
+      Read the request status once to confirm the queue is tracking the job
+      while the caller awaits the webhook callback.
+    operationId: getRequestStatus
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitWithWebhook.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    requestId: $steps.submitWithWebhook.outputs.requestId
+    statusUrl: $steps.submitWithWebhook.outputs.statusUrl
+    status: $steps.confirmTracking.outputs.status

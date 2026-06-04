@@ -1,0 +1,119 @@
+arazzo: 1.0.1
+info:
+  title: fal Queue Inference
+  summary: Submit a model inference job, poll the queue until it completes, then fetch the result.
+  description: >-
+    The canonical fal queue-based inference pattern. The workflow submits a
+    model-specific JSON input to the named model, captures the returned
+    request_id, polls the request status endpoint until the job reaches a
+    terminal COMPLETED state, and then retrieves the final inference output.
+    Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: falModelApis
+  url: ../openapi/fal-model-apis-openapi.yml
+  type: openapi
+workflows:
+- workflowId: queue-inference
+  summary: Run a generative model through the fal queue and return its output.
+  description: >-
+    Submits an inference request to a fal-hosted model, waits for the queued
+    job to finish by polling its status, and returns the completed result
+    payload once the status is COMPLETED.
+  inputs:
+    type: object
+    required:
+    - modelOwner
+    - modelName
+    - input
+    properties:
+      modelOwner:
+        type: string
+        description: Owning organization of the model (e.g. "fal-ai").
+      modelName:
+        type: string
+        description: Model identifier (e.g. "flux/schnell").
+      input:
+        type: object
+        description: Model-specific JSON input (prompt, image_url, seed, etc.).
+  steps:
+  - stepId: submitJob
+    description: >-
+      Submit the model-specific input to the named model and capture the
+      request_id returned by the queue.
+    operationId: submitRequest
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    requestBody:
+      contentType: application/json
+      payload: $inputs.input
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      requestId: $response.body#/request_id
+      status: $response.body#/status
+  - stepId: pollStatus
+    description: >-
+      Poll the request status until the job leaves the queue and reaches a
+      terminal COMPLETED state. Re-enters itself while still IN_QUEUE or
+      IN_PROGRESS.
+    operationId: getRequestStatus
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    - name: logs
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onSuccess:
+    - name: completed
+      type: goto
+      stepId: fetchResult
+      criteria:
+      - context: $response.body
+        condition: $.status == "COMPLETED"
+        type: jsonpath
+    - name: stillRunning
+      type: goto
+      stepId: pollStatus
+      criteria:
+      - context: $response.body
+        condition: $.status == "IN_QUEUE" || $.status == "IN_PROGRESS"
+        type: jsonpath
+  - stepId: fetchResult
+    description: >-
+      Retrieve the final inference output for the completed request.
+    operationId: getRequestResult
+    parameters:
+    - name: model_owner
+      in: path
+      value: $inputs.modelOwner
+    - name: model_name
+      in: path
+      value: $inputs.modelName
+    - name: request_id
+      in: path
+      value: $steps.submitJob.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      result: $response.body
+  outputs:
+    requestId: $steps.submitJob.outputs.requestId
+    result: $steps.fetchResult.outputs.result
