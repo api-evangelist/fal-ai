@@ -1,384 +1,383 @@
 aid: fal-ai
 url: https://raw.githubusercontent.com/api-evangelist/fal-ai/refs/heads/main/apis.yml
 apis:
-- aid: fal-ai:fal-model-apis
-  name: fal Model APIs
-  tags:
+  - aid: fal-ai:fal-model-apis
+    name: fal Model APIs
+    tags:
+      - AI
+      - Generative AI
+      - Image Generation
+      - Video Generation
+      - Audio Generation
+      - Multimodal
+      - Inference
+    humanURL: https://fal.ai/docs/model-apis/quickstart
+    baseURL: https://queue.fal.run
+    properties:
+      - url: https://fal.ai/docs/model-apis/quickstart
+        type: Documentation
+      - url: https://fal.ai/models
+        type: Documentation
+        name: Model Gallery
+      - url: openapi/fal-model-apis-openapi.yml
+        type: OpenAPI
+      - url: json-schema/fal-queue-request-schema.json
+        type: JSONSchema
+      - url: json-schema/fal-queue-status-schema.json
+        type: JSONSchema
+      - url: json-ld/fal-ai-context.jsonld
+        type: JSONLD
+    description: >-
+      Unified queue-based REST API for invoking 1,000+ generative image, video, audio, and multimodal models hosted on
+      fal's inference infrastructure. Submit a request to `https://queue.fal.run/{model-id}`, poll
+      `/requests/{request_id}/status` or `/requests/{request_id}` for progress and results, or subscribe to webhook
+      callbacks. Supports synchronous responses, asynchronous queueing, server-sent streaming progress, and request
+      cancellation. Powers flagship models including FLUX, Veo 3, Kling 2.5, Wan 2.5, Seedream, Nano Banana, Qwen, SDXL,
+      and Stable Diffusion variants.
+  - aid: fal-ai:fal-realtime-api
+    name: fal Realtime API
+    tags:
+      - AI
+      - Generative AI
+      - Realtime
+      - WebSocket
+      - Streaming
+      - Inference
+    humanURL: https://fal.ai/docs/model-apis/real-time
+    baseURL: wss://realtime.fal.run
+    properties:
+      - url: https://fal.ai/docs/model-apis/real-time
+        type: Documentation
+      - url: https://github.com/fal-ai/real-time-demo-app
+        type: CodeExamples
+      - url: asyncapi/fal-ai-asyncapi.yml
+        type: AsyncAPI
+    description: >-
+      WebSocket-based realtime inference for ultra-low latency interactive generative experiences such as LCM/SDXL
+      sketch-to-image, live-portrait, and realtime upscaling. Bi-directional binary/JSON messaging keeps a persistent
+      connection open so each frame, prompt, or pose adjustment is processed in milliseconds. Powers fal.realtime client
+      utilities used in canvas apps, drawing tools, AR experiences, and live video pipelines.
+  - aid: fal-ai:fal-streaming-api
+    name: fal Streaming API
+    tags:
+      - AI
+      - Generative AI
+      - Streaming
+      - Server-Sent Events
+      - Inference
+    humanURL: https://fal.ai/docs/model-apis/streaming
+    baseURL: https://queue.fal.run
+    properties:
+      - url: https://fal.ai/docs/model-apis/streaming
+        type: Documentation
+      - url: asyncapi/fal-ai-asyncapi.yml
+        type: AsyncAPI
+    description: >-
+      HTTP streaming endpoint (`/{model-id}/stream`) that emits progressive partial outputs as a model runs — used for
+      LLM/VLM token streams, incremental video frames, and step-by-step image diffusion previews. Compatible with
+      Server-Sent Events parsers in the official fal-client SDKs.
+  - aid: fal-ai:fal-storage-api
+    name: fal Storage API
+    tags:
+      - AI
+      - Generative AI
+      - File Upload
+      - Storage
+      - CDN
+    humanURL: https://fal.ai/docs/model-apis/file-uploads
+    baseURL: https://rest.alpha.fal.ai
+    properties:
+      - url: https://fal.ai/docs/model-apis/file-uploads
+        type: Documentation
+      - url: openapi/fal-storage-api-openapi.yml
+        type: OpenAPI
+    description: >-
+      REST endpoints for uploading binary inputs (images, audio clips, reference frames, control maps) to fal's CDN so
+      they can be referenced by URL when invoking model APIs. Issues short-lived signed upload URLs via
+      `/storage/upload/initiate` and serves the resulting assets from `https://v3.fal.media`.
+  - aid: fal-ai:fal-serverless-platform-api
+    name: fal Serverless Platform API
+    tags:
+      - AI
+      - Serverless
+      - GPU
+      - Deployments
+      - Platform
+    humanURL: https://fal.ai/docs/private-serverless-models
+    baseURL: https://rest.alpha.fal.ai
+    properties:
+      - url: https://fal.ai/docs/private-serverless-models
+        type: Documentation
+      - url: https://github.com/fal-ai/fal
+        type: SDK
+        name: fal Python SDK and CLI
+      - url: openapi/fal-serverless-platform-api-openapi.yml
+        type: OpenAPI
+    description: >-
+      Programmatic management of custom fal Serverless applications — list, inspect, deploy, scale, and monitor
+      user-defined GPU functions deployed with `@fal.function`, `fal.App`, or BYO containers. Covers app metadata,
+      secrets, file volumes, scaling parameters (`keep_alive`, `min_concurrency`), and execution analytics.
+  - aid: fal-ai:fal-models-catalog-api
+    name: fal Models Catalog API
+    tags:
+      - AI
+      - Generative AI
+      - Catalog
+      - Discovery
+    humanURL: https://fal.ai/models
+    baseURL: https://fal.ai
+    properties:
+      - url: https://fal.ai/models
+        type: Documentation
+    description: >-
+      Read-only discovery endpoints for browsing fal's 1,000+ production model catalog, including model metadata,
+      capability tags, pricing per output, supported parameters, example inputs, and OpenAPI schemas per model. Backs
+      the model gallery, search, and SDK tooling.
+  - aid: fal-ai:fal-compute-api
+    name: fal Compute API
+    tags:
+      - AI
+      - GPU
+      - Compute
+      - Infrastructure
+      - Dedicated
+    humanURL: https://fal.ai/compute
+    baseURL: https://rest.alpha.fal.ai
+    properties:
+      - url: https://fal.ai/compute
+        type: Documentation
+    description: >-
+      Provision and manage dedicated GPU instances (H100, H200, A100, B200) with full SSH access for training,
+      fine-tuning, and persistent workloads. Hourly or per-second billing with no lock-in.
+  - aid: fal-ai:fal-keys-api
+    name: fal API Keys API
+    tags:
+      - AI
+      - Administration
+      - Authentication
+      - API Keys
+    humanURL: https://fal.ai/dashboard/keys
+    baseURL: https://rest.alpha.fal.ai
+    properties:
+      - url: https://fal.ai/dashboard/keys
+        type: Documentation
+    description: >-
+      Manage fal API keys — create, list, scope, and revoke keys used to authenticate against the Model, Storage,
+      Serverless, and Compute APIs via the Authorization: Key $FAL_KEY header.
+  - aid: fal-ai:fal-usage-billing-api
+    name: fal Usage and Billing API
+    tags:
+      - AI
+      - Administration
+      - Usage
+      - Billing
+      - FinOps
+    humanURL: https://fal.ai/dashboard/usage
+    baseURL: https://rest.alpha.fal.ai
+    properties:
+      - url: https://fal.ai/dashboard/usage
+        type: Documentation
+    description: >-
+      Programmatic access to usage metrics, per-model spend, GPU-second consumption, and invoicing history. Surfaces the
+      same data shown on the fal dashboard so platform teams can pipe inference cost into internal FinOps tooling.
+name: fal
+tags:
   - AI
+  - Artificial Intelligence
   - Generative AI
+  - Generative Media
   - Image Generation
   - Video Generation
   - Audio Generation
-  - Multimodal
   - Inference
-  humanURL: https://fal.ai/docs/model-apis/quickstart
-  baseURL: https://queue.fal.run
-  properties:
-  - url: https://fal.ai/docs/model-apis/quickstart
-    type: Documentation
-  - url: https://fal.ai/models
-    type: Documentation
-    name: Model Gallery
-  - url: openapi/fal-model-apis-openapi.yml
-    type: OpenAPI
-  - url: json-schema/fal-queue-request-schema.json
-    type: JSONSchema
-  - url: json-schema/fal-queue-status-schema.json
-    type: JSONSchema
-  - url: json-ld/fal-ai-context.jsonld
-    type: JSONLD
-  - type: NaftikoCapability
-    url: capabilities/model-apis-queue.yaml
-  description: Unified queue-based REST API for invoking 1,000+ generative image, video, audio, and multimodal
-    models hosted on fal's inference infrastructure. Submit a request to `https://queue.fal.run/{model-id}`, poll
-    `/requests/{request_id}/status` or `/requests/{request_id}` for progress and results, or subscribe to webhook
-    callbacks. Supports synchronous responses, asynchronous queueing, server-sent streaming progress, and request
-    cancellation. Powers flagship models including FLUX, Veo 3, Kling 2.5, Wan 2.5, Seedream, Nano Banana, Qwen,
-    SDXL, and Stable Diffusion variants.
-- aid: fal-ai:fal-realtime-api
-  name: fal Realtime API
-  tags:
-  - AI
-  - Generative AI
-  - Realtime
-  - WebSocket
-  - Streaming
-  - Inference
-  humanURL: https://fal.ai/docs/model-apis/real-time
-  baseURL: wss://realtime.fal.run
-  properties:
-  - url: https://fal.ai/docs/model-apis/real-time
-    type: Documentation
-  - url: https://github.com/fal-ai/real-time-demo-app
-    type: CodeExamples
-  - url: asyncapi/fal-ai-asyncapi.yml
-    type: AsyncAPI
-  description: WebSocket-based realtime inference for ultra-low latency interactive generative experiences such as
-    LCM/SDXL sketch-to-image, live-portrait, and realtime upscaling. Bi-directional binary/JSON messaging keeps a
-    persistent connection open so each frame, prompt, or pose adjustment is processed in milliseconds. Powers
-    fal.realtime client utilities used in canvas apps, drawing tools, AR experiences, and live video pipelines.
-- aid: fal-ai:fal-streaming-api
-  name: fal Streaming API
-  tags:
-  - AI
-  - Generative AI
-  - Streaming
-  - Server-Sent Events
-  - Inference
-  humanURL: https://fal.ai/docs/model-apis/streaming
-  baseURL: https://queue.fal.run
-  properties:
-  - url: https://fal.ai/docs/model-apis/streaming
-    type: Documentation
-  - url: asyncapi/fal-ai-asyncapi.yml
-    type: AsyncAPI
-  description: HTTP streaming endpoint (`/{model-id}/stream`) that emits progressive partial outputs as a model
-    runs — used for LLM/VLM token streams, incremental video frames, and step-by-step image diffusion previews.
-    Compatible with Server-Sent Events parsers in the official fal-client SDKs.
-- aid: fal-ai:fal-storage-api
-  name: fal Storage API
-  tags:
-  - AI
-  - Generative AI
-  - File Upload
-  - Storage
-  - CDN
-  humanURL: https://fal.ai/docs/model-apis/file-uploads
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/docs/model-apis/file-uploads
-    type: Documentation
-  - url: openapi/fal-storage-api-openapi.yml
-    type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/storage-files.yaml
-  description: REST endpoints for uploading binary inputs (images, audio clips, reference frames, control maps) to
-    fal's CDN so they can be referenced by URL when invoking model APIs. Issues short-lived signed upload URLs via
-    `/storage/upload/initiate` and serves the resulting assets from `https://v3.fal.media`.
-- aid: fal-ai:fal-serverless-platform-api
-  name: fal Serverless Platform API
-  tags:
-  - AI
   - Serverless
   - GPU
-  - Deployments
-  - Platform
-  humanURL: https://fal.ai/docs/private-serverless-models
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/docs/private-serverless-models
-    type: Documentation
-  - url: https://github.com/fal-ai/fal
-    type: SDK
-    name: fal Python SDK and CLI
-  - url: openapi/fal-serverless-platform-api-openapi.yml
-    type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/serverless-apps.yaml
-  description: Programmatic management of custom fal Serverless applications — list, inspect, deploy, scale, and
-    monitor user-defined GPU functions deployed with `@fal.function`, `fal.App`, or BYO containers. Covers app
-    metadata, secrets, file volumes, scaling parameters (`keep_alive`, `min_concurrency`), and execution analytics.
-- aid: fal-ai:fal-models-catalog-api
-  name: fal Models Catalog API
-  tags:
-  - AI
-  - Generative AI
-  - Catalog
-  - Discovery
-  humanURL: https://fal.ai/models
-  baseURL: https://fal.ai
-  properties:
-  - url: https://fal.ai/models
-    type: Documentation
-  - type: NaftikoCapability
-    url: capabilities/models-catalog.yaml
-  description: Read-only discovery endpoints for browsing fal's 1,000+ production model catalog, including model
-    metadata, capability tags, pricing per output, supported parameters, example inputs, and OpenAPI schemas per
-    model. Backs the model gallery, search, and SDK tooling.
-- aid: fal-ai:fal-compute-api
-  name: fal Compute API
-  tags:
-  - AI
-  - GPU
-  - Compute
-  - Infrastructure
-  - Dedicated
-  humanURL: https://fal.ai/compute
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/compute
-    type: Documentation
-  - type: NaftikoCapability
-    url: capabilities/compute-instances.yaml
-  description: Provision and manage dedicated GPU instances (H100, H200, A100, B200) with full SSH access for
-    training, fine-tuning, and persistent workloads. Hourly or per-second billing with no lock-in.
-- aid: fal-ai:fal-keys-api
-  name: fal API Keys API
-  tags:
-  - AI
-  - Administration
-  - Authentication
-  - API Keys
-  humanURL: https://fal.ai/dashboard/keys
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/dashboard/keys
-    type: Documentation
-  - type: NaftikoCapability
-    url: capabilities/keys-management.yaml
-  description: 'Manage fal API keys — create, list, scope, and revoke keys used to authenticate against the Model,
-    Storage, Serverless, and Compute APIs via the Authorization: Key $FAL_KEY header.'
-- aid: fal-ai:fal-usage-billing-api
-  name: fal Usage and Billing API
-  tags:
-  - AI
-  - Administration
-  - Usage
-  - Billing
-  - FinOps
-  humanURL: https://fal.ai/dashboard/usage
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/dashboard/usage
-    type: Documentation
-  - type: NaftikoCapability
-    url: capabilities/usage-billing.yaml
-  description: Programmatic access to usage metrics, per-model spend, GPU-second consumption, and invoicing
-    history. Surfaces the same data shown on the fal dashboard so platform teams can pipe inference cost into
-    internal FinOps tooling.
-name: fal
-tags:
-- AI
-- Artificial Intelligence
-- Generative AI
-- Generative Media
-- Image Generation
-- Video Generation
-- Audio Generation
-- Inference
-- Serverless
-- GPU
-- MCP
+  - MCP
 kind: contract
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
-- type: ArazzoWorkflows
-  url: arazzo/
-  workflows:
-  - url: arazzo/fal-ai-image-to-image-result-workflow.yml
-    name: fal Upload, Run Image-To-Image With Webhook
-    summary: Upload a reference image, submit an image-to-image job with a webhook, and confirm queue acceptance.
-  - url: arazzo/fal-ai-queue-inference-workflow.yml
-    name: fal Queue Inference
-    summary: Submit a model inference job, poll the queue until it completes, then fetch the result.
-  - url: arazzo/fal-ai-serverless-app-discovery-workflow.yml
-    name: fal Serverless App Discovery
-    summary: List deployed Serverless apps, then fetch full metadata and scaling for the first one.
-  - url: arazzo/fal-ai-serverless-app-files-workflow.yml
-    name: fal Serverless App Files Inspection
-    summary: Confirm a Serverless app exists, then list files on its persistent /data volume.
-  - url: arazzo/fal-ai-set-and-verify-secret-workflow.yml
-    name: fal Set And Verify Serverless Secret
-    summary: Create or replace a Serverless secret, then list secret names to confirm it is present.
-  - url: arazzo/fal-ai-stream-inference-workflow.yml
-    name: fal Streaming Inference
-    summary: Run a model synchronously over the streaming endpoint to receive progressive output.
-  - url: arazzo/fal-ai-submit-and-cancel-workflow.yml
-    name: fal Submit And Conditionally Cancel
-    summary: Submit an inference job, check its status once, and cancel it if it has not finished.
-  - url: arazzo/fal-ai-upload-then-inference-workflow.yml
-    name: fal Upload Asset Then Run Inference
-    summary: Upload a binary reference asset to the fal CDN, then run an image-to-X model against it.
-  - url: arazzo/fal-ai-webhook-submission-workflow.yml
-    name: fal Webhook-Backed Submission
-    summary: Submit an inference job with a webhook callback and confirm it was accepted into the queue.
-- type: Portal
-  url: https://fal.ai
-- type: Documentation
-  url: https://fal.ai/docs
-- type: Documentation
-  name: Model APIs Quickstart
-  url: https://fal.ai/docs/model-apis/quickstart
-- type: Documentation
-  name: Model Gallery
-  url: https://fal.ai/models
-- type: Documentation
-  name: Authentication
-  url: https://fal.ai/docs/authentication
-- type: Documentation
-  name: Webhooks
-  url: https://fal.ai/docs/model-apis/webhooks
-- type: Documentation
-  name: Realtime
-  url: https://fal.ai/docs/model-apis/real-time
-- type: Documentation
-  name: Streaming
-  url: https://fal.ai/docs/model-apis/streaming
-- type: Documentation
-  name: File Uploads
-  url: https://fal.ai/docs/model-apis/file-uploads
-- type: Documentation
-  name: Private Serverless Models
-  url: https://fal.ai/docs/private-serverless-models
-- type: GettingStarted
-  url: https://fal.ai/docs/model-apis/quickstart
-- type: StatusPage
-  url: https://status.fal.ai
-- type: Blog
-  url: https://blog.fal.ai
-- type: SignUp
-  url: https://fal.ai/login
-- type: Pricing
-  url: https://fal.ai/pricing
-- type: Support
-  name: Discord
-  url: https://discord.gg/fal-ai
-- type: Forum
-  url: https://discord.gg/fal-ai
-- type: TermsOfService
-  url: https://fal.ai/legal/terms-of-service
-- type: PrivacyPolicy
-  url: https://fal.ai/legal/privacy-policy
-- type: TrustCenter
-  url: https://trust.fal.ai
-- type: LinkedIn
-  url: https://www.linkedin.com/company/featuresandlabels
-- type: Twitter
-  url: https://twitter.com/fal
-- type: GitHubOrganization
-  url: https://github.com/fal-ai
-- type: SDK
-  name: fal Python Client
-  url: https://github.com/fal-ai/fal-client-python
-- type: SDK
-  name: fal JavaScript Client
-  url: https://github.com/fal-ai/fal-js
-- type: SDK
-  name: fal Swift Client
-  url: https://github.com/fal-ai/fal-swift
-- type: SDK
-  name: fal Java/Kotlin Client
-  url: https://github.com/fal-ai/fal-java
-- type: SDK
-  name: fal Dart/Flutter Client
-  url: https://github.com/fal-ai/fal-dart
-- type: SDK
-  name: fal Python SDK / Serverless
-  url: https://github.com/fal-ai/fal
-- type: Tool
-  name: fal Terraform Provider
-  url: https://github.com/fal-ai/terraform-provider-fal
-- type: Tool
-  name: fal Blender Extension
-  url: https://github.com/fal-ai/fal-blender-extension
-- type: Tool
-  name: fal VS Code Extension (Serverless)
-  url: https://github.com/fal-ai/serverless-vscode
-- type: CodeExamples
-  name: Awesome fal
-  url: https://github.com/fal-ai/awesome
-- type: CodeExamples
-  name: Real-Time Demo App
-  url: https://github.com/fal-ai/real-time-demo-app
-- type: CodeExamples
-  name: fal Next.js Template
-  url: https://github.com/fal-ai/fal-nextjs-template
-- type: Documentation
-  name: MCP Server
-  url: https://fal.ai/docs/mcp-server
-- type: Documentation
-  name: ComfyUI Integration
-  url: https://fal.ai/docs/comfyui
-- url: plans/fal-ai-plans-pricing.yml
-  type: Plans
-- url: rate-limits/fal-ai-rate-limits.yml
-  type: RateLimits
-- url: finops/fal-ai-finops.yml
-  type: FinOps
-- type: Features
-  data:
-  - Unified queue-based REST API at https://queue.fal.run/{model-id} for 1,000+ generative models
-  - Image generation models — FLUX (Schnell, Dev, Pro, Kontext Pro), Seedream V4, Nano Banana, Qwen, SDXL, SD3,
-    Ideogram, Recraft
-  - Video generation models — Veo 3, Kling 2.5 Turbo Pro, Wan 2.5, Seedance 2.0, Ovi, Hunyuan, Sora-class
-  - Audio and voice models — Inworld TTS-1.5, ElevenLabs, MMAudio, MusicGen, Stable Audio
-  - 3D and multimodal models — TripoSR, Hunyuan3D, LivePortrait, FaceChain
-  - Synchronous, asynchronous queue, server-sent streaming, and WebSocket realtime invocation modes
-  - Webhook callbacks for queue completion with HMAC signature verification
-  - File uploads / CDN storage at https://v3.fal.media with signed upload URLs
-  - fal Serverless — `@fal.function`, `fal.App`, BYO container deployment with autoscaling from 0 to thousands of
-    GPUs
-  - fal Compute — dedicated H100/H200/A100/B200 instances with SSH and per-second billing
-  - Per-output billing (image, video second, audio minute) plus per-second GPU billing for custom deployments
-  - 99.99% uptime SLA, SOC 2 compliance, private endpoints, and enterprise support
-  - Proprietary Inference Engine — up to 10x faster than reference implementations
-  - Official SDKs for Python (fal-client), JavaScript/TypeScript (@fal-ai/client), Swift, Java/Kotlin, Dart
-  - fal CLI for serverless deploy / run / apps / secrets / auth
-  - fal MCP Server exposing all 1,000+ models to AI assistants via the Model Context Protocol
-  - ComfyUI and Blender extensions, plus Terraform provider for infra-as-code
-  - Day-zero launch partner for major model releases (FLUX, Veo, Kling, Seedance, Wan, etc.)
-  sources:
-  - https://fal.ai
-  - https://fal.ai/docs
-  - https://fal.ai/pricing
-  - https://fal.ai/models
-  - https://github.com/fal-ai
-  - https://blog.fal.ai
-  updated: '2026-05-25'
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/fal/overview
+  - type: ArazzoWorkflows
+    url: arazzo/
+    workflows:
+      - url: arazzo/fal-ai-image-to-image-result-workflow.yml
+        name: fal Upload, Run Image-To-Image With Webhook
+        summary: Upload a reference image, submit an image-to-image job with a webhook, and confirm queue acceptance.
+      - url: arazzo/fal-ai-queue-inference-workflow.yml
+        name: fal Queue Inference
+        summary: Submit a model inference job, poll the queue until it completes, then fetch the result.
+      - url: arazzo/fal-ai-serverless-app-discovery-workflow.yml
+        name: fal Serverless App Discovery
+        summary: List deployed Serverless apps, then fetch full metadata and scaling for the first one.
+      - url: arazzo/fal-ai-serverless-app-files-workflow.yml
+        name: fal Serverless App Files Inspection
+        summary: Confirm a Serverless app exists, then list files on its persistent /data volume.
+      - url: arazzo/fal-ai-set-and-verify-secret-workflow.yml
+        name: fal Set And Verify Serverless Secret
+        summary: Create or replace a Serverless secret, then list secret names to confirm it is present.
+      - url: arazzo/fal-ai-stream-inference-workflow.yml
+        name: fal Streaming Inference
+        summary: Run a model synchronously over the streaming endpoint to receive progressive output.
+      - url: arazzo/fal-ai-submit-and-cancel-workflow.yml
+        name: fal Submit And Conditionally Cancel
+        summary: Submit an inference job, check its status once, and cancel it if it has not finished.
+      - url: arazzo/fal-ai-upload-then-inference-workflow.yml
+        name: fal Upload Asset Then Run Inference
+        summary: Upload a binary reference asset to the fal CDN, then run an image-to-X model against it.
+      - url: arazzo/fal-ai-webhook-submission-workflow.yml
+        name: fal Webhook-Backed Submission
+        summary: Submit an inference job with a webhook callback and confirm it was accepted into the queue.
+  - type: Portal
+    url: https://fal.ai
+  - type: Documentation
+    url: https://fal.ai/docs
+  - type: Documentation
+    name: Model APIs Quickstart
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    name: Model Gallery
+    url: https://fal.ai/models
+  - type: Documentation
+    name: Authentication
+    url: https://fal.ai/docs/authentication
+  - type: Documentation
+    name: Webhooks
+    url: https://fal.ai/docs/model-apis/webhooks
+  - type: Documentation
+    name: Realtime
+    url: https://fal.ai/docs/model-apis/real-time
+  - type: Documentation
+    name: Streaming
+    url: https://fal.ai/docs/model-apis/streaming
+  - type: Documentation
+    name: File Uploads
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    name: Private Serverless Models
+    url: https://fal.ai/docs/private-serverless-models
+  - type: GettingStarted
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: StatusPage
+    url: https://status.fal.ai
+  - type: Blog
+    url: https://blog.fal.ai
+  - type: SignUp
+    url: https://fal.ai/login
+  - type: Pricing
+    url: https://fal.ai/pricing
+  - type: Support
+    name: Discord
+    url: https://discord.gg/fal-ai
+  - type: Forum
+    url: https://discord.gg/fal-ai
+  - type: TermsOfService
+    url: https://fal.ai/legal/terms-of-service
+  - type: PrivacyPolicy
+    url: https://fal.ai/legal/privacy-policy
+  - type: TrustCenter
+    url: https://trust.fal.ai
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/featuresandlabels
+  - type: Twitter
+    url: https://twitter.com/fal
+  - type: GitHubOrganization
+    url: https://github.com/fal-ai
+  - type: SDK
+    name: fal Python Client
+    url: https://github.com/fal-ai/fal-client-python
+  - type: SDK
+    name: fal JavaScript Client
+    url: https://github.com/fal-ai/fal-js
+  - type: SDK
+    name: fal Swift Client
+    url: https://github.com/fal-ai/fal-swift
+  - type: SDK
+    name: fal Java/Kotlin Client
+    url: https://github.com/fal-ai/fal-java
+  - type: SDK
+    name: fal Dart/Flutter Client
+    url: https://github.com/fal-ai/fal-dart
+  - type: SDK
+    name: fal Python SDK / Serverless
+    url: https://github.com/fal-ai/fal
+  - type: Tool
+    name: fal Terraform Provider
+    url: https://github.com/fal-ai/terraform-provider-fal
+  - type: Tool
+    name: fal Blender Extension
+    url: https://github.com/fal-ai/fal-blender-extension
+  - type: Tool
+    name: fal VS Code Extension (Serverless)
+    url: https://github.com/fal-ai/serverless-vscode
+  - type: CodeExamples
+    name: Awesome fal
+    url: https://github.com/fal-ai/awesome
+  - type: CodeExamples
+    name: Real-Time Demo App
+    url: https://github.com/fal-ai/real-time-demo-app
+  - type: CodeExamples
+    name: fal Next.js Template
+    url: https://github.com/fal-ai/fal-nextjs-template
+  - type: Documentation
+    name: MCP Server
+    url: https://fal.ai/docs/mcp-server
+  - type: Documentation
+    name: ComfyUI Integration
+    url: https://fal.ai/docs/comfyui
+  - url: plans/fal-ai-plans-pricing.yml
+    type: Plans
+  - url: rate-limits/fal-ai-rate-limits.yml
+    type: RateLimits
+  - url: finops/fal-ai-finops.yml
+    type: FinOps
+  - type: Features
+    data:
+      - Unified queue-based REST API at https://queue.fal.run/{model-id} for 1,000+ generative models
+      - >-
+        Image generation models — FLUX (Schnell, Dev, Pro, Kontext Pro), Seedream V4, Nano Banana, Qwen, SDXL, SD3,
+        Ideogram, Recraft
+      - Video generation models — Veo 3, Kling 2.5 Turbo Pro, Wan 2.5, Seedance 2.0, Ovi, Hunyuan, Sora-class
+      - Audio and voice models — Inworld TTS-1.5, ElevenLabs, MMAudio, MusicGen, Stable Audio
+      - 3D and multimodal models — TripoSR, Hunyuan3D, LivePortrait, FaceChain
+      - Synchronous, asynchronous queue, server-sent streaming, and WebSocket realtime invocation modes
+      - Webhook callbacks for queue completion with HMAC signature verification
+      - File uploads / CDN storage at https://v3.fal.media with signed upload URLs
+      - >-
+        fal Serverless — `@fal.function`, `fal.App`, BYO container deployment with autoscaling from 0 to thousands of
+        GPUs
+      - fal Compute — dedicated H100/H200/A100/B200 instances with SSH and per-second billing
+      - Per-output billing (image, video second, audio minute) plus per-second GPU billing for custom deployments
+      - 99.99% uptime SLA, SOC 2 compliance, private endpoints, and enterprise support
+      - Proprietary Inference Engine — up to 10x faster than reference implementations
+      - Official SDKs for Python (fal-client), JavaScript/TypeScript (@fal-ai/client), Swift, Java/Kotlin, Dart
+      - fal CLI for serverless deploy / run / apps / secrets / auth
+      - fal MCP Server exposing all 1,000+ models to AI assistants via the Model Context Protocol
+      - ComfyUI and Blender extensions, plus Terraform provider for infra-as-code
+      - Day-zero launch partner for major model releases (FLUX, Veo, Kling, Seedance, Wan, etc.)
+    sources:
+      - https://fal.ai
+      - https://fal.ai/docs
+      - https://fal.ai/pricing
+      - https://fal.ai/models
+      - https://github.com/fal-ai
+      - https://blog.fal.ai
+    updated: '2026-05-25'
 created: '2026-05-25'
 modified: '2026-05-25'
 position: Consuming
-description: fal (Features and Labels, Inc.) is a generative media platform providing the world's fastest API for
-  running image, video, audio, and multimodal generative AI models. Through a unified queue-based REST API at
-  https://queue.fal.run, plus realtime WebSocket and SSE streaming surfaces, fal serves 1,000+ production models
-  — including FLUX, Veo 3, Kling, Wan, Seedream, Nano Banana, and Stable Diffusion — on autoscaling GPU
-  infrastructure. fal Serverless lets developers ship custom models with `@fal.function` / `fal.App` / BYO
-  containers, while fal Compute provides dedicated H100/H200/A100/B200 instances. Trusted by Canva, Perplexity,
-  Poe, and 1.5M+ developers; Series D funded ($140M, Sequoia-led, December 2025); SOC 2 with 99.99% uptime.
+description: >-
+  fal (Features and Labels, Inc.) is a generative media platform providing the world's fastest API for running image,
+  video, audio, and multimodal generative AI models. Through a unified queue-based REST API at https://queue.fal.run,
+  plus realtime WebSocket and SSE streaming surfaces, fal serves 1,000+ production models — including FLUX, Veo 3,
+  Kling, Wan, Seedream, Nano Banana, and Stable Diffusion — on autoscaling GPU infrastructure. fal Serverless lets
+  developers ship custom models with `@fal.function` / `fal.App` / BYO containers, while fal Compute provides dedicated
+  H100/H200/A100/B200 instances. Trusted by Canva, Perplexity, Poe, and 1.5M+ developers; Series D funded ($140M,
+  Sequoia-led, December 2025); SOC 2 with 99.99% uptime.
 maintainers:
-- FN: Kin Lane
-  email: info@apievangelist.com
-  X: apievangelist
-  url: https://apievangelist.com
+  - FN: Kin Lane
+    email: info@apievangelist.com
+    X: apievangelist
+    url: https://apievangelist.com
 specificationVersion: '0.16'
