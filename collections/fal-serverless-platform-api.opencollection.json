@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "fal Serverless Platform API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Serverless Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rest.alpha.fal.ai/serverless/apps"
+          },
+          "docs": "Return every Serverless app deployed under the calling key's organization."
+        },
+        {
+          "info": {
+            "name": "Get Serverless App",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rest.alpha.fal.ai/serverless/apps/:app_id",
+            "params": [
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata, endpoint URL, and current scaling parameters for an app."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Secrets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Serverless Secrets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rest.alpha.fal.ai/serverless/secrets"
+          },
+          "docs": "Return secret names available to all Serverless apps in the calling org. Values are never returned."
+        },
+        {
+          "info": {
+            "name": "Set Serverless Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rest.alpha.fal.ai/serverless/secrets",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or replace a named secret injected as an env var into Serverless runs."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Serverless Files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rest.alpha.fal.ai/serverless/files",
+            "params": [
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Subdirectory path under `/data` to list."
+              }
+            ]
+          },
+          "docs": "List files on the persistent `/data` volume mounted into Serverless runs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

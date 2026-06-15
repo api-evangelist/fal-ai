@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "fal Storage API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Storage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate Asset Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rest.alpha.fal.ai/storage/upload/initiate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a short-lived signed URL to which the client should PUT the file bytes. Returns both the upload URL and the public CDN URL that should be passed to model APIs once the upload completes.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

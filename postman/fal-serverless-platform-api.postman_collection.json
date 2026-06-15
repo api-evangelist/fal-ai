@@ -1,0 +1,758 @@
+{
+  "info": {
+    "_postman_id": "fab4112d-dd55-44f2-a816-8c69ff186143",
+    "name": "fal Serverless Platform API",
+    "description": "Platform control-plane endpoints for managing fal Serverless applications \u2014 custom GPU functions and apps deployed using `@fal.function`, `fal.App`, or bring-your-own containers. Covers app metadata, scaling, secrets, files, and execution analytics. This API backs the `fal` CLI (`fal apps list`, `fal secrets`, `fal deploy`).\n\n\nContact Support:\n Name: fal Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T15:00:51.000Z",
+    "updatedAt": "2026-06-05T15:00:52.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-fab4112d-dd55-44f2-a816-8c69ff186143"
+  },
+  "item": [
+    {
+      "name": "serverless",
+      "item": [
+        {
+          "name": "apps",
+          "item": [
+            {
+              "name": "{app_id}",
+              "item": [
+                {
+                  "name": "Get Serverless App",
+                  "id": "14b0cbff-16b6-410c-859a-41d71aa6e935",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/apps/:app_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "apps",
+                        ":app_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "87fbdb85-25ff-4215-a888-73b7b2565165",
+                          "key": "app_id",
+                          "value": "<string>",
+                          "description": "(Required) Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve metadata, endpoint URL, and current scaling parameters for an app."
+                  },
+                  "response": [
+                    {
+                      "id": "c33b00a0-60d1-4bde-a190-8a3f8a99548e",
+                      "name": "App detail.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/serverless/apps/:app_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "serverless",
+                            "apps",
+                            ":app_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "app_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"gpu\": \"<string>\",\n  \"keep_alive\": \"<integer>\",\n  \"min_concurrency\": \"<integer>\",\n  \"max_concurrency\": \"<integer>\",\n  \"public\": \"<boolean>\"\n}",
+                      "createdAt": "2026-06-05T15:00:52.000Z",
+                      "updatedAt": "2026-06-05T15:00:52.000Z",
+                      "uid": "35240-c33b00a0-60d1-4bde-a190-8a3f8a99548e"
+                    },
+                    {
+                      "id": "e7c11ff9-b169-49d8-ad68-d841bf1c9fbd",
+                      "name": "Missing or invalid API key.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/serverless/apps/:app_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "serverless",
+                            "apps",
+                            ":app_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "app_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T15:00:52.000Z",
+                      "updatedAt": "2026-06-05T15:00:52.000Z",
+                      "uid": "35240-e7c11ff9-b169-49d8-ad68-d841bf1c9fbd"
+                    },
+                    {
+                      "id": "338ffbe1-4d39-4bef-bbee-27baddb1437f",
+                      "name": "App or resource not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/serverless/apps/:app_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "serverless",
+                            "apps",
+                            ":app_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "app_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T15:00:52.000Z",
+                      "updatedAt": "2026-06-05T15:00:52.000Z",
+                      "uid": "35240-338ffbe1-4d39-4bef-bbee-27baddb1437f"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-14b0cbff-16b6-410c-859a-41d71aa6e935"
+                }
+              ],
+              "id": "52b58558-7314-40a4-89fb-43af9f6f8c49",
+              "createdAt": "2026-06-05T15:00:52.000Z",
+              "updatedAt": "2026-06-05T15:00:52.000Z",
+              "uid": "35240-52b58558-7314-40a4-89fb-43af9f6f8c49"
+            },
+            {
+              "name": "List Serverless Apps",
+              "id": "ee08f087-7bf6-4a41-8f1f-d9f1f8e683b8",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/serverless/apps",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "serverless",
+                    "apps"
+                  ]
+                },
+                "description": "Return every Serverless app deployed under the calling key's organization."
+              },
+              "response": [
+                {
+                  "id": "7c66234d-c56d-47f6-8449-53fddc7c7cb7",
+                  "name": "Apps owned by the organization.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/apps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "apps"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"endpoint\": \"<uri>\",\n    \"gpu\": \"<string>\",\n    \"keep_alive\": \"<integer>\",\n    \"min_concurrency\": \"<integer>\",\n    \"max_concurrency\": \"<integer>\",\n    \"public\": \"<boolean>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"endpoint\": \"<uri>\",\n    \"gpu\": \"<string>\",\n    \"keep_alive\": \"<integer>\",\n    \"min_concurrency\": \"<integer>\",\n    \"max_concurrency\": \"<integer>\",\n    \"public\": \"<boolean>\"\n  }\n]",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-7c66234d-c56d-47f6-8449-53fddc7c7cb7"
+                },
+                {
+                  "id": "46065ef8-f672-4f3f-a3c7-03f159316aee",
+                  "name": "Missing or invalid API key.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/apps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "apps"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-46065ef8-f672-4f3f-a3c7-03f159316aee"
+                }
+              ],
+              "createdAt": "2026-06-05T15:00:52.000Z",
+              "updatedAt": "2026-06-05T15:00:52.000Z",
+              "uid": "35240-ee08f087-7bf6-4a41-8f1f-d9f1f8e683b8"
+            }
+          ],
+          "id": "6ab8c711-66af-4fcd-8d06-1ac5ea20cd6b",
+          "createdAt": "2026-06-05T15:00:52.000Z",
+          "updatedAt": "2026-06-05T15:00:52.000Z",
+          "uid": "35240-6ab8c711-66af-4fcd-8d06-1ac5ea20cd6b"
+        },
+        {
+          "name": "secrets",
+          "item": [
+            {
+              "name": "List Serverless Secrets",
+              "id": "3c61a0c5-da1b-424d-90a3-518ba6e162d3",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/serverless/secrets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "serverless",
+                    "secrets"
+                  ]
+                },
+                "description": "Return secret names available to all Serverless apps in the calling org. Values are never returned."
+              },
+              "response": [
+                {
+                  "id": "e02802ab-d356-40fe-ab1b-a43a921707d2",
+                  "name": "Secret names.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/secrets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "secrets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\"\n  }\n]",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-e02802ab-d356-40fe-ab1b-a43a921707d2"
+                },
+                {
+                  "id": "66a5ab8e-3325-46de-b966-daab674f20c3",
+                  "name": "Missing or invalid API key.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/secrets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "secrets"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-66a5ab8e-3325-46de-b966-daab674f20c3"
+                }
+              ],
+              "createdAt": "2026-06-05T15:00:52.000Z",
+              "updatedAt": "2026-06-05T15:00:52.000Z",
+              "uid": "35240-3c61a0c5-da1b-424d-90a3-518ba6e162d3"
+            },
+            {
+              "name": "Set Serverless Secret",
+              "id": "960a58f4-5383-4cb7-99d2-0c7f61890c3f",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"value\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/serverless/secrets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "serverless",
+                    "secrets"
+                  ]
+                },
+                "description": "Create or replace a named secret injected as an env var into Serverless runs."
+              },
+              "response": [
+                {
+                  "id": "96c695c3-ec8b-45fd-b9d8-cccd6345d207",
+                  "name": "Secret saved.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"value\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/secrets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "secrets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"name\": \"<string>\",\n  \"created_at\": \"<dateTime>\"\n}",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-96c695c3-ec8b-45fd-b9d8-cccd6345d207"
+                },
+                {
+                  "id": "c6390843-8985-4b1c-9a0f-add930d6a312",
+                  "name": "Missing or invalid API key.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"value\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/secrets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "secrets"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-c6390843-8985-4b1c-9a0f-add930d6a312"
+                }
+              ],
+              "createdAt": "2026-06-05T15:00:52.000Z",
+              "updatedAt": "2026-06-05T15:00:52.000Z",
+              "uid": "35240-960a58f4-5383-4cb7-99d2-0c7f61890c3f"
+            }
+          ],
+          "id": "385b5f43-25d8-452b-a46e-194c354427b0",
+          "createdAt": "2026-06-05T15:00:52.000Z",
+          "updatedAt": "2026-06-05T15:00:52.000Z",
+          "uid": "35240-385b5f43-25d8-452b-a46e-194c354427b0"
+        },
+        {
+          "name": "files",
+          "item": [
+            {
+              "name": "List Serverless Files",
+              "id": "e2511298-b255-4ea2-8e19-327c41dd1a84",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/serverless/files?path=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "serverless",
+                    "files"
+                  ],
+                  "query": [
+                    {
+                      "description": "Subdirectory path under `/data` to list.",
+                      "key": "path",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "List files on the persistent `/data` volume mounted into Serverless runs."
+              },
+              "response": [
+                {
+                  "id": "0d089b78-ffe6-47b9-b93c-9cdbe5f63559",
+                  "name": "File listing.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/serverless/files?path=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "serverless",
+                        "files"
+                      ],
+                      "query": [
+                        {
+                          "description": "Subdirectory path under `/data` to list.",
+                          "key": "path",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"path\": \"<string>\",\n    \"size\": \"<integer>\",\n    \"modified_at\": \"<dateTime>\"\n  },\n  {\n    \"path\": \"<string>\",\n    \"size\": \"<integer>\",\n    \"modified_at\": \"<dateTime>\"\n  }\n]",
+                  "createdAt": "2026-06-05T15:00:52.000Z",
+                  "updatedAt": "2026-06-05T15:00:52.000Z",
+                  "uid": "35240-0d089b78-ffe6-47b9-b93c-9cdbe5f63559"
+                }
+              ],
+              "createdAt": "2026-06-05T15:00:52.000Z",
+              "updatedAt": "2026-06-05T15:00:52.000Z",
+              "uid": "35240-e2511298-b255-4ea2-8e19-327c41dd1a84"
+            }
+          ],
+          "id": "2230f41f-7099-47d2-9f8b-d856f25a4491",
+          "createdAt": "2026-06-05T15:00:52.000Z",
+          "updatedAt": "2026-06-05T15:00:52.000Z",
+          "uid": "35240-2230f41f-7099-47d2-9f8b-d856f25a4491"
+        }
+      ],
+      "id": "391a67e6-5e4e-4b58-82b8-a2b04dfc3098",
+      "createdAt": "2026-06-05T15:00:52.000Z",
+      "updatedAt": "2026-06-05T15:00:52.000Z",
+      "uid": "35240-391a67e6-5e4e-4b58-82b8-a2b04dfc3098"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://rest.alpha.fal.ai"
+    }
+  ]
+}

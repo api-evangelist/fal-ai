@@ -1,0 +1,288 @@
+{
+  "info": {
+    "_postman_id": "309f62bb-c619-4804-92f3-59d9fe8e6f9d",
+    "name": "fal Storage API",
+    "description": "REST endpoints for uploading binary input assets (images, audio, control maps, reference frames) to fal's CDN so they can be passed by URL when invoking model APIs. Clients first call `/storage/upload/initiate` to obtain a short-lived signed upload URL, then PUT the bytes to the returned URL. Assets are served from `https://v3.fal.media`.\n\n\nContact Support:\n Name: fal Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T15:00:50.000Z",
+    "updatedAt": "2026-06-05T15:00:51.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-309f62bb-c619-4804-92f3-59d9fe8e6f9d"
+  },
+  "item": [
+    {
+      "name": "storage",
+      "item": [
+        {
+          "name": "upload",
+          "item": [
+            {
+              "name": "initiate",
+              "item": [
+                {
+                  "name": "Initiate Asset Upload",
+                  "id": "01530058-1e69-4909-b29c-51dc8fec29f0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"content_type\": \"<string>\",\n  \"file_name\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/storage/upload/initiate",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "storage",
+                        "upload",
+                        "initiate"
+                      ]
+                    },
+                    "description": "Request a short-lived signed URL to which the client should PUT the file bytes. Returns both the upload URL and the public CDN URL that should be passed to model APIs once the upload completes.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "6d75d7e7-b4ee-4d61-a84e-93e8a81cfa0c",
+                      "name": "Signed upload URL.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"content_type\": \"<string>\",\n  \"file_name\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/storage/upload/initiate",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "storage",
+                            "upload",
+                            "initiate"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"upload_url\": \"<uri>\",\n  \"file_url\": \"<uri>\"\n}",
+                      "createdAt": "2026-06-05T15:00:51.000Z",
+                      "updatedAt": "2026-06-05T15:00:51.000Z",
+                      "uid": "35240-6d75d7e7-b4ee-4d61-a84e-93e8a81cfa0c"
+                    },
+                    {
+                      "id": "cac252f5-687b-4a13-a08d-58bf4792fa77",
+                      "name": "Missing or invalid API key.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"content_type\": \"<string>\",\n  \"file_name\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/storage/upload/initiate",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "storage",
+                            "upload",
+                            "initiate"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T15:00:51.000Z",
+                      "updatedAt": "2026-06-05T15:00:51.000Z",
+                      "uid": "35240-cac252f5-687b-4a13-a08d-58bf4792fa77"
+                    },
+                    {
+                      "id": "7d4daeb0-52e4-4950-9495-400e1e45180d",
+                      "name": "Invalid `content_type` or `file_name`.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"content_type\": \"<string>\",\n  \"file_name\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/storage/upload/initiate",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "storage",
+                            "upload",
+                            "initiate"
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T15:00:51.000Z",
+                      "updatedAt": "2026-06-05T15:00:51.000Z",
+                      "uid": "35240-7d4daeb0-52e4-4950-9495-400e1e45180d"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T15:00:51.000Z",
+                  "updatedAt": "2026-06-05T15:00:51.000Z",
+                  "uid": "35240-01530058-1e69-4909-b29c-51dc8fec29f0"
+                }
+              ],
+              "id": "415d4c89-0578-42bc-a1d3-82844415aad1",
+              "createdAt": "2026-06-05T15:00:51.000Z",
+              "updatedAt": "2026-06-05T15:00:51.000Z",
+              "uid": "35240-415d4c89-0578-42bc-a1d3-82844415aad1"
+            }
+          ],
+          "id": "ba527149-abef-4875-8eb4-10df346bb507",
+          "createdAt": "2026-06-05T15:00:51.000Z",
+          "updatedAt": "2026-06-05T15:00:51.000Z",
+          "uid": "35240-ba527149-abef-4875-8eb4-10df346bb507"
+        }
+      ],
+      "id": "56e2aa08-9a5d-40b1-92e8-58007632752c",
+      "createdAt": "2026-06-05T15:00:51.000Z",
+      "updatedAt": "2026-06-05T15:00:51.000Z",
+      "uid": "35240-56e2aa08-9a5d-40b1-92e8-58007632752c"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://rest.alpha.fal.ai"
+    }
+  ]
+}

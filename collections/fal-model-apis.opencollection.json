@@ -1,0 +1,197 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "fal Model APIs",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Queue",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit Model Inference Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://queue.fal.run/:model_owner/:model_name",
+            "params": [
+              {
+                "name": "model_owner",
+                "value": "",
+                "type": "path",
+                "description": "Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "path",
+                "description": "Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+              },
+              {
+                "name": "fal_webhook",
+                "value": "",
+                "type": "query",
+                "description": "Optional webhook URL that fal will POST to when the job finishes."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a new inference request to the named model. The response includes a `request_id` that can be used to poll status, fetch the final result, or cancel the job. Provide `fal_webhook` as a query parameter to receive a POST callback when the job completes.\n"
+        },
+        {
+          "info": {
+            "name": "Get Inference Request Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://queue.fal.run/:model_owner/:model_name/requests/:request_id/status",
+            "params": [
+              {
+                "name": "model_owner",
+                "value": "",
+                "type": "path",
+                "description": "Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "path",
+                "description": "Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a queued inference job, returned by `submitRequest`."
+              },
+              {
+                "name": "logs",
+                "value": "",
+                "type": "query",
+                "description": "When set to `1`, include log lines emitted by the running model."
+              }
+            ]
+          },
+          "docs": "Retrieve current status (IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED, CANCELED) for a queued request."
+        },
+        {
+          "info": {
+            "name": "Get Inference Request Result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://queue.fal.run/:model_owner/:model_name/requests/:request_id",
+            "params": [
+              {
+                "name": "model_owner",
+                "value": "",
+                "type": "path",
+                "description": "Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "path",
+                "description": "Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a queued inference job, returned by `submitRequest`."
+              }
+            ]
+          },
+          "docs": "Retrieve the final result for a completed request. Returns 202 while the job is still running."
+        },
+        {
+          "info": {
+            "name": "Cancel Inference Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://queue.fal.run/:model_owner/:model_name/requests/:request_id/cancel",
+            "params": [
+              {
+                "name": "model_owner",
+                "value": "",
+                "type": "path",
+                "description": "Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "path",
+                "description": "Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a queued inference job, returned by `submitRequest`."
+              }
+            ]
+          },
+          "docs": "Cancel an in-queue or in-progress request. Released GPU capacity is returned to the pool."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Streaming",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stream Model Inference Output",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://queue.fal.run/:model_owner/:model_name/stream",
+            "params": [
+              {
+                "name": "model_owner",
+                "value": "",
+                "type": "path",
+                "description": "Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "path",
+                "description": "Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Synchronous streaming endpoint that emits Server-Sent Events as the model produces progressive output (tokens, intermediate frames, diffusion steps). Useful for chatty multimodal models and live previews.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
