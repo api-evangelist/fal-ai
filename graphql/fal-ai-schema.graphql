@@ -1,0 +1,1018 @@
+"""
+fal GraphQL API Schema
+Conceptual schema derived from fal REST API surface covering model invocation,
+queue management, storage, serverless deployments, compute, API keys, and billing.
+Endpoint: No native GraphQL endpoint — derived from https://queue.fal.run and https://rest.alpha.fal.ai
+"""
+
+# ─────────────────────────────────────────────
+# Scalar types
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar URL
+scalar Upload
+
+# ─────────────────────────────────────────────
+# Enumerations
+# ─────────────────────────────────────────────
+
+enum RequestStatus {
+  IN_QUEUE
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+enum ModelCategory {
+  IMAGE_GENERATION
+  IMAGE_TO_IMAGE
+  IMAGE_TO_VIDEO
+  TEXT_TO_IMAGE
+  TEXT_TO_VIDEO
+  TEXT_TO_AUDIO
+  TEXT_TO_SPEECH
+  VIDEO_TO_VIDEO
+  AUDIO_TO_TEXT
+  THREE_D_GENERATION
+  MULTIMODAL
+  EMBEDDING
+  UPSCALING
+  INPAINTING
+  OUTPAINTING
+  FACE_SWAP
+  STYLE_TRANSFER
+  BACKGROUND_REMOVAL
+  OBJECT_DETECTION
+  SEGMENTATION
+  DEPTH_ESTIMATION
+}
+
+enum ModelTag {
+  FLUX
+  STABLE_DIFFUSION
+  SDXL
+  SD3
+  KLING
+  VEO
+  WAN
+  SEEDREAM
+  SEEDANCE
+  HUNYUAN
+  MMAUDIO
+  MUSICGEN
+  ELEVENLABS
+  INWORLD_TTS
+  QWEN
+  IDEOGRAM
+  RECRAFT
+  TRIPOSR
+  LIVE_PORTRAIT
+  LCM
+  CONTROLNET
+  LORA
+  INPAINT
+}
+
+enum InvocationMode {
+  QUEUE
+  SYNC
+  STREAM
+  REALTIME
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARNING
+  ERROR
+}
+
+enum AppStatus {
+  RUNNING
+  STOPPED
+  DEPLOYING
+  FAILED
+  SCALING
+}
+
+enum GpuType {
+  H100
+  H200
+  A100
+  B200
+  A10G
+  T4
+  L40S
+}
+
+enum InstanceStatus {
+  PROVISIONING
+  RUNNING
+  STOPPING
+  STOPPED
+  FAILED
+}
+
+enum BillingUnit {
+  PER_IMAGE
+  PER_VIDEO_SECOND
+  PER_AUDIO_MINUTE
+  PER_GPU_SECOND
+  PER_TOKEN
+  PER_MEGAPIXEL
+}
+
+enum WebhookEvent {
+  QUEUE_COMPLETED
+  QUEUE_FAILED
+  QUEUE_CANCELED
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+enum SecretScope {
+  GLOBAL
+  APP
+}
+
+enum StorageRegion {
+  US_EAST
+  US_WEST
+  EU_WEST
+  AP_SOUTHEAST
+}
+
+enum ApiKeyPermission {
+  FULL
+  READ_ONLY
+  MODEL_INVOCATION
+  STORAGE
+  SERVERLESS
+  COMPUTE
+}
+
+# ─────────────────────────────────────────────
+# Core entity types
+# ─────────────────────────────────────────────
+
+"""A fal model available for inference."""
+type Model {
+  id: ID!
+  owner: String!
+  name: String!
+  slug: String!
+  displayName: String
+  description: String
+  category: ModelCategory!
+  tags: [ModelTag!]!
+  isPublic: Boolean!
+  isFeatured: Boolean!
+  isExperimental: Boolean!
+  version: String
+  inputSchema: JSON
+  outputSchema: JSON
+  exampleInputs: [ModelExample!]!
+  pricing: ModelPricing!
+  supportedModes: [InvocationMode!]!
+  openApiUrl: URL
+  documentationUrl: URL
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""An example input/output pair for a model."""
+type ModelExample {
+  id: ID!
+  title: String
+  description: String
+  input: JSON!
+  output: JSON
+  imageUrl: URL
+}
+
+"""Pricing information for a model."""
+type ModelPricing {
+  unit: BillingUnit!
+  pricePerUnit: Float!
+  currency: String!
+  freeUnits: Int
+  notes: String
+}
+
+"""A queue-based inference request."""
+type InferenceRequest {
+  id: ID!
+  requestId: String!
+  modelId: String!
+  modelOwner: String!
+  modelName: String!
+  status: RequestStatus!
+  input: JSON!
+  output: JSON
+  logs: [LogEntry!]!
+  metrics: RequestMetrics
+  webhookUrl: URL
+  webhookEvents: [WebhookEvent!]!
+  queuePosition: Int
+  startedAt: DateTime
+  completedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A log line emitted by a running model."""
+type LogEntry {
+  timestamp: DateTime!
+  level: LogLevel!
+  message: String!
+  source: String
+}
+
+"""Performance metrics for a completed inference request."""
+type RequestMetrics {
+  queueTimeMs: Int
+  inferenceTimeMs: Int
+  totalTimeMs: Int
+  gpuTimeSeconds: Float
+  tokensGenerated: Int
+  imagesGenerated: Int
+  videoSecondsGenerated: Float
+}
+
+"""A streaming inference event (SSE chunk)."""
+type StreamEvent {
+  requestId: String!
+  eventType: String!
+  partialOutput: JSON
+  progress: Float
+  logEntry: LogEntry
+  isFinal: Boolean!
+}
+
+"""A file stored on fal's CDN."""
+type StorageFile {
+  id: ID!
+  url: URL!
+  filename: String
+  mimeType: String
+  sizeBytes: Int
+  region: StorageRegion
+  expiresAt: DateTime
+  createdAt: DateTime!
+}
+
+"""A signed upload URL for uploading files to fal storage."""
+type UploadUrl {
+  uploadUrl: URL!
+  fileUrl: URL!
+  expiresAt: DateTime!
+  headers: JSON
+}
+
+"""A fal Serverless application."""
+type ServerlessApp {
+  id: ID!
+  appId: String!
+  name: String!
+  owner: String!
+  status: AppStatus!
+  description: String
+  runtime: String
+  gpuType: GpuType
+  minConcurrency: Int!
+  maxConcurrency: Int
+  keepAliveSeconds: Int
+  memoryGb: Float
+  storageGb: Float
+  secrets: [SecretReference!]!
+  volumes: [VolumeMount!]!
+  environment: [EnvironmentVariable!]!
+  deployedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A reference to a secret (name only, value is never returned)."""
+type SecretReference {
+  name: String!
+  scope: SecretScope!
+  createdAt: DateTime!
+}
+
+"""A volume mount for a Serverless app."""
+type VolumeMount {
+  mountPath: String!
+  volumeId: String!
+  sizeGb: Float
+}
+
+"""An environment variable for a Serverless app."""
+type EnvironmentVariable {
+  name: String!
+  value: String
+  isSecret: Boolean!
+}
+
+"""A file on the persistent /data volume of a Serverless app."""
+type AppFile {
+  path: String!
+  sizeBytes: Int
+  isDirectory: Boolean!
+  modifiedAt: DateTime
+}
+
+"""A dedicated GPU compute instance."""
+type ComputeInstance {
+  id: ID!
+  name: String
+  gpuType: GpuType!
+  gpuCount: Int!
+  status: InstanceStatus!
+  sshHost: String
+  sshPort: Int
+  sshUser: String
+  publicIpAddress: String
+  region: String
+  hourlyRate: Float
+  currency: String!
+  startedAt: DateTime
+  stoppedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""An API key for authenticating against fal services."""
+type ApiKey {
+  id: ID!
+  name: String
+  keyPrefix: String!
+  permissions: [ApiKeyPermission!]!
+  isActive: Boolean!
+  lastUsedAt: DateTime
+  expiresAt: DateTime
+  createdAt: DateTime!
+}
+
+"""Usage metrics for a billing period."""
+type UsageRecord {
+  id: ID!
+  modelId: String
+  modelName: String
+  appId: String
+  requestCount: Int!
+  successCount: Int!
+  failureCount: Int!
+  gpuSeconds: Float!
+  imagesGenerated: Int!
+  videoSecondsGenerated: Float!
+  audioMinutesGenerated: Float!
+  costUsd: Float!
+  periodStart: DateTime!
+  periodEnd: DateTime!
+}
+
+"""An invoice or billing statement."""
+type Invoice {
+  id: ID!
+  invoiceNumber: String!
+  periodStart: DateTime!
+  periodEnd: DateTime!
+  subtotalUsd: Float!
+  creditsAppliedUsd: Float!
+  totalUsd: Float!
+  status: InvoiceStatus!
+  pdfUrl: URL
+  issuedAt: DateTime!
+  dueAt: DateTime
+  paidAt: DateTime
+}
+
+enum InvoiceStatus {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+  UNCOLLECTIBLE
+}
+
+"""A webhook configuration registered for a fal application."""
+type WebhookConfig {
+  id: ID!
+  url: URL!
+  events: [WebhookEvent!]!
+  secret: String
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A webhook delivery attempt log."""
+type WebhookDelivery {
+  id: ID!
+  webhookConfigId: String!
+  requestId: String!
+  event: WebhookEvent!
+  responseStatus: Int
+  responseBody: String
+  attemptCount: Int!
+  deliveredAt: DateTime
+  createdAt: DateTime!
+}
+
+"""A real-time inference session over WebSocket."""
+type RealtimeSession {
+  id: ID!
+  modelId: String!
+  sessionUrl: URL!
+  status: RequestStatus!
+  latencyMs: Int
+  framesProcessed: Int
+  createdAt: DateTime!
+  expiresAt: DateTime!
+}
+
+"""A LoRA adapter that can be composed with base models."""
+type LoraAdapter {
+  id: ID!
+  name: String!
+  url: URL!
+  scale: Float
+  description: String
+  tags: [String!]!
+  isPublic: Boolean!
+  createdAt: DateTime!
+}
+
+"""A ControlNet conditioning adapter."""
+type ControlNetAdapter {
+  id: ID!
+  name: String!
+  type: String!
+  url: URL!
+  scale: Float
+  description: String
+}
+
+"""A fine-tuning job for a custom model."""
+type FineTuneJob {
+  id: ID!
+  baseModelId: String!
+  name: String
+  status: RequestStatus!
+  trainingDataUrl: URL
+  outputModelId: String
+  steps: Int
+  learningRate: Float
+  batchSize: Int
+  costUsd: Float
+  startedAt: DateTime
+  completedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Connection / pagination types
+# ─────────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  totalCount: Int
+}
+
+type ModelConnection {
+  edges: [ModelEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ModelEdge {
+  node: Model!
+  cursor: String!
+}
+
+type InferenceRequestConnection {
+  edges: [InferenceRequestEdge!]!
+  pageInfo: PageInfo!
+}
+
+type InferenceRequestEdge {
+  node: InferenceRequest!
+  cursor: String!
+}
+
+type ServerlessAppConnection {
+  edges: [ServerlessAppEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ServerlessAppEdge {
+  node: ServerlessApp!
+  cursor: String!
+}
+
+type ComputeInstanceConnection {
+  edges: [ComputeInstanceEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ComputeInstanceEdge {
+  node: ComputeInstance!
+  cursor: String!
+}
+
+type ApiKeyConnection {
+  edges: [ApiKeyEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApiKeyEdge {
+  node: ApiKey!
+  cursor: String!
+}
+
+type UsageRecordConnection {
+  edges: [UsageRecordEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UsageRecordEdge {
+  node: UsageRecord!
+  cursor: String!
+}
+
+type StorageFileConnection {
+  edges: [StorageFileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type StorageFileEdge {
+  node: StorageFile!
+  cursor: String!
+}
+
+type LoraAdapterConnection {
+  edges: [LoraAdapterEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LoraAdapterEdge {
+  node: LoraAdapter!
+  cursor: String!
+}
+
+type FineTuneJobConnection {
+  edges: [FineTuneJobEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FineTuneJobEdge {
+  node: FineTuneJob!
+  cursor: String!
+}
+
+# ─────────────────────────────────────────────
+# Input types
+# ─────────────────────────────────────────────
+
+input SubmitInferenceInput {
+  modelOwner: String!
+  modelName: String!
+  input: JSON!
+  webhookUrl: URL
+  webhookEvents: [WebhookEvent!]
+}
+
+input CancelInferenceInput {
+  requestId: String!
+  modelOwner: String!
+  modelName: String!
+}
+
+input InitiateUploadInput {
+  filename: String!
+  mimeType: String!
+  sizeBytes: Int
+  region: StorageRegion
+}
+
+input ModelFilterInput {
+  category: ModelCategory
+  tags: [ModelTag!]
+  isPublic: Boolean
+  isFeatured: Boolean
+  searchQuery: String
+  supportedModes: [InvocationMode!]
+}
+
+input InferenceRequestFilterInput {
+  status: RequestStatus
+  modelId: String
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input CreateServerlessAppInput {
+  name: String!
+  description: String
+  gpuType: GpuType
+  minConcurrency: Int
+  maxConcurrency: Int
+  keepAliveSeconds: Int
+  memoryGb: Float
+  storageGb: Float
+  environment: [EnvironmentVariableInput!]
+}
+
+input UpdateServerlessAppInput {
+  appId: String!
+  description: String
+  gpuType: GpuType
+  minConcurrency: Int
+  maxConcurrency: Int
+  keepAliveSeconds: Int
+  memoryGb: Float
+}
+
+input EnvironmentVariableInput {
+  name: String!
+  value: String!
+  isSecret: Boolean
+}
+
+input SetSecretInput {
+  name: String!
+  value: String!
+  scope: SecretScope
+}
+
+input DeleteSecretInput {
+  name: String!
+  scope: SecretScope
+}
+
+input CreateComputeInstanceInput {
+  name: String
+  gpuType: GpuType!
+  gpuCount: Int
+  region: String
+}
+
+input CreateApiKeyInput {
+  name: String
+  permissions: [ApiKeyPermission!]
+  expiresAt: DateTime
+}
+
+input UsageFilterInput {
+  fromDate: DateTime!
+  toDate: DateTime!
+  modelId: String
+  appId: String
+}
+
+input RegisterWebhookInput {
+  url: URL!
+  events: [WebhookEvent!]!
+  secret: String
+}
+
+input UpdateWebhookInput {
+  webhookId: String!
+  url: URL
+  events: [WebhookEvent!]
+  isActive: Boolean
+}
+
+input StartFineTuneInput {
+  baseModelId: String!
+  name: String
+  trainingDataUrl: URL!
+  steps: Int
+  learningRate: Float
+  batchSize: Int
+}
+
+input PaginationInput {
+  first: Int
+  after: String
+  last: Int
+  before: String
+}
+
+input SortInput {
+  field: String!
+  order: SortOrder!
+}
+
+# ─────────────────────────────────────────────
+# Result / payload types
+# ─────────────────────────────────────────────
+
+type SubmitInferencePayload {
+  request: InferenceRequest!
+  queuePosition: Int
+}
+
+type CancelInferencePayload {
+  requestId: String!
+  success: Boolean!
+}
+
+type InitiateUploadPayload {
+  uploadUrl: UploadUrl!
+}
+
+type CreateServerlessAppPayload {
+  app: ServerlessApp!
+}
+
+type UpdateServerlessAppPayload {
+  app: ServerlessApp!
+}
+
+type DeleteServerlessAppPayload {
+  appId: String!
+  success: Boolean!
+}
+
+type SetSecretPayload {
+  name: String!
+  success: Boolean!
+}
+
+type DeleteSecretPayload {
+  name: String!
+  success: Boolean!
+}
+
+type CreateComputeInstancePayload {
+  instance: ComputeInstance!
+}
+
+type StopComputeInstancePayload {
+  instanceId: String!
+  success: Boolean!
+}
+
+type CreateApiKeyPayload {
+  apiKey: ApiKey!
+  rawKey: String!
+}
+
+type RevokeApiKeyPayload {
+  keyId: String!
+  success: Boolean!
+}
+
+type RegisterWebhookPayload {
+  webhook: WebhookConfig!
+}
+
+type UpdateWebhookPayload {
+  webhook: WebhookConfig!
+}
+
+type DeleteWebhookPayload {
+  webhookId: String!
+  success: Boolean!
+}
+
+type StartFineTunePayload {
+  job: FineTuneJob!
+}
+
+type CancelFineTunePayload {
+  jobId: String!
+  success: Boolean!
+}
+
+# ─────────────────────────────────────────────
+# Query root
+# ─────────────────────────────────────────────
+
+type Query {
+  """Look up a single model by owner and name."""
+  model(owner: String!, name: String!): Model
+
+  """Browse the fal model catalog."""
+  models(
+    filter: ModelFilterInput
+    pagination: PaginationInput
+    sort: SortInput
+  ): ModelConnection!
+
+  """Fetch featured / trending models."""
+  featuredModels(limit: Int): [Model!]!
+
+  """Get the current status and output of an inference request."""
+  inferenceRequest(
+    requestId: String!
+    modelOwner: String!
+    modelName: String!
+    includeLogs: Boolean
+  ): InferenceRequest
+
+  """List inference requests for the authenticated user."""
+  inferenceRequests(
+    filter: InferenceRequestFilterInput
+    pagination: PaginationInput
+  ): InferenceRequestConnection!
+
+  """List Serverless apps owned by the authenticated user."""
+  serverlessApps(pagination: PaginationInput): ServerlessAppConnection!
+
+  """Get a single Serverless app by ID."""
+  serverlessApp(appId: String!): ServerlessApp
+
+  """List files on a Serverless app's persistent /data volume."""
+  serverlessAppFiles(appId: String!, path: String): [AppFile!]!
+
+  """List secrets (names only) for Serverless apps."""
+  secrets(scope: SecretScope): [SecretReference!]!
+
+  """List dedicated compute instances."""
+  computeInstances(pagination: PaginationInput): ComputeInstanceConnection!
+
+  """Get a single compute instance by ID."""
+  computeInstance(instanceId: String!): ComputeInstance
+
+  """List API keys for the authenticated user."""
+  apiKeys(pagination: PaginationInput): ApiKeyConnection!
+
+  """Get usage records for a billing period."""
+  usage(
+    filter: UsageFilterInput!
+    pagination: PaginationInput
+  ): UsageRecordConnection!
+
+  """Get invoices for the authenticated user."""
+  invoices(pagination: PaginationInput): [Invoice!]!
+
+  """Get a single invoice by ID."""
+  invoice(invoiceId: String!): Invoice
+
+  """List registered webhook configurations."""
+  webhooks: [WebhookConfig!]!
+
+  """Get a single webhook configuration by ID."""
+  webhook(webhookId: String!): WebhookConfig
+
+  """List webhook delivery attempts."""
+  webhookDeliveries(
+    webhookId: String
+    requestId: String
+    pagination: PaginationInput
+  ): [WebhookDelivery!]!
+
+  """List files uploaded to fal storage."""
+  storageFiles(pagination: PaginationInput): StorageFileConnection!
+
+  """Get a single storage file by ID."""
+  storageFile(fileId: String!): StorageFile
+
+  """List available LoRA adapters."""
+  loraAdapters(
+    searchQuery: String
+    pagination: PaginationInput
+  ): LoraAdapterConnection!
+
+  """List fine-tuning jobs."""
+  fineTuneJobs(pagination: PaginationInput): FineTuneJobConnection!
+
+  """Get a single fine-tuning job by ID."""
+  fineTuneJob(jobId: String!): FineTuneJob
+
+  """Get available GPU types and current availability."""
+  gpuAvailability: [GpuAvailability!]!
+
+  """Get the fal platform status."""
+  platformStatus: PlatformStatus!
+}
+
+# ─────────────────────────────────────────────
+# Mutation root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  """Submit a new inference request to a model."""
+  submitInference(input: SubmitInferenceInput!): SubmitInferencePayload!
+
+  """Cancel a queued or in-progress inference request."""
+  cancelInference(input: CancelInferenceInput!): CancelInferencePayload!
+
+  """Initiate a signed upload URL for uploading a file to fal storage."""
+  initiateUpload(input: InitiateUploadInput!): InitiateUploadPayload!
+
+  """Delete a file from fal storage."""
+  deleteStorageFile(fileId: String!): Boolean!
+
+  """Create a new Serverless app (placeholder; actual deploy via CLI)."""
+  createServerlessApp(input: CreateServerlessAppInput!): CreateServerlessAppPayload!
+
+  """Update configuration for an existing Serverless app."""
+  updateServerlessApp(input: UpdateServerlessAppInput!): UpdateServerlessAppPayload!
+
+  """Delete a Serverless app."""
+  deleteServerlessApp(appId: String!): DeleteServerlessAppPayload!
+
+  """Set or update a secret for Serverless apps."""
+  setSecret(input: SetSecretInput!): SetSecretPayload!
+
+  """Delete a secret for Serverless apps."""
+  deleteSecret(input: DeleteSecretInput!): DeleteSecretPayload!
+
+  """Provision a new dedicated compute instance."""
+  createComputeInstance(input: CreateComputeInstanceInput!): CreateComputeInstancePayload!
+
+  """Stop and deprovision a dedicated compute instance."""
+  stopComputeInstance(instanceId: String!): StopComputeInstancePayload!
+
+  """Create a new API key."""
+  createApiKey(input: CreateApiKeyInput!): CreateApiKeyPayload!
+
+  """Revoke an API key."""
+  revokeApiKey(keyId: String!): RevokeApiKeyPayload!
+
+  """Register a webhook endpoint."""
+  registerWebhook(input: RegisterWebhookInput!): RegisterWebhookPayload!
+
+  """Update an existing webhook configuration."""
+  updateWebhook(input: UpdateWebhookInput!): UpdateWebhookPayload!
+
+  """Delete a webhook configuration."""
+  deleteWebhook(webhookId: String!): DeleteWebhookPayload!
+
+  """Start a fine-tuning job."""
+  startFineTune(input: StartFineTuneInput!): StartFineTunePayload!
+
+  """Cancel a running fine-tuning job."""
+  cancelFineTune(jobId: String!): CancelFineTunePayload!
+}
+
+# ─────────────────────────────────────────────
+# Subscription root
+# ─────────────────────────────────────────────
+
+type Subscription {
+  """Stream progress events for a queued inference request."""
+  inferenceProgress(
+    requestId: String!
+    modelOwner: String!
+    modelName: String!
+  ): StreamEvent!
+
+  """Subscribe to real-time inference output frames (WebSocket session)."""
+  realtimeInference(
+    modelId: String!
+    sessionId: String
+  ): StreamEvent!
+
+  """Subscribe to status changes for a Serverless app."""
+  serverlessAppStatus(appId: String!): ServerlessApp!
+
+  """Subscribe to status changes for a compute instance."""
+  computeInstanceStatus(instanceId: String!): ComputeInstance!
+
+  """Subscribe to webhook delivery events."""
+  webhookDeliveryEvents(webhookId: String!): WebhookDelivery!
+
+  """Subscribe to fine-tune job progress."""
+  fineTuneProgress(jobId: String!): FineTuneJob!
+}
+
+# ─────────────────────────────────────────────
+# Auxiliary types
+# ─────────────────────────────────────────────
+
+"""GPU availability status."""
+type GpuAvailability {
+  gpuType: GpuType!
+  isAvailable: Boolean!
+  queueDepth: Int
+  estimatedWaitSeconds: Int
+  regions: [String!]!
+}
+
+"""Overall fal platform operational status."""
+type PlatformStatus {
+  status: String!
+  description: String
+  components: [ComponentStatus!]!
+  updatedAt: DateTime!
+}
+
+"""Status of a single platform component."""
+type ComponentStatus {
+  name: String!
+  status: String!
+  description: String
+}
