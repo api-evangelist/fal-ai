@@ -113,7 +113,7 @@ apis:
   - url: https://fal.ai/docs/private-serverless-models
     type: Documentation
   - url: https://github.com/fal-ai/fal
-    type: SDK
+    type: SDKs
     name: fal Python SDK and CLI
   - url: openapi/fal-serverless-platform-api-openapi.yml
     type: OpenAPI
@@ -203,45 +203,33 @@ access: 3rd-Party
 common:
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/fal/overview
-- type: ArazzoWorkflows
-  url: arazzo/
-  workflows:
-  - url: arazzo/fal-ai-image-to-image-result-workflow.yml
-    name: fal Upload, Run Image-To-Image With Webhook
-    summary: Upload a reference image, submit an image-to-image job with a webhook,
-      and confirm queue acceptance.
-  - url: arazzo/fal-ai-queue-inference-workflow.yml
-    name: fal Queue Inference
-    summary: Submit a model inference job, poll the queue until it completes, then
-      fetch the result.
-  - url: arazzo/fal-ai-serverless-app-discovery-workflow.yml
-    name: fal Serverless App Discovery
-    summary: List deployed Serverless apps, then fetch full metadata and scaling for
-      the first one.
-  - url: arazzo/fal-ai-serverless-app-files-workflow.yml
-    name: fal Serverless App Files Inspection
-    summary: Confirm a Serverless app exists, then list files on its persistent /data
-      volume.
-  - url: arazzo/fal-ai-set-and-verify-secret-workflow.yml
-    name: fal Set And Verify Serverless Secret
-    summary: Create or replace a Serverless secret, then list secret names to confirm
-      it is present.
-  - url: arazzo/fal-ai-stream-inference-workflow.yml
-    name: fal Streaming Inference
-    summary: Run a model synchronously over the streaming endpoint to receive progressive
-      output.
-  - url: arazzo/fal-ai-submit-and-cancel-workflow.yml
-    name: fal Submit And Conditionally Cancel
-    summary: Submit an inference job, check its status once, and cancel it if it has
-      not finished.
-  - url: arazzo/fal-ai-upload-then-inference-workflow.yml
-    name: fal Upload Asset Then Run Inference
-    summary: Upload a binary reference asset to the fal CDN, then run an image-to-X
-      model against it.
-  - url: arazzo/fal-ai-webhook-submission-workflow.yml
-    name: fal Webhook-Backed Submission
-    summary: Submit an inference job with a webhook callback and confirm it was accepted
-      into the queue.
+- type: Arazzo
+  url: arazzo/fal-ai-image-to-image-result-workflow.yml
+  name: fal Upload, Run Image-To-Image With Webhook
+- type: Arazzo
+  url: arazzo/fal-ai-queue-inference-workflow.yml
+  name: fal Queue Inference
+- type: Arazzo
+  url: arazzo/fal-ai-serverless-app-discovery-workflow.yml
+  name: fal Serverless App Discovery
+- type: Arazzo
+  url: arazzo/fal-ai-serverless-app-files-workflow.yml
+  name: fal Serverless App Files Inspection
+- type: Arazzo
+  url: arazzo/fal-ai-set-and-verify-secret-workflow.yml
+  name: fal Set And Verify Serverless Secret
+- type: Arazzo
+  url: arazzo/fal-ai-stream-inference-workflow.yml
+  name: fal Streaming Inference
+- type: Arazzo
+  url: arazzo/fal-ai-submit-and-cancel-workflow.yml
+  name: fal Submit And Conditionally Cancel
+- type: Arazzo
+  url: arazzo/fal-ai-upload-then-inference-workflow.yml
+  name: fal Upload Asset Then Run Inference
+- type: Arazzo
+  url: arazzo/fal-ai-webhook-submission-workflow.yml
+  name: fal Webhook-Backed Submission
 - type: Portal
   url: https://fal.ai
 - type: Documentation
@@ -276,14 +264,14 @@ common:
   url: https://status.fal.ai
 - type: Blog
   url: https://blog.fal.ai
-- type: SignUp
+- type: Signup
   url: https://fal.ai/login
 - type: Pricing
   url: https://fal.ai/pricing
 - type: Support
   name: Discord
   url: https://discord.gg/fal-ai
-- type: Forum
+- type: Forums
   url: https://discord.gg/fal-ai
 - type: TermsOfService
   url: https://fal.ai/legal/terms-of-service
@@ -297,31 +285,31 @@ common:
   url: https://twitter.com/fal
 - type: GitHubOrganization
   url: https://github.com/fal-ai
-- type: SDK
+- type: SDKs
   name: fal Python Client
   url: https://github.com/fal-ai/fal-client-python
-- type: SDK
+- type: SDKs
   name: fal JavaScript Client
   url: https://github.com/fal-ai/fal-js
-- type: SDK
+- type: SDKs
   name: fal Swift Client
   url: https://github.com/fal-ai/fal-swift
-- type: SDK
+- type: SDKs
   name: fal Java/Kotlin Client
   url: https://github.com/fal-ai/fal-java
-- type: SDK
+- type: SDKs
   name: fal Dart/Flutter Client
   url: https://github.com/fal-ai/fal-dart
-- type: SDK
+- type: SDKs
   name: fal Python SDK / Serverless
   url: https://github.com/fal-ai/fal
-- type: Tool
+- type: Tools
   name: fal Terraform Provider
   url: https://github.com/fal-ai/terraform-provider-fal
-- type: Tool
+- type: Tools
   name: fal Blender Extension
   url: https://github.com/fal-ai/fal-blender-extension
-- type: Tool
+- type: Tools
   name: fal VS Code Extension (Serverless)
   url: https://github.com/fal-ai/serverless-vscode
 - type: CodeExamples
