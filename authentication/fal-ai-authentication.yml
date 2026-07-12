@@ -1,0 +1,20 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/fal-model-apis-openapi.yml, openapi/fal-serverless-platform-api-openapi.yml,
+  openapi/fal-storage-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: FalKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'Pass the fal API key as `Authorization: Key $FAL_KEY`. Keys are issued from
+    the fal dashboard at https://fal.ai/dashboard/keys.'
+  sources:
+  - openapi/fal-model-apis-openapi.yml
+  - openapi/fal-serverless-platform-api-openapi.yml
+  - openapi/fal-storage-api-openapi.yml
