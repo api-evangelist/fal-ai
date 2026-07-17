@@ -1,0 +1,25 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for fal Model APIs
+  version: 1.0.0
+extends: openapi/fal-model-apis-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: fal-ai
+    x-apievangelist-artifacts:
+      mcp: mcp/fal-ai-mcp.yml
+      errors: errors/fal-ai-problem-types.yml
+      conventions: conventions/fal-ai-conventions.yml
+      data-model: data-model/fal-ai-data-model.yml
+      lifecycle: lifecycle/fal-ai-lifecycle.yml
+- target: $.info
+  update:
+    x-apievangelist-async-pattern: queue-submit-poll-or-webhook
+    x-apievangelist-webhooks: HMAC-signed queue completion callbacks
+- target: $.paths['/{model_owner}/{model_name}'].post
+  update:
+    x-apievangelist-note: Primary inference entrypoint; provide fal_webhook to receive an HMAC-signed completion callback.
+- target: $.paths['/{model_owner}/{model_name}/stream'].post
+  update:
+    x-apievangelist-note: SSE streaming variant; parse with the official fal-client SSE parser.

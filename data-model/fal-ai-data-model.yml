@@ -1,0 +1,57 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/fal-model-apis-openapi.yml, openapi/fal-serverless-platform-api-openapi.yml, openapi/fal-storage-api-openapi.yml
+entities:
+- name: InferenceRequest
+  source: openapi/fal-model-apis-openapi.yml#/components/schemas/InferenceRequest
+  key_fields: [prompt, image_url, seed]
+  note: Model-specific payload; each model defines its own schema in the gallery.
+- name: QueuedRequest
+  source: openapi/fal-model-apis-openapi.yml#/components/schemas/QueueAcceptedResponse
+  id_field: request_id
+  key_fields: [request_id, status, response_url, status_url, cancel_url, gateway_request_id]
+- name: RequestStatus
+  source: openapi/fal-model-apis-openapi.yml#/components/schemas/QueueStatusResponse
+  key_fields: [status, queue_position, logs]
+- name: InferenceResult
+  source: openapi/fal-model-apis-openapi.yml#/components/schemas/InferenceResult
+  key_fields: [images, video, audio, seed, timings]
+- name: ServerlessApp
+  source: openapi/fal-serverless-platform-api-openapi.yml#/components/schemas/ServerlessApp
+  id_field: id
+  key_fields: [id, name, endpoint, gpu, keep_alive, min_concurrency, max_concurrency, public]
+- name: Secret
+  source: openapi/fal-serverless-platform-api-openapi.yml#/components/schemas/Secret
+  id_field: name
+  key_fields: [name, created_at]
+- name: FileEntry
+  source: openapi/fal-serverless-platform-api-openapi.yml#/components/schemas/FileEntry
+  id_field: path
+  key_fields: [path, size, modified_at]
+- name: UploadedAsset
+  source: openapi/fal-storage-api-openapi.yml#/components/schemas/InitiateUploadResponse
+  id_field: file_url
+  key_fields: [upload_url, file_url]
+relationships:
+- from: QueuedRequest
+  to: RequestStatus
+  type: has_one
+  via: request_id
+- from: QueuedRequest
+  to: InferenceResult
+  type: has_one
+  via: request_id
+- from: InferenceRequest
+  to: UploadedAsset
+  type: belongs_to
+  via: image_url
+  note: image_url / reference inputs typically point at an https://v3.fal.media asset produced by the Storage API.
+- from: ServerlessApp
+  to: Secret
+  type: has_many
+  via: organization
+  note: Secrets are org-scoped and injected into all Serverless apps in the org.
+- from: ServerlessApp
+  to: FileEntry
+  type: has_many
+  via: /data volume

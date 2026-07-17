@@ -1,0 +1,57 @@
+generated: '2026-06-20'
+method: searched
+source: https://fal.ai/docs/api-reference, npm, PyPI, pub.dev, github.com/fal-ai
+packages:
+- language: javascript
+  registry: npm
+  name: "@fal-ai/client"
+  url: https://www.npmjs.com/package/@fal-ai/client
+  install: npm install @fal-ai/client
+  repo: https://github.com/fal-ai/fal-js
+  official: true
+- language: javascript
+  registry: npm
+  name: "@fal-ai/serverless-client"
+  url: https://www.npmjs.com/package/@fal-ai/serverless-client
+  install: npm install @fal-ai/serverless-client
+  repo: https://github.com/fal-ai/fal-js
+  official: true
+  note: Legacy client package superseded by @fal-ai/client.
+- language: python
+  registry: pypi
+  name: fal-client
+  url: https://pypi.org/project/fal-client/
+  install: pip install fal-client
+  repo: https://github.com/fal-ai/fal-client-python
+  official: true
+- language: python
+  registry: pypi
+  name: fal
+  url: https://pypi.org/project/fal/
+  install: pip install fal
+  repo: https://github.com/fal-ai/fal
+  official: true
+  note: Serverless SDK (@fal.function / fal.App) plus the fal CLI.
+- language: dart
+  registry: pub.dev
+  name: fal_client
+  url: https://pub.dev/packages/fal_client
+  install: dart pub add fal_client
+  repo: https://github.com/fal-ai/fal-dart
+  official: true
+- language: swift
+  registry: swift-package-manager
+  name: FalClient
+  url: https://github.com/fal-ai/fal-swift
+  install: '.package(url: "https://github.com/fal-ai/fal-swift", from: "0.1.0")'
+  repo: https://github.com/fal-ai/fal-swift
+  official: true
+  note: Distributed via Swift Package Manager (GitHub), not a central registry.
+- language: java
+  registry: maven
+  name: ai.fal.client
+  url: https://github.com/fal-ai/fal-java
+  install: 'implementation("ai.fal.client:fal-client")'
+  repo: https://github.com/fal-ai/fal-java
+  official: true
+  note: Java/Kotlin client published from the fal-java repository.

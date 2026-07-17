@@ -1,0 +1,15 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for fal Storage API
+  version: 1.0.0
+extends: openapi/fal-storage-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: fal-ai
+    x-apievangelist-artifacts:
+      data-model: data-model/fal-ai-data-model.yml
+      conventions: conventions/fal-ai-conventions.yml
+- target: $.paths['/storage/upload/initiate'].post
+  update:
+    x-apievangelist-note: Two-step upload — initiate to get a signed URL, PUT the bytes, then pass file_url (https://v3.fal.media/...) as a model input.

@@ -1,0 +1,39 @@
+generated: '2026-06-20'
+method: searched
+source: https://fal.ai/docs/changelog
+scheme: dated
+current_version: null
+notes: >
+  fal publishes a date-stamped product changelog (not semver-versioned). The
+  recent window is captured below; the live changelog is the source of truth.
+entries:
+- date: '2026-07-08'
+  highlight: App-level retry configuration — set default retry budgets at deploy time via the new `retry_config` option.
+  breaking: false
+- date: '2026-06-17'
+  highlight: New Serverless Usage page with attributable, dimensioned reporting of compute spend by app, environment, and machine type.
+  breaking: false
+- date: '2026-06-16'
+  highlight: Redesigned Usage & Billing page supports attribution filtering by auth method, API key, and login username; Docker servers deployable without rewriting as fal.App.
+  breaking: false
+- date: '2026-06-15'
+  highlight: New GET /v1/serverless/usage endpoint reports serverless compute usage per app, environment, and machine type.
+  breaking: false
+- date: '2026-06-07'
+  highlight: New Capacity page reports GPU consumption against account limits with baseline and burst reference lines.
+  breaking: false
+- date: '2026-06-05'
+  highlight: Per-condition retry configuration via the X-Fal-Retry-Config header for independent retry budgets per failure mode.
+  breaking: false
+- date: '2026-06-02'
+  highlight: Filter and sort apps by machine type, active runners, GPUs, or queue size on the apps page.
+  breaking: false
+- date: '2026-05-29'
+  highlight: Configurable termination grace period now supports up to 1 hour so long-running requests can drain before shutdown.
+  breaking: false
+- date: '2026-04-29'
+  highlight: Aggregate analytics dashboard on the Serverless apps page summarizes capacity, traffic, and per-app activity.
+  breaking: false
+- date: '2026-02-25'
+  highlight: Custom tags for serverless apps — organize apps by team, project, or model type from the dashboard.
+  breaking: false

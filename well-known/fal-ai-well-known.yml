@@ -1,0 +1,39 @@
+generated: '2026-06-20'
+method: searched
+source: live probes of /.well-known/* on fal hosts
+notes: >
+  No /.well-known/ discovery documents are published on any fal host. The web
+  origin (fal.ai) returns 404 for all probed paths; the queue gateway
+  (queue.fal.run) returns 405 (method not allowed on GET at those paths); the
+  REST control-plane (rest.alpha.fal.ai) returns 404. No security.txt, OIDC, or
+  OAuth authorization-server metadata is exposed. Absence is expected: fal uses
+  static API-key authentication (Authorization: Key $FAL_KEY), not OAuth/OIDC.
+hosts:
+- host: https://fal.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://queue.fal.run
+  documents:
+  - path: /.well-known/security.txt
+    status: 405
+  - path: /.well-known/openid-configuration
+    status: 405
+  - path: /.well-known/oauth-authorization-server
+    status: 405
+- host: https://rest.alpha.fal.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404

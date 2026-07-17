@@ -1,0 +1,57 @@
+generated: '2026-06-20'
+method: searched
+source: https://fal.ai/docs/api-reference/python-sdk/cli, https://github.com/fal-ai/fal, https://pypi.org/project/fal/
+name: fal
+scope: Serverless workflow — write, test, deploy, scale, and monitor custom GPU apps.
+install:
+- method: pip
+  command: pip install fal
+package: packages/fal-ai-packages.yml
+binary: fal
+commands:
+- group: auth
+  commands:
+  - name: fal auth login
+    description: Authenticate the CLI with a fal account.
+  - name: fal auth logout
+    description: Sign the CLI out.
+  - name: fal auth whoami
+    description: Show the currently authenticated identity.
+- group: deploy
+  commands:
+  - name: fal deploy
+    description: Deploy an application (e.g. `fal deploy my_app.py`) to fal Serverless.
+- group: run
+  commands:
+  - name: fal run
+    description: Test an app on fal before deploying (e.g. `fal run hello_world.py::MyApp`).
+- group: apps
+  commands:
+  - name: fal apps list
+    description: List deployed applications.
+  - name: fal apps scale
+    description: Configure scaling / concurrency (e.g. `--max-concurrency 10 --min-concurrency 1`).
+  - name: fal apps logs
+    description: View application logs.
+- group: runners
+  commands:
+  - name: fal runners list
+    description: View active runners.
+- group: keys
+  commands:
+  - name: fal keys create
+    description: Create API keys.
+- group: secrets
+  commands:
+  - name: fal secrets set
+    description: Create or replace an environment secret.
+  - name: fal secrets list
+    description: List secret names.
+- group: environments
+  commands:
+  - name: fal environments create
+    description: Create an isolated environment (dev / staging / production).
+key_flows:
+- Deploy a custom model - fal auth login then fal deploy my_app.py.
+- Iterate locally - fal run app.py::MyApp before production deploy.
+- Scale for traffic - fal apps scale my-app --max-concurrency 10 --min-concurrency 1.

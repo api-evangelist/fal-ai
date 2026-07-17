@@ -1,0 +1,28 @@
+generated: '2026-06-20'
+method: searched
+probe: true
+source: https://trust.fal.ai
+url: https://trust.fal.ai
+certifications:
+- SOC 2 Type II
+compliance:
+- name: SOC 2 Type II
+  status: certified
+  note: Audit completed; report available for download in the trust center Resources section.
+- name: GDPR
+  status: addressed
+  note: Data handling described in the privacy policy (https://fal.ai/legal/privacy-policy); not a standalone certification.
+enterprise_security:
+- SSO via SAML / OIDC (https://fal.ai/enterprise/sso)
+- Private / dedicated model deployments
+- Private endpoints
+evidence:
+- source: https://trust.fal.ai
+  keywords: [soc 2, trust center, compliance, resources]
+- source: llms/fal-ai-llms.txt
+  keywords: [soc2 compliance, enterprise, security]
+notes: >
+  Trust center is a JavaScript-rendered SafeBase-style portal; SOC 2 Type II
+  confirmed via the portal and fal's enterprise/security pages. Additional
+  frameworks (e.g. ISO 27001) were not confirmed as published certifications at
+  capture time.

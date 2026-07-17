@@ -1,0 +1,19 @@
+generated: '2026-06-20'
+method: searched
+source: https://fal.ai/docs, https://status.fal.ai, https://fal.ai/docs/changelog, https://fal.ai/enterprise
+versioning:
+  scheme: mixed
+  model_api: 'v1 (queue.fal.run has no version prefix in the model path; model identity is model_owner/model_name)'
+  control_plane: 'Newer control-plane endpoints are versioned under /v1/ (e.g. GET /v1/serverless/usage); the current REST host is rest.alpha.fal.ai.'
+  docs: https://fal.ai/docs
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal RFC 8594 Sunset/Deprecation header policy documented. Model deprecations are announced via changelog and Discord.
+sla:
+  uptime_target: '99.99%'
+  tier: enterprise
+  url: https://fal.ai/enterprise
+status_page: https://status.fal.ai
+changelog: https://fal.ai/docs/changelog
+deprecated_operations: []

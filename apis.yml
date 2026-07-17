@@ -21,6 +21,8 @@ apis:
     name: Model Gallery
   - url: openapi/fal-model-apis-openapi.yml
     type: OpenAPI
+  - url: overlays/fal-ai-model-apis-overlay.yaml
+    type: Overlay
   - url: json-schema/fal-queue-request-schema.json
     type: JSONSchema
   - url: json-schema/fal-queue-status-schema.json
@@ -95,6 +97,8 @@ apis:
     type: Documentation
   - url: openapi/fal-storage-api-openapi.yml
     type: OpenAPI
+  - url: overlays/fal-ai-storage-api-overlay.yaml
+    type: Overlay
   description: REST endpoints for uploading binary inputs (images, audio clips, reference
     frames, control maps) to fal's CDN so they can be referenced by URL when invoking
     model APIs. Issues short-lived signed upload URLs via `/storage/upload/initiate`
@@ -117,6 +121,8 @@ apis:
     name: fal Python SDK and CLI
   - url: openapi/fal-serverless-platform-api-openapi.yml
     type: OpenAPI
+  - url: overlays/fal-ai-serverless-platform-api-overlay.yaml
+    type: Overlay
   description: Programmatic management of custom fal Serverless applications — list,
     inspect, deploy, scale, and monitor user-defined GPU functions deployed with `@fal.function`,
     `fal.App`, or BYO containers. Covers app metadata, secrets, file volumes, scaling
@@ -207,6 +213,31 @@ common:
   url: security/fal-ai-domain-security.yml
 - type: Authentication
   url: authentication/fal-ai-authentication.yml
+- type: Packages
+  url: packages/fal-ai-packages.yml
+- type: WellKnown
+  url: well-known/fal-ai-well-known.yml
+- type: MCPServer
+  url: mcp/fal-ai-mcp.yml
+- type: LLMsTxt
+  url: llms/fal-ai-llms.txt
+- type: LLMsTxt
+  name: llms-full
+  url: llms/fal-ai-llms-full.txt
+- type: Conformance
+  url: conformance/fal-ai-conformance.yml
+- type: ErrorCatalog
+  url: errors/fal-ai-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/fal-ai-lifecycle.yml
+- type: Conventions
+  url: conventions/fal-ai-conventions.yml
+- type: DataModel
+  url: data-model/fal-ai-data-model.yml
+- type: ChangeLog
+  url: changelog/fal-ai-changelog.yml
+- type: CLI
+  url: cli/fal-ai-cli.yml
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/fal/overview
 - type: Arazzo
@@ -285,6 +316,9 @@ common:
   url: https://fal.ai/legal/privacy-policy
 - type: TrustCenter
   url: https://trust.fal.ai
+- type: TrustCenter
+  name: Trust Center Artifact
+  url: security/fal-ai-trust-center.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/featuresandlabels
 - type: Twitter
@@ -379,7 +413,7 @@ common:
   - https://blog.fal.ai
   updated: '2026-05-25'
 created: '2026-05-25'
-modified: '2026-05-25'
+modified: '2026-06-20'
 position: Consuming
 description: fal (Features and Labels, Inc.) is a generative media platform providing
   the world's fastest API for running image, video, audio, and multimodal generative

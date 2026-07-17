@@ -1,0 +1,56 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/fal-model-apis-openapi.yml, openapi/fal-serverless-platform-api-openapi.yml, openapi/fal-storage-api-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  shape: '{ "detail": string | array<object> }'
+  note: >
+    fal does not emit RFC 9457 application/problem+json. Errors carry a `detail`
+    field that is either a human-readable string or, for 422 validation failures,
+    an array of FastAPI-style field error objects (loc / msg / type).
+problems:
+- status: 401
+  title: Unauthorized
+  meaning: 'Missing or invalid `Authorization: Key …` header.'
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#submitRequest
+  - openapi/fal-serverless-platform-api-openapi.yml#listApps
+  - openapi/fal-storage-api-openapi.yml#initiateUpload
+- status: 402
+  title: Payment Required
+  meaning: Insufficient credits / unpaid account.
+  remediation: Add credits or a payment method in the fal dashboard billing settings.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#submitRequest
+- status: 404
+  title: Not Found
+  meaning: Request ID, model, or app not found.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#getRequestStatus
+  - openapi/fal-model-apis-openapi.yml#getRequestResult
+  - openapi/fal-serverless-platform-api-openapi.yml#getApp
+- status: 409
+  title: Conflict
+  meaning: Request already finished and cannot be canceled.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#cancelRequest
+- status: 422
+  title: Validation Error
+  meaning: Model input failed validation against the per-model schema (or invalid content_type/file_name on upload).
+  remediation: Consult the model's input schema in the model gallery or via the MCP get_model_schema tool.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#submitRequest
+  - openapi/fal-model-apis-openapi.yml#streamRequest
+  - openapi/fal-storage-api-openapi.yml#initiateUpload
+- status: 429
+  title: Rate Limited
+  meaning: Concurrency or per-key rate limit exceeded.
+  remediation: Reduce concurrent in-flight requests, back off and retry, or request a higher concurrency limit.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#submitRequest
+- status: 500
+  title: Server Error
+  meaning: Internal server error.
+  source_operations:
+  - openapi/fal-model-apis-openapi.yml#submitRequest

@@ -1,0 +1,48 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/*.yml, asyncapi/fal-ai-asyncapi.yml, https://fal.ai/docs
+authentication:
+  style: api-key
+  header: 'Authorization: Key $FAL_KEY'
+  mcp_header: 'Authorization: Bearer YOUR_FAL_KEY'
+  docs: https://fal.ai/docs/authentication
+  see: authentication/fal-ai-authentication.yml
+async_pattern:
+  model: queue
+  description: >
+    Submit a job to POST https://queue.fal.run/{model_owner}/{model_name} which
+    returns a request_id plus status_url / response_url / cancel_url. Poll
+    /requests/{request_id}/status then GET /requests/{request_id} for the result,
+    or receive a webhook callback on completion.
+  states: [IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED, CANCELED]
+webhooks:
+  supported: true
+  trigger: fal_webhook query parameter on submit
+  verification: HMAC signature
+  docs: https://fal.ai/docs/model-apis/webhooks
+streaming:
+  sse: 'POST /{model}/stream returns text/event-stream (event: progress / event: output)'
+  websocket: 'wss://realtime.fal.run for ultra-low-latency bidirectional inference'
+pagination:
+  supported: false
+  note: List endpoints (apps, secrets, files) return unpaginated arrays.
+idempotency:
+  supported: false
+  note: No Idempotency-Key header; each queue submission creates a distinct request_id.
+request_tracing:
+  fields: [gateway_request_id, request_id]
+  note: Queue responses include a gateway_request_id for correlating with fal support/logs.
+retry:
+  header: X-Fal-Retry-Config
+  deploy_option: retry_config
+  note: Per-condition retry budgets can be set via header or at deploy time (see changelog 2026-06-05 / 2026-07-08).
+error_envelope:
+  media_type: application/json
+  shape: '{ "detail": string | array }'
+  see: errors/fal-ai-problem-types.yml
+rate_limiting:
+  model: concurrency
+  signal: HTTP 429
+  see: rate-limits/fal-ai-rate-limits.yml
+versioning:
+  see: lifecycle/fal-ai-lifecycle.yml

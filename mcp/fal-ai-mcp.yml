@@ -1,0 +1,53 @@
+generated: '2026-06-20'
+method: searched
+status: published
+source: https://fal.ai/docs/documentation/setting-up/mcp
+docs: https://fal.ai/docs/documentation/setting-up/mcp
+announcement: https://blog.fal.ai/connect-your-ai-to-1-000-models-with-the-fal-mcp-server/
+server:
+  name: fal-ai
+  transport: http
+  streamable: true
+  url: https://mcp.fal.ai/mcp
+  auth:
+    type: bearer
+    header: 'Authorization: Bearer YOUR_FAL_KEY'
+    note: Uses a personal fal API key. The MCP server is free; you pay only for the model runs you trigger, at standard API pricing.
+install:
+  claude_code: |
+    claude mcp add --transport http fal-ai \
+      https://mcp.fal.ai/mcp \
+      --header "Authorization: Bearer YOUR_FAL_KEY"
+  clients:
+  - Claude Code
+  - Claude Desktop
+  - Cursor
+  - Windsurf
+tools:
+- name: search_models
+  group: discovery
+  description: Search fal's catalog of 1,000+ models by keyword or category.
+- name: get_model_schema
+  group: discovery
+  description: Get the full input/output parameters for any model.
+- name: get_pricing
+  group: discovery
+  description: Check the cost of running a model before you use it.
+- name: search_docs
+  group: discovery
+  description: Search the fal documentation for guides, examples, and API references.
+- name: run_model
+  group: execution
+  description: Run any model and wait for the result.
+- name: submit_job
+  group: execution
+  description: Submit a long-running job and return immediately with a request ID.
+- name: check_job
+  group: execution
+  description: Check job status, fetch results, or cancel a running job.
+- name: upload_file
+  group: utility
+  description: Upload a file (local path or URL) to fal's CDN for use as model input.
+- name: recommend_model
+  group: utility
+  description: Describe what you want to build and get model recommendations.

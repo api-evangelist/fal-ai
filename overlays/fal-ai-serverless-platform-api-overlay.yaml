@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for fal Serverless Platform API
+  version: 1.0.0
+extends: openapi/fal-serverless-platform-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: fal-ai
+    x-apievangelist-artifacts:
+      cli: cli/fal-ai-cli.yml
+      packages: packages/fal-ai-packages.yml
+      changelog: changelog/fal-ai-changelog.yml
+      data-model: data-model/fal-ai-data-model.yml
+- target: $.info
+  update:
+    x-apievangelist-cli: This control-plane backs the `fal` CLI (fal apps, fal secrets, fal deploy).
+- target: $.paths['/serverless/secrets'].post
+  update:
+    x-apievangelist-note: Secrets are org-scoped and never returned; values are write-only.
