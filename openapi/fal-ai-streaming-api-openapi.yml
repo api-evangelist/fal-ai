@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: fal Model APIs Apps Streaming API
+  description: 'The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal''s GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.
+
+    '
+  version: v1
+  contact:
+    name: fal Support
+    url: https://fal.ai/support
+  license:
+    name: fal Terms of Service
+    url: https://fal.ai/legal/terms-of-service
+servers:
+- url: https://queue.fal.run
+  description: Production queue endpoint
+security:
+- FalKeyAuth: []
+tags:
+- name: Streaming
+  description: Server-sent streaming of incremental model output.
+paths:
+  /{model_owner}/{model_name}/stream:
+    post:
+      summary: Stream Model Inference Output
+      description: 'Synchronous streaming endpoint that emits Server-Sent Events as the model produces progressive output (tokens, intermediate frames, diffusion steps). Useful for chatty multimodal models and live previews.
+
+        '
+      operationId: streamRequest
+      tags:
+      - Streaming
+      parameters:
+      - $ref: '#/components/parameters/ModelOwner'
+      - $ref: '#/components/parameters/ModelName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: 'SSE stream of `event: progress` and `event: output` messages.'
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-Sent Events stream.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  responses:
+    ValidationError:
+      description: The model input failed validation against the per-model schema.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: 'Missing or invalid `Authorization: Key …` header.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
+    InferenceRequest:
+      type: object
+      description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
+
+        '
+      additionalProperties: true
+      properties:
+        prompt:
+          type: string
+          description: Natural-language prompt describing the desired output.
+        image_url:
+          type: string
+          format: uri
+          description: Optional reference image URL (commonly an `https://v3.fal.media/...` asset).
+        seed:
+          type: integer
+          description: Optional integer seed for deterministic outputs.
+  parameters:
+    ModelOwner:
+      name: model_owner
+      in: path
+      required: true
+      description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
+      schema:
+        type: string
+    ModelName:
+      name: model_name
+      in: path
+      required: true
+      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
+      schema:
+        type: string
+  securitySchemes:
+    FalKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Pass the fal API key as `Authorization: Key $FAL_KEY`. Keys are issued from the fal dashboard at https://fal.ai/dashboard/keys.
+
+        '

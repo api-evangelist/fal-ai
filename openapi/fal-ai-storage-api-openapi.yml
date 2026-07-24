@@ -1,42 +1,34 @@
 openapi: 3.1.0
 info:
-  title: fal Storage API
-  description: >
-    REST endpoints for uploading binary input assets (images, audio, control
-    maps, reference frames) to fal's CDN so they can be passed by URL when
-    invoking model APIs. Clients first call `/storage/upload/initiate` to obtain
-    a short-lived signed upload URL, then PUT the bytes to the returned URL.
-    Assets are served from `https://v3.fal.media`.
-  version: 'v1'
+  title: fal Model APIs Apps Storage API
+  description: 'The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal''s GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.
+
+    '
+  version: v1
   contact:
     name: fal Support
     url: https://fal.ai/support
   license:
     name: fal Terms of Service
     url: https://fal.ai/legal/terms-of-service
-
 servers:
-  - url: https://rest.alpha.fal.ai
-    description: fal REST control-plane
-
+- url: https://queue.fal.run
+  description: Production queue endpoint
 security:
-  - FalKeyAuth: []
-
+- FalKeyAuth: []
 tags:
-  - name: Storage
-    description: Upload binary assets to the fal CDN.
-
+- name: Storage
+  description: Upload binary assets to the fal CDN.
 paths:
   /storage/upload/initiate:
     post:
       summary: Initiate Asset Upload
-      description: >
-        Request a short-lived signed URL to which the client should PUT the file
-        bytes. Returns both the upload URL and the public CDN URL that should
-        be passed to model APIs once the upload completes.
+      description: 'Request a short-lived signed URL to which the client should PUT the file bytes. Returns both the upload URL and the public CDN URL that should be passed to model APIs once the upload completes.
+
+        '
       operationId: initiateUpload
       tags:
-        - Storage
+      - Storage
       requestBody:
         required: true
         content:
@@ -60,19 +52,35 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/ValidationError'
-
 components:
-  securitySchemes:
-    FalKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: 'Pass the fal API key as `Authorization: Key $FAL_KEY`.'
-
+  responses:
+    ValidationError:
+      description: Invalid `content_type` or `file_name`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
     InitiateUploadRequest:
       type: object
-      required: [content_type, file_name]
+      required:
+      - content_type
+      - file_name
       properties:
         content_type:
           type: string
@@ -80,10 +88,11 @@ components:
         file_name:
           type: string
           description: Original file name. Used to derive the CDN object name.
-
     InitiateUploadResponse:
       type: object
-      required: [upload_url, file_url]
+      required:
+      - upload_url
+      - file_url
       properties:
         upload_url:
           type: string
@@ -93,31 +102,6 @@ components:
           type: string
           format: uri
           description: Public CDN URL to pass to model APIs (e.g. as `image_url`).
-
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                type: object
-
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: Invalid `content_type` or `file_name`.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-
   examples:
     PngImageRequest:
       summary: PNG image upload
@@ -129,3 +113,11 @@ components:
       value:
         upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
         file_url: https://v3.fal.media/files/abc/reference.png
+  securitySchemes:
+    FalKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Pass the fal API key as `Authorization: Key $FAL_KEY`. Keys are issued from the fal dashboard at https://fal.ai/dashboard/keys.
+
+        '
