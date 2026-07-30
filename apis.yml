@@ -1,44 +1,6 @@
 aid: fal-ai
 url: https://raw.githubusercontent.com/api-evangelist/fal-ai/refs/heads/main/apis.yml
 apis:
-- aid: fal-ai:fal-model-apis
-  name: fal Model APIs
-  tags:
-  - AI
-  - Generative AI
-  - Image Generation
-  - Video Generation
-  - Audio Generation
-  - Multimodal
-  - Inference
-  humanURL: https://fal.ai/docs/model-apis/quickstart
-  baseURL: https://queue.fal.run
-  properties:
-  - url: https://fal.ai/docs/model-apis/quickstart
-    type: Documentation
-  - url: https://fal.ai/models
-    type: Documentation
-    name: Model Gallery
-  - url: openapi/fal-model-apis-openapi.yml
-    type: OpenAPI
-  - url: overlays/fal-ai-model-apis-overlay.yaml
-    type: Overlay
-  - url: json-schema/fal-queue-request-schema.json
-    type: JSONSchema
-  - url: json-schema/fal-queue-status-schema.json
-    type: JSONSchema
-  - url: json-ld/fal-ai-context.jsonld
-    type: JSONLD
-  - url: graphql/fal-ai-graphql.md
-    type: GraphQL
-  description: Unified queue-based REST API for invoking 1,000+ generative image,
-    video, audio, and multimodal models hosted on fal's inference infrastructure.
-    Submit a request to `https://queue.fal.run/{model-id}`, poll `/requests/{request_id}/status`
-    or `/requests/{request_id}` for progress and results, or subscribe to webhook
-    callbacks. Supports synchronous responses, asynchronous queueing, server-sent
-    streaming progress, and request cancellation. Powers flagship models including
-    FLUX, Veo 3, Kling 2.5, Wan 2.5, Seedream, Nano Banana, Qwen, SDXL, and Stable
-    Diffusion variants.
 - aid: fal-ai:fal-realtime-api
   name: fal Realtime API
   tags:
@@ -57,12 +19,12 @@ apis:
     type: CodeExamples
   - url: asyncapi/fal-ai-asyncapi.yml
     type: AsyncAPI
-  description: WebSocket-based realtime inference for ultra-low latency interactive
-    generative experiences such as LCM/SDXL sketch-to-image, live-portrait, and realtime
-    upscaling. Bi-directional binary/JSON messaging keeps a persistent connection
-    open so each frame, prompt, or pose adjustment is processed in milliseconds. Powers
-    fal.realtime client utilities used in canvas apps, drawing tools, AR experiences,
-    and live video pipelines.
+  description: >-
+    WebSocket-based realtime inference for ultra-low latency interactive generative experiences such as
+    LCM/SDXL sketch-to-image, live-portrait, and realtime upscaling. Bi-directional binary/JSON messaging
+    keeps a persistent connection open so each frame, prompt, or pose adjustment is processed in milliseconds.
+    Powers fal.realtime client utilities used in canvas apps, drawing tools, AR experiences, and live
+    video pipelines.
 - aid: fal-ai:fal-streaming-api
   name: fal Streaming API
   tags:
@@ -78,55 +40,10 @@ apis:
     type: Documentation
   - url: asyncapi/fal-ai-asyncapi.yml
     type: AsyncAPI
-  description: HTTP streaming endpoint (`/{model-id}/stream`) that emits progressive
-    partial outputs as a model runs — used for LLM/VLM token streams, incremental
-    video frames, and step-by-step image diffusion previews. Compatible with Server-Sent
-    Events parsers in the official fal-client SDKs.
-- aid: fal-ai:fal-storage-api
-  name: fal Storage API
-  tags:
-  - AI
-  - Generative AI
-  - File Upload
-  - Storage
-  - CDN
-  humanURL: https://fal.ai/docs/model-apis/file-uploads
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/docs/model-apis/file-uploads
-    type: Documentation
-  - url: openapi/fal-storage-api-openapi.yml
-    type: OpenAPI
-  - url: overlays/fal-ai-storage-api-overlay.yaml
-    type: Overlay
-  description: REST endpoints for uploading binary inputs (images, audio clips, reference
-    frames, control maps) to fal's CDN so they can be referenced by URL when invoking
-    model APIs. Issues short-lived signed upload URLs via `/storage/upload/initiate`
-    and serves the resulting assets from `https://v3.fal.media`.
-- aid: fal-ai:fal-serverless-platform-api
-  name: fal Serverless Platform API
-  tags:
-  - AI
-  - Serverless
-  - GPU
-  - Deployments
-  - Platform
-  humanURL: https://fal.ai/docs/private-serverless-models
-  baseURL: https://rest.alpha.fal.ai
-  properties:
-  - url: https://fal.ai/docs/private-serverless-models
-    type: Documentation
-  - url: https://github.com/fal-ai/fal
-    type: SDKs
-    name: fal Python SDK and CLI
-  - url: openapi/fal-serverless-platform-api-openapi.yml
-    type: OpenAPI
-  - url: overlays/fal-ai-serverless-platform-api-overlay.yaml
-    type: Overlay
-  description: Programmatic management of custom fal Serverless applications — list,
-    inspect, deploy, scale, and monitor user-defined GPU functions deployed with `@fal.function`,
-    `fal.App`, or BYO containers. Covers app metadata, secrets, file volumes, scaling
-    parameters (`keep_alive`, `min_concurrency`), and execution analytics.
+  description: >-
+    HTTP streaming endpoint (`/{model-id}/stream`) that emits progressive partial outputs as a model runs
+    — used for LLM/VLM token streams, incremental video frames, and step-by-step image diffusion previews.
+    Compatible with Server-Sent Events parsers in the official fal-client SDKs.
 - aid: fal-ai:fal-models-catalog-api
   name: fal Models Catalog API
   tags:
@@ -139,10 +56,10 @@ apis:
   properties:
   - url: https://fal.ai/models
     type: Documentation
-  description: Read-only discovery endpoints for browsing fal's 1,000+ production
-    model catalog, including model metadata, capability tags, pricing per output,
-    supported parameters, example inputs, and OpenAPI schemas per model. Backs the
-    model gallery, search, and SDK tooling.
+  description: >-
+    Read-only discovery endpoints for browsing fal's 1,000+ production model catalog, including model
+    metadata, capability tags, pricing per output, supported parameters, example inputs, and OpenAPI schemas
+    per model. Backs the model gallery, search, and SDK tooling.
 - aid: fal-ai:fal-compute-api
   name: fal Compute API
   tags:
@@ -156,9 +73,9 @@ apis:
   properties:
   - url: https://fal.ai/compute
     type: Documentation
-  description: Provision and manage dedicated GPU instances (H100, H200, A100, B200)
-    with full SSH access for training, fine-tuning, and persistent workloads. Hourly
-    or per-second billing with no lock-in.
+  description: >-
+    Provision and manage dedicated GPU instances (H100, H200, A100, B200) with full SSH access for training,
+    fine-tuning, and persistent workloads. Hourly or per-second billing with no lock-in.
 - aid: fal-ai:fal-keys-api
   name: fal API Keys API
   tags:
@@ -171,9 +88,9 @@ apis:
   properties:
   - url: https://fal.ai/dashboard/keys
     type: Documentation
-  description: 'Manage fal API keys — create, list, scope, and revoke keys used to
-    authenticate against the Model, Storage, Serverless, and Compute APIs via the
-    Authorization: Key $FAL_KEY header.'
+  description: >-
+    Manage fal API keys — create, list, scope, and revoke keys used to authenticate against the Model,
+    Storage, Serverless, and Compute APIs via the Authorization: Key $FAL_KEY header.
 - aid: fal-ai:fal-usage-billing-api
   name: fal Usage and Billing API
   tags:
@@ -187,9 +104,178 @@ apis:
   properties:
   - url: https://fal.ai/dashboard/usage
     type: Documentation
-  description: Programmatic access to usage metrics, per-model spend, GPU-second consumption,
-    and invoicing history. Surfaces the same data shown on the fal dashboard so platform
-    teams can pipe inference cost into internal FinOps tooling.
+  description: >-
+    Programmatic access to usage metrics, per-model spend, GPU-second consumption, and invoicing history.
+    Surfaces the same data shown on the fal dashboard so platform teams can pipe inference cost into internal
+    FinOps tooling.
+- aid: fal-ai:fal-ai-apps-api
+  name: fal Apps API
+  description: List and inspect deployed Serverless apps.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Apps
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-apps-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
+- aid: fal-ai:fal-ai-files-api
+  name: fal Files API
+  description: Manage files on persistent Serverless `/data` volumes.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-files-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
+- aid: fal-ai:fal-ai-queue-api
+  name: fal Queue API
+  description: Submit, inspect, and cancel model inference jobs.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Queue
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-queue-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
+- aid: fal-ai:fal-ai-secrets-api
+  name: fal Secrets API
+  description: Manage per-org secrets injected into Serverless runs.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Secrets
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-secrets-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
+- aid: fal-ai:fal-ai-storage-api
+  name: fal Storage API
+  description: Upload binary assets to the fal CDN.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Storage
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-storage-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
+- aid: fal-ai:fal-ai-streaming-api
+  name: fal Streaming API
+  description: Server-sent streaming of incremental model output.
+  humanURL: https://fal.ai/docs/model-apis/quickstart
+  baseURL: https://queue.fal.run
+  tags:
+  - Streaming
+  properties:
+  - type: OpenAPI
+    url: openapi/fal-ai-streaming-api-openapi.yml
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/quickstart
+  - type: Documentation
+    url: https://fal.ai/models
+  - type: JSONSchema
+    url: json-schema/fal-queue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fal-queue-status-schema.json
+  - type: JSONLD
+    url: json-ld/fal-ai-context.jsonld
+  - type: GraphQL
+    url: graphql/fal-ai-graphql.md
+  - type: Documentation
+    url: https://fal.ai/docs/model-apis/file-uploads
+  - type: Documentation
+    url: https://fal.ai/docs/private-serverless-models
+  - type: SDKs
+    url: https://github.com/fal-ai/fal
 name: fal
 tags:
 - AI
@@ -204,7 +290,20 @@ tags:
 - GPU
 - MCP
 kind: contract
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fal-ai.png
 access: 3rd-Party
 common:
 - type: AgenticAccess
