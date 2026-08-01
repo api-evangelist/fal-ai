@@ -1,0 +1,24 @@
+{
+  "provider": "fal-ai",
+  "sources": [
+    "fal-ai-apps-api-openapi.yml",
+    "fal-ai-files-api-openapi.yml",
+    "fal-ai-queue-api-openapi.yml",
+    "fal-ai-secrets-api-openapi.yml",
+    "fal-ai-storage-api-openapi.yml",
+    "fal-ai-streaming-api-openapi.yml"
+  ],
+  "outputs": [
+    "fal-ai-apps-api-openapi.yml",
+    "fal-ai-files-api-openapi.yml",
+    "fal-ai-queue-api-openapi.yml",
+    "fal-ai-secrets-api-openapi.yml",
+    "fal-ai-storage-api-openapi.yml",
+    "fal-ai-streaming-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
