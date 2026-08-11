@@ -306,6 +306,8 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fal-ai.png
 access: 3rd-Party
 common:
+- type: Overlay
+  url: overlays/fal-ai-model-apis-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/fal-ai-agentic-access.yml
 - type: DomainSecurity
