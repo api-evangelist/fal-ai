@@ -1,0 +1,1434 @@
+{
+  "item": [
+    {
+      "id": "681e15c0-e605-433f-a2b4-0843cc86b7bf",
+      "name": "Queue",
+      "description": {
+        "content": "Submit, inspect, and cancel model inference jobs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5af17620-5803-41bf-9c3d-8759b644a844",
+          "name": "Submit Model Inference Request",
+          "request": {
+            "name": "Submit Model Inference Request",
+            "description": {
+              "content": "Submit a new inference request to the named model. The response includes a `request_id` that can be used to poll status, fetch the final result, or cancel the job. Provide `fal_webhook` as a query parameter to receive a POST callback when the job completes.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":model_owner",
+                ":model_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fal_webhook",
+                  "value": "<uri>",
+                  "description": "Optional webhook URL that fal will POST to when the job finishes."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_owner",
+                  "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_name",
+                  "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"<string>\",\n  \"image_url\": \"<uri>\",\n  \"seed\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7152c840-66c6-423c-8fc2-6552bd0875b3",
+              "name": "Job accepted and queued.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234\",\n  \"status\": \"IN_QUEUE\",\n  \"status_url\": \"https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status\",\n  \"response_url\": \"https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234\",\n  \"cancel_url\": \"https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0f10dd3-24a5-407b-ada9-3e78cfa45fa6",
+              "name": "Missing or invalid `Authorization: Key …` header.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a451b63-b41b-496b-b440-dc2442497788",
+              "name": "Insufficient credits / unpaid account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b6f77b9-191b-4793-848b-1e8213efd1af",
+              "name": "The model input failed validation against the per-model schema.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8d258fc-fa18-48a4-9460-51b0f4abd2ad",
+              "name": "Concurrency or per-key rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "babbfabe-4a5c-462d-91ca-05f75c3d8c98",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fal_webhook",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\",\n  \"image_size\": \"landscape_16_9\",\n  \"num_inference_steps\": 4,\n  \"enable_safety_checker\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6042531-f413-48d0-b628-522eb64a3339",
+          "name": "Get Inference Request Status",
+          "request": {
+            "name": "Get Inference Request Status",
+            "description": {
+              "content": "Retrieve current status (IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED, CANCELED) for a queued request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":model_owner",
+                ":model_name",
+                "requests",
+                ":request_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "logs",
+                  "value": "0",
+                  "description": "When set to `1`, include log lines emitted by the running model."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_owner",
+                  "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_name",
+                  "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "request_id",
+                  "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ea4284e2-f11e-4db1-9afa-3913a4d139bb",
+              "name": "Current status payload.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "logs",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"IN_PROGRESS\",\n  \"logs\": [\n    {\n      \"timestamp\": \"2026-05-25T16:01:02Z\",\n      \"level\": \"INFO\",\n      \"message\": \"Loading checkpoint flux-schnell.safetensors\"\n    },\n    {\n      \"timestamp\": \"2026-05-25T16:01:04Z\",\n      \"level\": \"INFO\",\n      \"message\": \"Step 2/4\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "544a78fa-eb9b-459a-b7bb-c1e60dc8e13f",
+              "name": "Missing or invalid `Authorization: Key …` header.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "logs",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74bf2ba6-243b-48c3-872a-0b7a40df6a13",
+              "name": "Request ID or model not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "logs",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63ded5a3-3512-4baf-aee8-946766d7b6f3",
+          "name": "Get Inference Request Result",
+          "request": {
+            "name": "Get Inference Request Result",
+            "description": {
+              "content": "Retrieve the final result for a completed request. Returns 202 while the job is still running.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":model_owner",
+                ":model_name",
+                "requests",
+                ":request_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_owner",
+                  "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_name",
+                  "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "request_id",
+                  "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6aabd1cc-9dd4-45f9-b526-5665cdb092d4",
+              "name": "Final inference output.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"images\": [\n    {\n      \"url\": \"https://v3.fal.media/files/lion/abc123.png\",\n      \"width\": 1344,\n      \"height\": 768,\n      \"content_type\": \"image/png\"\n    }\n  ],\n  \"seed\": 271828,\n  \"timings\": {\n    \"inference\": 0.83\n  },\n  \"has_nsfw_concepts\": [\n    false\n  ],\n  \"prompt\": \"a futuristic cityscape at sunset, cinematic lighting, ultra-detailed\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b40df3a-d79b-4059-89a0-0ab018cae60e",
+              "name": "Still running. Poll again shortly.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f35ae6cc-a706-456f-a34d-cf0ebc695b80",
+              "name": "Missing or invalid `Authorization: Key …` header.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31eaee5e-cee6-4972-9965-7bbffb32cff4",
+              "name": "Request ID or model not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "886940fd-ff24-452c-8758-d033bf667d3a",
+          "name": "Cancel Inference Request",
+          "request": {
+            "name": "Cancel Inference Request",
+            "description": {
+              "content": "Cancel an in-queue or in-progress request. Released GPU capacity is returned to the pool.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":model_owner",
+                ":model_name",
+                "requests",
+                ":request_id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_owner",
+                  "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "model_name",
+                  "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "request_id",
+                  "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "367db75d-8ddd-4027-b4ce-05bd139570cf",
+              "name": "Cancellation accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"CANCELED\",\n  \"request_id\": \"16f8e195-b32b-65f8-700d-52060935073b\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3772018c-528f-4836-a7e1-5151b1cbfd4d",
+              "name": "Request ID or model not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be66a085-5214-43ca-b6d3-7838e7e7d58a",
+              "name": "Request already finished and cannot be canceled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":model_owner",
+                    ":model_name",
+                    "requests",
+                    ":request_id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_owner",
+                      "description": "(Required) Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "model_name",
+                      "description": "(Required) Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "request_id",
+                      "description": "(Required) Unique identifier for a queued inference job, returned by `submitRequest`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://queue.fal.run",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "67e7abf3-701f-492b-b76d-07bf49eba783",
+    "name": "fal Model APIs Apps Queue API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal's GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.\n\n\nContact Support:\n Name: fal Support",
+      "type": "text/plain"
+    }
+  }
+}

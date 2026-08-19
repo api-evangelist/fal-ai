@@ -1,0 +1,377 @@
+{
+  "item": [
+    {
+      "id": "926cba91-adbc-4d67-8751-cc99d4e1ad44",
+      "name": "Apps",
+      "description": {
+        "content": "List and inspect deployed Serverless apps.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e084dfb9-ba94-4e67-936c-64f7cadc55f8",
+          "name": "List Serverless Apps",
+          "request": {
+            "name": "List Serverless Apps",
+            "description": {
+              "content": "Return every Serverless app deployed under the calling key's organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "serverless",
+                "apps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c3afc5e-2c96-44c5-ba01-5a4475284580",
+              "name": "Apps owned by the organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"my-org/flux-finetune\",\n    \"name\": \"flux-finetune\",\n    \"endpoint\": \"https://fal.run/my-org/flux-finetune\",\n    \"gpu\": \"H100\",\n    \"keep_alive\": 60,\n    \"min_concurrency\": 0,\n    \"max_concurrency\": 8,\n    \"public\": false\n  },\n  {\n    \"id\": \"my-org/sdxl-lcm\",\n    \"name\": \"sdxl-lcm\",\n    \"endpoint\": \"https://fal.run/my-org/sdxl-lcm\",\n    \"gpu\": \"A100\",\n    \"keep_alive\": 120,\n    \"min_concurrency\": 1,\n    \"max_concurrency\": 16,\n    \"public\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d60189c-4613-4442-aa72-ab66df6e3536",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d15f1358-06e0-4dbe-9fb7-50e01985a5e9",
+          "name": "Get Serverless App",
+          "request": {
+            "name": "Get Serverless App",
+            "description": {
+              "content": "Retrieve metadata, endpoint URL, and current scaling parameters for an app.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "serverless",
+                "apps",
+                ":app_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "36b57fa4-98af-4b09-9e56-043557dd131b",
+              "name": "App detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"endpoint\": \"http://KrYKhxWVfsKJYLdmRO.omFc6CZB+CfTY0a,VtI6K9u.,iEbelRHtGjmdRAY\",\n  \"gpu\": \"string\",\n  \"keep_alive\": 5187,\n  \"min_concurrency\": 4902,\n  \"max_concurrency\": 5745,\n  \"public\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06c7e714-eea1-444f-845a-44e8bbe60035",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fec81043-68db-4a5c-b99c-6504d38c1b5b",
+              "name": "App or resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) Serverless app identifier (e.g. `my-org/my-flux-finetune`)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://queue.fal.run",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "11243d95-c525-496f-86fb-546e770dea9e",
+    "name": "fal Model APIs Apps API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal's GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.\n\n\nContact Support:\n Name: fal Support",
+      "type": "text/plain"
+    }
+  }
+}

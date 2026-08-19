@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "beabb733-fb4f-4d7c-ac29-e1283b9d8ddd",
+      "name": "Files",
+      "description": {
+        "content": "Manage files on persistent Serverless `/data` volumes.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c23b83ef-2bcf-413c-888d-0990f5fd1b61",
+          "name": "List Serverless Files",
+          "request": {
+            "name": "List Serverless Files",
+            "description": {
+              "content": "List files on the persistent `/data` volume mounted into Serverless runs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "serverless",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "path",
+                  "value": "<string>",
+                  "description": "Subdirectory path under `/data` to list."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fae39c98-b51c-47bc-8243-db3a76ad0bbd",
+              "name": "File listing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "serverless",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "path",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"path\": \"string\",\n    \"size\": 6212,\n    \"modified_at\": \"1983-01-07T11:39:45.378Z\"\n  },\n  {\n    \"path\": \"string\",\n    \"size\": 3621,\n    \"modified_at\": \"2003-08-23T15:03:33.232Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://queue.fal.run",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d0865c78-625b-4435-85db-02730a524c69",
+    "name": "fal Model APIs Apps Files API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal's GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.\n\n\nContact Support:\n Name: fal Support",
+      "type": "text/plain"
+    }
+  }
+}

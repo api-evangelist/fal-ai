@@ -12,12 +12,11 @@ server:
   auth:
     type: bearer
     header: 'Authorization: Bearer YOUR_FAL_KEY'
-    note: Uses a personal fal API key. The MCP server is free; you pay only for the model runs you trigger, at standard API pricing.
+    note: Uses a personal fal API key. The MCP server is free; you pay only for the model runs you trigger,
+      at standard API pricing.
 install:
-  claude_code: |
-    claude mcp add --transport http fal-ai \
-      https://mcp.fal.ai/mcp \
-      --header "Authorization: Bearer YOUR_FAL_KEY"
+  claude_code: "claude mcp add --transport http fal-ai \\\n  https://mcp.fal.ai/mcp \\\n  --header \"\
+    Authorization: Bearer YOUR_FAL_KEY\"\n"
   clients:
   - Claude Code
   - Claude Desktop
@@ -51,3 +50,10 @@ tools:
 - name: recommend_model
   group: utility
   description: Describe what you want to build and get model recommendations.
+deployment:
+  mode: remote
+  endpoint: https://mcp.fal.ai/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

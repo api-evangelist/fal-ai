@@ -1,0 +1,258 @@
+{
+  "item": [
+    {
+      "id": "f49f6069-9fc1-483f-95c8-294e5c95df2f",
+      "name": "Storage",
+      "description": {
+        "content": "Upload binary assets to the fal CDN.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "473ce4f1-c889-4468-9d6f-b65c1db7e324",
+          "name": "Initiate Asset Upload",
+          "request": {
+            "name": "Initiate Asset Upload",
+            "description": {
+              "content": "Request a short-lived signed URL to which the client should PUT the file bytes. Returns both the upload URL and the public CDN URL that should be passed to model APIs once the upload completes.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "storage",
+                "upload",
+                "initiate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content_type\": \"<string>\",\n  \"file_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3beaa034-5683-4787-be1c-4e6e8eb3bc60",
+              "name": "Signed upload URL.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "storage",
+                    "upload",
+                    "initiate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content_type\": \"image/png\",\n  \"file_name\": \"reference.png\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"upload_url\": \"https://v3-uploads.fal.media/files/abc/upload?signature=…\",\n  \"file_url\": \"https://v3.fal.media/files/abc/reference.png\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ed90527-62e0-4ac4-931c-ea882952392f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "storage",
+                    "upload",
+                    "initiate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content_type\": \"image/png\",\n  \"file_name\": \"reference.png\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a01e36d9-3446-4caa-a254-c714ca394295",
+              "name": "Invalid `content_type` or `file_name`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "storage",
+                    "upload",
+                    "initiate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content_type\": \"image/png\",\n  \"file_name\": \"reference.png\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://queue.fal.run",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "29b9cc41-3f40-461d-82cd-b472500a83c0",
+    "name": "fal Model APIs Apps Storage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The fal Model APIs are a unified queue-based REST surface for invoking 1,000+ production generative image, video, audio, and multimodal models hosted on fal's GPU inference infrastructure. Clients submit a job to `https://queue.fal.run/{model-owner}/{model-name}`, then either poll for status and result, subscribe via webhook, or stream incremental progress.\n\n\nContact Support:\n Name: fal Support",
+      "type": "text/plain"
+    }
+  }
+}
