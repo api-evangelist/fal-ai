@@ -4,6 +4,13 @@ apis:
 - aid: fal-ai:fal-realtime-api
   name: fal Realtime API
   tags:
+  - Artificial Intelligence
+  - Generative AI
+  - Real-Time
+  - WebSocket
+  - Streaming
+  - Inference
+  tags_raw:
   - AI
   - Generative AI
   - Realtime
@@ -28,6 +35,12 @@ apis:
 - aid: fal-ai:fal-streaming-api
   name: fal Streaming API
   tags:
+  - Artificial Intelligence
+  - Generative AI
+  - Streaming
+  - Server-Sent Events
+  - Inference
+  tags_raw:
   - AI
   - Generative AI
   - Streaming
@@ -47,6 +60,11 @@ apis:
 - aid: fal-ai:fal-models-catalog-api
   name: fal Models Catalog API
   tags:
+  - Artificial Intelligence
+  - Generative AI
+  - Catalog
+  - Discovery
+  tags_raw:
   - AI
   - Generative AI
   - Catalog
@@ -63,6 +81,12 @@ apis:
 - aid: fal-ai:fal-compute-api
   name: fal Compute API
   tags:
+  - Artificial Intelligence
+  - GPU
+  - Compute
+  - Infrastructure
+  - Dedicated
+  tags_raw:
   - AI
   - GPU
   - Compute
@@ -79,6 +103,11 @@ apis:
 - aid: fal-ai:fal-keys-api
   name: fal API Keys API
   tags:
+  - Artificial Intelligence
+  - Administration
+  - Authentication
+  - APIKeys
+  tags_raw:
   - AI
   - Administration
   - Authentication
@@ -94,6 +123,12 @@ apis:
 - aid: fal-ai:fal-usage-billing-api
   name: fal Usage and Billing API
   tags:
+  - Artificial Intelligence
+  - Administration
+  - Usage
+  - Billing
+  - FinOps
+  tags_raw:
   - AI
   - Administration
   - Usage
@@ -114,6 +149,8 @@ apis:
   humanURL: https://fal.ai/docs/model-apis/quickstart
   baseURL: https://queue.fal.run
   tags:
+  - Application
+  tags_raw:
   - Apps
   properties:
   - type: OpenAPI
@@ -142,6 +179,8 @@ apis:
   humanURL: https://fal.ai/docs/model-apis/quickstart
   baseURL: https://queue.fal.run
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -278,6 +317,17 @@ apis:
     url: https://github.com/fal-ai/fal
 name: fal
 tags:
+- Artificial Intelligence
+- Generative AI
+- Generative Media
+- Image-Generation
+- Video Generation
+- Audio Generation
+- Inference
+- Serverless
+- GPU
+- MCP
+tags_raw:
 - AI
 - Artificial Intelligence
 - Generative AI
