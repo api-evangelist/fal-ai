@@ -13,11 +13,11 @@ info:
     opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: falStorageApi
-  url: ../openapi/fal-storage-api-openapi.yml
+- name: queueApi
+  url: ../openapi/fal-ai-queue-api-openapi.yml
   type: openapi
-- name: falModelApis
-  url: ../openapi/fal-model-apis-openapi.yml
+- name: storageApi
+  url: ../openapi/fal-ai-storage-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: upload-then-inference

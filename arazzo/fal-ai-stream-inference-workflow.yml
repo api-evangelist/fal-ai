@@ -14,8 +14,8 @@ info:
     underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: falModelApis
-  url: ../openapi/fal-model-apis-openapi.yml
+- name: streamingApi
+  url: ../openapi/fal-ai-streaming-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: stream-inference

@@ -11,8 +11,11 @@ info:
     read and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: falServerlessPlatformApi
-  url: ../openapi/fal-serverless-platform-api-openapi.yml
+- name: appsApi
+  url: ../openapi/fal-ai-apps-api-openapi.yml
+  type: openapi
+- name: filesApi
+  url: ../openapi/fal-ai-files-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: serverless-app-files

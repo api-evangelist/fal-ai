@@ -13,8 +13,8 @@ info:
     description.
   version: 1.0.0
 sourceDescriptions:
-- name: falModelApis
-  url: ../openapi/fal-model-apis-openapi.yml
+- name: queueApi
+  url: ../openapi/fal-ai-queue-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: webhook-submission
