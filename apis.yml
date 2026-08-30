@@ -368,6 +368,9 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/fal-ai.png
 access: 3rd-Party
 common:
+- type: CapabilityMap
+  url: capabilities/fal-ai-capability-edges.yml
+  name: fal Business Capability Map
 - type: Overlay
   url: overlays/fal-ai-model-apis-overlay.yaml
 - type: AgenticAccess

@@ -1,0 +1,36 @@
+slug: fal-ai
+provider: fal
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Electrical Components & Equipment
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Queue
+  spec_file: fal-ai-queue-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: POST /{model_owner}/{model_name}  submitRequest  Submit Model Inference Request
+  reason: Operations submit, poll, retrieve and cancel generative model inference jobs against hosted
+    image/video/audio models — this is AI/ML model serving and operations. Some ambiguity because the
+    surface is also generic job-queue plumbing, so 0.7 rather than higher.
+- tag: Secrets
+  spec_file: fal-ai-secrets-api-openapi.yml
+  capability_id: BC-4210.60
+  capability_id_l1: BC-4210
+  capability_name: Configuration & Secrets Management
+  confidence: 0.7
+  evidence: GET /serverless/secrets  listSecrets; POST /serverless/secrets  setSecret  Set Serverless
+    Secret
+  reason: Manages runtime secrets consumed by deployed serverless functions, which is precisely configuration
+    and secrets management for deployed services. Confidence moderate because it is a narrow two-operation
+    control-plane surface.
