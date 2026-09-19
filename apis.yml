@@ -209,6 +209,8 @@ apis:
   humanURL: https://fal.ai/docs/model-apis/quickstart
   baseURL: https://queue.fal.run
   tags:
+  - Queues
+  tags_raw:
   - Queue
   properties:
   - type: OpenAPI
