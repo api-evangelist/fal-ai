@@ -1,131 +1,137 @@
-specification: API Commons Plans
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
-provider: fal
-providerId: fal-ai
-created: '2026-05-25'
-modified: '2026-05-25'
-reconciled: true
-tags:
-  - AI
-  - Generative AI
-  - Inference
-  - GPU
-  - Per-Output
-description: 'Reconciled plans and pricing for fal Model APIs, Serverless, and Compute. Per-output pricing for
-  image/video/audio model APIs; per-second/per-hour billing for dedicated GPU instances and Serverless apps.
-  Source: fal.ai/pricing.'
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://fal.ai/pricing
 sources:
-  - https://fal.ai/pricing
-  - https://fal.ai/docs/pricing
-  - https://fal.ai/models
+- https://fal.ai/pricing
+provenance:
+  tool: planning/api-economics/harvest_pricing.py
+  run: 20260920T120546
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: per-call
+published: true
+note: Pay-per-use page listing GPU hourly rates (list and discounted 'as low as') plus per-output model
+  API prices. Custom/enterprise deployments direct to Contact Sales / support@fal.ai.
+plan_count: 17
+currency: USD
 plans:
-  - id: fal-pay-as-you-go
-    name: Pay-as-you-go
-    type: usage-based
-    description: Default account model. No subscription, no minimums. All Model APIs and Serverless/Compute usage
-      billed by output, by GPU-second, or by GPU-hour. Add credits in any amount.
-    entries:
-      - label: Minimum top-up
-        name: credits_minimum
-        type: prepay
-        metric: usd
-        limit: -1
-        timeFrame: usage
-        geo: global
-        unit: 1
-        price: '5.00'
-        userMultiplied: false
-        description: Starter credit purchase.
-    elements:
-      - name: Access to 1,000+ generative models
-      - name: Queue, streaming, realtime WebSocket, and webhook delivery
-      - name: 99.99% uptime SLA
-      - name: Standard support (community Discord)
-  - id: fal-enterprise
-    name: Enterprise
-    type: contract
-    description: Custom volume pricing, private endpoints, dedicated capacity, SSO, SOC 2 reports, and named
-      support. Contact sales.
-    entries:
-      - label: Custom
-        name: contract
-        type: contract
-        metric: contract
-        limit: -1
-        timeFrame: contract
-        geo: global
-        unit: 1
-        price: 'Call'
-        userMultiplied: false
-    elements:
-      - name: Volume discounts on Model APIs
-      - name: Private endpoints
-      - name: Reserved GPU capacity
-      - name: SSO and audit logs
-      - name: SOC 2 Type II report
-      - name: Named support
-modelPricing:
-  - category: Image
-    entries:
-      - id: seedream-v4
-        unit: image
-        price: '0.03'
-        notes: 33 images per $1.
-      - id: flux-kontext-pro
-        unit: image
-        price: '0.04'
-        notes: 25 images per $1.
-      - id: nano-banana
-        unit: image
-        price: '0.0398'
-        notes: ~25 images per $1.
-      - id: qwen-image
-        unit: megapixel
-        price: '0.02'
-        notes: 50 MP per $1, normalized.
-      - id: flux-schnell
-        unit: megapixel
-        price: '0.003'
-        notes: Fast 4-step FLUX variant.
-  - category: Video
-    entries:
-      - id: wan-2.5
-        unit: video_second
-        price: '0.05'
-        notes: 20 seconds per $1.
-      - id: kling-2.5-turbo-pro
-        unit: video_second
-        price: '0.07'
-        notes: 14 seconds per $1.
-      - id: veo-3
-        unit: video_second
-        price: '0.40'
-        notes: 3 seconds per $1; flagship Google Veo 3.
-      - id: ovi
-        unit: video
-        price: '0.20'
-        notes: 5 videos per $1.
-  - category: Audio
-    entries:
-      - id: inworld-tts-1.5
-        unit: 1k_characters
-        price: 'see catalog'
-        notes: Per-character pricing.
-gpuPricing:
-  - id: h100
-    name: NVIDIA H100 (80GB)
-    perHour: '1.89'
-    perSecond: '0.0005'
-  - id: h200
-    name: NVIDIA H200 (141GB)
-    perHour: '2.10'
-    perSecond: '0.0006'
-  - id: a100
-    name: NVIDIA A100 (40GB)
-    perHour: '0.99'
-    perSecond: '0.0003'
-  - id: b200
-    name: NVIDIA B200 (184GB)
-    perHour: 'Call'
-    perSecond: 'Call'
+- name: B300 GPU (list price)
+  price_text: $8.50/h
+  price: 8.5
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 288GB VRAM
+- name: B300 GPU (as low as)
+  price_text: $4.49/h
+  price: 4.49
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 288GB VRAM
+- name: B200 GPU (list price)
+  price_text: $6.25/h
+  price: 6.25
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 180GB VRAM
+- name: B200 GPU (as low as)
+  price_text: $3.49/h
+  price: 3.49
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 180GB VRAM
+- name: H200 GPU (list price)
+  price_text: $4.50/h
+  price: 4.5
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 141GB VRAM
+- name: H200 GPU (as low as)
+  price_text: $2.10/h
+  price: 2.1
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 141GB VRAM
+- name: H100 GPU (as low as)
+  price_text: $1.89/hr
+  price: 1.89
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 80GB VRAM
+- name: RTX PRO 6000 (list price)
+  price_text: $2.99/h
+  price: 2.99
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 96GB VRAM
+- name: RTX PRO 6000 (as low as)
+  price_text: $1.10/h
+  price: 1.1
+  currency: USD
+  period: per-use
+  unit: GPU hour
+  included_quota: 96GB VRAM
+- name: Wan 2.5
+  price_text: $ 0.05
+  price: 0.05
+  currency: USD
+  period: per-use
+  unit: second
+  included_quota: 20 seconds per $1
+- name: Kling 2.5 Turbo Pro
+  price_text: $ 0.07
+  price: 0.07
+  currency: USD
+  period: per-use
+  unit: second
+  included_quota: 14 seconds per $1
+- name: Veo 3
+  price_text: $ 0.4
+  price: 0.4
+  currency: USD
+  period: per-use
+  unit: second
+  included_quota: 3 seconds per $1
+- name: Ovi
+  price_text: $ 0.2
+  price: 0.2
+  currency: USD
+  period: per-use
+  unit: video
+  included_quota: 5 videos per $1
+- name: Seedream V4
+  price_text: $ 0.03
+  price: 0.03
+  currency: USD
+  period: per-use
+  unit: image
+  included_quota: 33 images per $1
+- name: Flux Kontext Pro
+  price_text: $ 0.04
+  price: 0.04
+  currency: USD
+  period: per-use
+  unit: image
+  included_quota: 25 images per $1
+- name: Nanobanana
+  price_text: $ 0.0398
+  price: 0.0398
+  currency: USD
+  period: per-use
+  unit: image
+  included_quota: 25 images per $1
+- name: Qwen
+  price_text: $ 0.02
+  price: 0.02
+  currency: USD
+  period: per-use
+  unit: megapixel
+  included_quota: 50 megapixels per $1
