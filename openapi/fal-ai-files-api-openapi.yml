@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: fal Serverless Platform Files API
-  description: 'Platform control-plane endpoints for managing fal Serverless applications — custom GPU functions and apps deployed using `@fal.function`, `fal.App`, or bring-your-own containers. Covers app metadata, scaling, secrets, files, and execution analytics. This API backs the `fal` CLI (`fal apps list`, `fal secrets`, `fal deploy`).
-
-    '
+  description: Platform control-plane endpoints for managing fal Serverless applications — custom GPU functions and apps deployed using `@fal.function`, `fal.App`, or bring-your-own containers. Covers app metadata, scaling, secrets, files, and execution analytics. This API backs the `fal` CLI (`fal apps list`, `fal secrets`, `fal deploy`).
   version: v1
   contact:
     name: fal Support

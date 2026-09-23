@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: fal Serverless Platform Apps API
-  description: 'Platform control-plane endpoints for managing fal Serverless applications — custom GPU functions and apps deployed using `@fal.function`, `fal.App`, or bring-your-own containers. Covers app metadata, scaling, secrets, files, and execution analytics. This API backs the `fal` CLI (`fal apps list`, `fal secrets`, `fal deploy`).
-
-    '
+  description: Platform control-plane endpoints for managing fal Serverless applications — custom GPU functions and apps deployed using `@fal.function`, `fal.App`, or bring-your-own containers. Covers app metadata, scaling, secrets, files, and execution analytics. This API backs the `fal` CLI (`fal apps list`, `fal secrets`, `fal deploy`).
   version: v1
   contact:
     name: fal Support
@@ -62,25 +60,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: App or resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          type: string
     ServerlessApp:
       type: object
       required:
@@ -108,6 +88,11 @@ components:
           type: integer
         public:
           type: boolean
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
   examples:
     AppsExample:
       summary: Two deployed apps
@@ -136,6 +121,19 @@ components:
       description: Serverless app identifier (e.g. `my-org/my-flux-finetune`).
       schema:
         type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: App or resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     FalKeyAuth:
       type: apiKey
