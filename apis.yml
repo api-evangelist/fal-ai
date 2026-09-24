@@ -165,8 +165,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -195,8 +193,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -225,8 +221,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -253,8 +247,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -281,8 +273,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -309,8 +299,6 @@ apis:
     url: json-schema/fal-queue-status-schema.json
   - type: JSONLD
     url: json-ld/fal-ai-context.jsonld
-  - type: GraphQL
-    url: graphql/fal-ai-graphql.md
   - type: Documentation
     url: https://fal.ai/docs/model-apis/file-uploads
   - type: Documentation
@@ -322,13 +310,14 @@ tags:
 - Artificial Intelligence
 - Generative AI
 - Generative Media
-- Image-Generation
+- Image Generation
 - Video Generation
 - Audio Generation
 - Inference
 - Serverless
 - GPU
 - MCP
+- Real-Time
 tags_raw:
 - AI
 - Artificial Intelligence
@@ -341,6 +330,8 @@ tags_raw:
 - Serverless
 - GPU
 - MCP
+- Image-Generation
+- Real-Time
 kind: contract
 deliveryModel:
   model: saas
