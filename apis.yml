@@ -70,7 +70,6 @@ apis:
   - Catalog
   - Discovery
   humanURL: https://fal.ai/models
-  baseURL: https://fal.ai
   properties:
   - url: https://fal.ai/models
     type: Documentation
