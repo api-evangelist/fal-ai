@@ -49,16 +49,30 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  examples:
+    IssuedExample:
+      summary: Signed upload issued
+      value:
+        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
+        file_url: https://v3.fal.media/files/abc/reference.png
+    PngImageRequest:
+      summary: PNG image upload
+      value:
+        content_type: image/png
+        file_name: reference.png
   schemas:
-    ErrorResponse:
+    InitiateUploadRequest:
       type: object
+      required:
+      - content_type
+      - file_name
       properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
+        content_type:
+          type: string
+          description: MIME type of the asset (e.g. `image/png`, `audio/wav`, `video/mp4`).
+        file_name:
+          type: string
+          description: Original file name. Used to derive the CDN object name.
     InitiateUploadResponse:
       type: object
       required:
@@ -73,18 +87,15 @@ components:
           type: string
           format: uri
           description: Public CDN URL to pass to model APIs (e.g. as `image_url`).
-    InitiateUploadRequest:
+    ErrorResponse:
       type: object
-      required:
-      - content_type
-      - file_name
       properties:
-        content_type:
-          type: string
-          description: MIME type of the asset (e.g. `image/png`, `audio/wav`, `video/mp4`).
-        file_name:
-          type: string
-          description: Original file name. Used to derive the CDN object name.
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
   responses:
     Unauthorized:
       description: Missing or invalid API key.
@@ -98,17 +109,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-  examples:
-    PngImageRequest:
-      summary: PNG image upload
-      value:
-        content_type: image/png
-        file_name: reference.png
-    IssuedExample:
-      summary: Signed upload issued
-      value:
-        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
-        file_url: https://v3.fal.media/files/abc/reference.png
   securitySchemes:
     FalKeyAuth:
       type: apiKey

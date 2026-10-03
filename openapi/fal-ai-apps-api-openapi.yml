@@ -61,14 +61,14 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    Unauthorized:
-      description: Missing or invalid API key.
+    NotFound:
+      description: App or resource not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: App or resource not found.
+    Unauthorized:
+      description: Missing or invalid API key.
       content:
         application/json:
           schema:
@@ -82,11 +82,6 @@ components:
       schema:
         type: string
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          type: string
     ServerlessApp:
       type: object
       required:
@@ -114,6 +109,11 @@ components:
           type: integer
         public:
           type: boolean
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
   examples:
     AppsExample:
       summary: Two deployed apps

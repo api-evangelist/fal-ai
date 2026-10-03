@@ -151,6 +151,23 @@ paths:
           description: Request already finished and cannot be canceled.
 components:
   schemas:
+    InferenceRequest:
+      type: object
+      description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
+
+        '
+      additionalProperties: true
+      properties:
+        prompt:
+          type: string
+          description: Natural-language prompt describing the desired output.
+        image_url:
+          type: string
+          format: uri
+          description: Optional reference image URL (commonly an `https://v3.fal.media/...` asset).
+        seed:
+          type: integer
+          description: Optional integer seed for deterministic outputs.
     CancelResponse:
       type: object
       properties:
@@ -161,40 +178,12 @@ components:
         request_id:
           type: string
           format: uuid
-    ErrorResponse:
+    InferenceResult:
       type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
-    QueueAcceptedResponse:
-      type: object
-      required:
-      - request_id
-      - status
-      properties:
-        request_id:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-          - IN_QUEUE
-        response_url:
-          type: string
-          format: uri
-          description: Convenience URL that resolves to the final result once ready.
-        status_url:
-          type: string
-          format: uri
-        cancel_url:
-          type: string
-          format: uri
-        gateway_request_id:
-          type: string
+      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
+
+        '
+      additionalProperties: true
     QueueStatusResponse:
       type: object
       required:
@@ -229,38 +218,43 @@ components:
                 - INFO
                 - WARN
                 - ERROR
-    InferenceRequest:
+    QueueAcceptedResponse:
       type: object
-      description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
-
-        '
-      additionalProperties: true
+      required:
+      - request_id
+      - status
       properties:
-        prompt:
+        request_id:
           type: string
-          description: Natural-language prompt describing the desired output.
-        image_url:
+          format: uuid
+        status:
+          type: string
+          enum:
+          - IN_QUEUE
+        response_url:
           type: string
           format: uri
-          description: Optional reference image URL (commonly an `https://v3.fal.media/...` asset).
-        seed:
-          type: integer
-          description: Optional integer seed for deterministic outputs.
-    InferenceResult:
+          description: Convenience URL that resolves to the final result once ready.
+        status_url:
+          type: string
+          format: uri
+        cancel_url:
+          type: string
+          format: uri
+        gateway_request_id:
+          type: string
+    ErrorResponse:
       type: object
-      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
-
-        '
-      additionalProperties: true
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
   responses:
-    PaymentRequired:
-      description: Insufficient credits / unpaid account.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: The model input failed validation against the per-model schema.
+    NotFound:
+      description: Request ID or model not found.
       content:
         application/json:
           schema:
@@ -271,8 +265,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    RateLimited:
-      description: Concurrency or per-key rate limit exceeded.
+    PaymentRequired:
+      description: Insufficient credits / unpaid account.
       content:
         application/json:
           schema:
@@ -283,27 +277,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Request ID or model not found.
+    ValidationError:
+      description: The model input failed validation against the per-model schema.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimited:
+      description: Concurrency or per-key rate limit exceeded.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
   examples:
-    FluxResultExample:
-      summary: FLUX Schnell output
-      value:
-        images:
-        - url: https://v3.fal.media/files/lion/abc123.png
-          width: 1344
-          height: 768
-          content_type: image/png
-        seed: 271828
-        timings:
-          inference: 0.83
-        has_nsfw_concepts:
-        - false
-        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
     QueueAcceptedExample:
       summary: Queue acceptance
       value:
@@ -319,6 +305,20 @@ components:
         image_size: landscape_16_9
         num_inference_steps: 4
         enable_safety_checker: true
+    FluxResultExample:
+      summary: FLUX Schnell output
+      value:
+        images:
+        - url: https://v3.fal.media/files/lion/abc123.png
+          width: 1344
+          height: 768
+          content_type: image/png
+        seed: 271828
+        timings:
+          inference: 0.83
+        has_nsfw_concepts:
+        - false
+        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
     QueueInProgressExample:
       summary: In-progress status
       value:

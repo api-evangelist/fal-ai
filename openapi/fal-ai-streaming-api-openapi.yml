@@ -48,15 +48,6 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
     InferenceRequest:
       type: object
       description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
@@ -74,6 +65,15 @@ components:
         seed:
           type: integer
           description: Optional integer seed for deterministic outputs.
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
   parameters:
     ModelName:
       name: model_name
