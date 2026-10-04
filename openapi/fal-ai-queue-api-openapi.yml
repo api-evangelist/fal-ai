@@ -151,6 +151,56 @@ paths:
           description: Request already finished and cannot be canceled.
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
+    InferenceResult:
+      type: object
+      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
+
+        '
+      additionalProperties: true
+    CancelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - CANCELED
+        request_id:
+          type: string
+          format: uuid
+    QueueAcceptedResponse:
+      type: object
+      required:
+      - request_id
+      - status
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - IN_QUEUE
+        response_url:
+          type: string
+          format: uri
+          description: Convenience URL that resolves to the final result once ready.
+        status_url:
+          type: string
+          format: uri
+        cancel_url:
+          type: string
+          format: uri
+        gateway_request_id:
+          type: string
     InferenceRequest:
       type: object
       description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
@@ -168,22 +218,6 @@ components:
         seed:
           type: integer
           description: Optional integer seed for deterministic outputs.
-    CancelResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - CANCELED
-        request_id:
-          type: string
-          format: uuid
-    InferenceResult:
-      type: object
-      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
-
-        '
-      additionalProperties: true
     QueueStatusResponse:
       type: object
       required:
@@ -218,61 +252,15 @@ components:
                 - INFO
                 - WARN
                 - ERROR
-    QueueAcceptedResponse:
-      type: object
-      required:
-      - request_id
-      - status
-      properties:
-        request_id:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-          - IN_QUEUE
-        response_url:
-          type: string
-          format: uri
-          description: Convenience URL that resolves to the final result once ready.
-        status_url:
-          type: string
-          format: uri
-        cancel_url:
-          type: string
-          format: uri
-        gateway_request_id:
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
   responses:
-    NotFound:
-      description: Request ID or model not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ServerError:
-      description: Internal server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     PaymentRequired:
       description: Insufficient credits / unpaid account.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: 'Missing or invalid `Authorization: Key …` header.'
+    NotFound:
+      description: Request ID or model not found.
       content:
         application/json:
           schema:
@@ -289,15 +277,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    ServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: 'Missing or invalid `Authorization: Key …` header.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   examples:
-    QueueAcceptedExample:
-      summary: Queue acceptance
-      value:
-        request_id: 9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
-        status: IN_QUEUE
-        status_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status
-        response_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
-        cancel_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel
     FluxSchnellRequest:
       summary: FLUX Schnell text-to-image input
       value:
@@ -305,6 +297,17 @@ components:
         image_size: landscape_16_9
         num_inference_steps: 4
         enable_safety_checker: true
+    QueueInProgressExample:
+      summary: In-progress status
+      value:
+        status: IN_PROGRESS
+        logs:
+        - timestamp: '2026-05-25T16:01:02Z'
+          level: INFO
+          message: Loading checkpoint flux-schnell.safetensors
+        - timestamp: '2026-05-25T16:01:04Z'
+          level: INFO
+          message: Step 2/4
     FluxResultExample:
       summary: FLUX Schnell output
       value:
@@ -319,17 +322,14 @@ components:
         has_nsfw_concepts:
         - false
         prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
-    QueueInProgressExample:
-      summary: In-progress status
+    QueueAcceptedExample:
+      summary: Queue acceptance
       value:
-        status: IN_PROGRESS
-        logs:
-        - timestamp: '2026-05-25T16:01:02Z'
-          level: INFO
-          message: Loading checkpoint flux-schnell.safetensors
-        - timestamp: '2026-05-25T16:01:04Z'
-          level: INFO
-          message: Step 2/4
+        request_id: 9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
+        status: IN_QUEUE
+        status_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status
+        response_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
+        cancel_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel
   parameters:
     RequestId:
       name: request_id
@@ -339,18 +339,18 @@ components:
       schema:
         type: string
         format: uuid
-    ModelName:
-      name: model_name
-      in: path
-      required: true
-      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
-      schema:
-        type: string
     ModelOwner:
       name: model_owner
       in: path
       required: true
       description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
+      schema:
+        type: string
+    ModelName:
+      name: model_name
+      in: path
+      required: true
+      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
       schema:
         type: string
   securitySchemes:

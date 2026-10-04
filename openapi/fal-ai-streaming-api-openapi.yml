@@ -48,6 +48,15 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
     InferenceRequest:
       type: object
       description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
@@ -65,23 +74,7 @@ components:
         seed:
           type: integer
           description: Optional integer seed for deterministic outputs.
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
   parameters:
-    ModelName:
-      name: model_name
-      in: path
-      required: true
-      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
-      schema:
-        type: string
     ModelOwner:
       name: model_owner
       in: path
@@ -89,15 +82,22 @@ components:
       description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
       schema:
         type: string
+    ModelName:
+      name: model_name
+      in: path
+      required: true
+      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
+      schema:
+        type: string
   responses:
-    Unauthorized:
-      description: 'Missing or invalid `Authorization: Key …` header.'
+    ValidationError:
+      description: The model input failed validation against the per-model schema.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: The model input failed validation against the per-model schema.
+    Unauthorized:
+      description: 'Missing or invalid `Authorization: Key …` header.'
       content:
         application/json:
           schema:

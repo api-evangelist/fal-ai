@@ -49,18 +49,16 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
-  examples:
-    IssuedExample:
-      summary: Signed upload issued
-      value:
-        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
-        file_url: https://v3.fal.media/files/abc/reference.png
-    PngImageRequest:
-      summary: PNG image upload
-      value:
-        content_type: image/png
-        file_name: reference.png
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
     InitiateUploadRequest:
       type: object
       required:
@@ -87,24 +85,26 @@ components:
           type: string
           format: uri
           description: Public CDN URL to pass to model APIs (e.g. as `image_url`).
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
+  examples:
+    IssuedExample:
+      summary: Signed upload issued
+      value:
+        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
+        file_url: https://v3.fal.media/files/abc/reference.png
+    PngImageRequest:
+      summary: PNG image upload
+      value:
+        content_type: image/png
+        file_name: reference.png
   responses:
-    Unauthorized:
-      description: Missing or invalid API key.
+    ValidationError:
+      description: Invalid `content_type` or `file_name`.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: Invalid `content_type` or `file_name`.
+    Unauthorized:
+      description: Missing or invalid API key.
       content:
         application/json:
           schema:
