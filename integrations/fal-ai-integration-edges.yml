@@ -37,8 +37,48 @@ edges:
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
+- partner_name: Pipecat
+  partner: pipecat-ai
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/pipecat-ai/pipecat/tree/main/src/pipecat/services/fal
+  coverage_role:
+  - stt
+  framework_signals:
+    packages:
+    - fal
+    roles:
+    - stt
+    vendor_domain: fal.ai
+  matched_by: verified-domain-table
+  detected_by: sweep-voice-ai.py
+  first_seen: '2026-10-15'
+- partner_name: LiveKit Agents
+  partner: livekit
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/livekit/agents/tree/main/livekit-plugins/livekit-plugins-fal
+  coverage_role:
+  - stt
+  framework_signals:
+    packages:
+    - livekit-plugins-fal
+    roles:
+    - stt
+    vendor_domain: fal.ai
+  matched_by: verified-domain-table
+  detected_by: sweep-voice-ai.py
+  first_seen: '2026-10-15'
 generated: '2026-10-13'
 method: searched
 checked:
 - https://developers.cloudflare.com/ai-gateway/usage/providers/
 - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
+- https://github.com/livekit/agents/tree/main/livekit-plugins
+- https://github.com/pipecat-ai/pipecat/tree/main/src/pipecat/services

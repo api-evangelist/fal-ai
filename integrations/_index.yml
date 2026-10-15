@@ -25,3 +25,25 @@
   relationship: system-coverage
   status: not-a-workflow
   arazzo: null
+- slug: fal-ai-pipecat
+  label: Pipecat
+  partner: pipecat-ai
+  partner_name: Pipecat
+  type: coverage
+  channel: partner-built
+  evidence: https://github.com/pipecat-ai/pipecat/tree/main/src/pipecat/services/fal
+  source: edge
+  relationship: system-coverage
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-livekit-agents
+  label: LiveKit Agents
+  partner: livekit
+  partner_name: LiveKit Agents
+  type: coverage
+  channel: partner-built
+  evidence: https://github.com/livekit/agents/tree/main/livekit-plugins/livekit-plugins-fal
+  source: edge
+  relationship: system-coverage
+  status: not-a-workflow
+  arazzo: null
