@@ -60,6 +60,19 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: App or resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     ErrorResponse:
       type: object
@@ -101,19 +114,6 @@ components:
       description: Serverless app identifier (e.g. `my-org/my-flux-finetune`).
       schema:
         type: string
-  responses:
-    NotFound:
-      description: App or resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   examples:
     AppsExample:
       summary: Two deployed apps

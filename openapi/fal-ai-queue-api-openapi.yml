@@ -150,22 +150,108 @@ paths:
         '409':
           description: Request already finished and cannot be canceled.
 components:
+  parameters:
+    ModelName:
+      name: model_name
+      in: path
+      required: true
+      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
+      schema:
+        type: string
+    ModelOwner:
+      name: model_owner
+      in: path
+      required: true
+      description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
+      schema:
+        type: string
+    RequestId:
+      name: request_id
+      in: path
+      required: true
+      description: Unique identifier for a queued inference job, returned by `submitRequest`.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    RateLimited:
+      description: Concurrency or per-key rate limit exceeded.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: 'Missing or invalid `Authorization: Key …` header.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    PaymentRequired:
+      description: Insufficient credits / unpaid account.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Request ID or model not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: The model input failed validation against the per-model schema.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  examples:
+    FluxSchnellRequest:
+      summary: FLUX Schnell text-to-image input
+      value:
+        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
+        image_size: landscape_16_9
+        num_inference_steps: 4
+        enable_safety_checker: true
+    QueueAcceptedExample:
+      summary: Queue acceptance
+      value:
+        request_id: 9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
+        status: IN_QUEUE
+        status_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status
+        response_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
+        cancel_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel
+    QueueInProgressExample:
+      summary: In-progress status
+      value:
+        status: IN_PROGRESS
+        logs:
+        - timestamp: '2026-05-25T16:01:02Z'
+          level: INFO
+          message: Loading checkpoint flux-schnell.safetensors
+        - timestamp: '2026-05-25T16:01:04Z'
+          level: INFO
+          message: Step 2/4
+    FluxResultExample:
+      summary: FLUX Schnell output
+      value:
+        images:
+        - url: https://v3.fal.media/files/lion/abc123.png
+          width: 1344
+          height: 768
+          content_type: image/png
+        seed: 271828
+        timings:
+          inference: 0.83
+        has_nsfw_concepts:
+        - false
+        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        detail:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
-    InferenceResult:
-      type: object
-      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
-
-        '
-      additionalProperties: true
     CancelResponse:
       type: object
       properties:
@@ -176,48 +262,6 @@ components:
         request_id:
           type: string
           format: uuid
-    QueueAcceptedResponse:
-      type: object
-      required:
-      - request_id
-      - status
-      properties:
-        request_id:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-          - IN_QUEUE
-        response_url:
-          type: string
-          format: uri
-          description: Convenience URL that resolves to the final result once ready.
-        status_url:
-          type: string
-          format: uri
-        cancel_url:
-          type: string
-          format: uri
-        gateway_request_id:
-          type: string
-    InferenceRequest:
-      type: object
-      description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
-
-        '
-      additionalProperties: true
-      properties:
-        prompt:
-          type: string
-          description: Natural-language prompt describing the desired output.
-        image_url:
-          type: string
-          format: uri
-          description: Optional reference image URL (commonly an `https://v3.fal.media/...` asset).
-        seed:
-          type: integer
-          description: Optional integer seed for deterministic outputs.
     QueueStatusResponse:
       type: object
       required:
@@ -252,107 +296,63 @@ components:
                 - INFO
                 - WARN
                 - ERROR
-  responses:
-    PaymentRequired:
-      description: Insufficient credits / unpaid account.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Request ID or model not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: The model input failed validation against the per-model schema.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    RateLimited:
-      description: Concurrency or per-key rate limit exceeded.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ServerError:
-      description: Internal server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: 'Missing or invalid `Authorization: Key …` header.'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-  examples:
-    FluxSchnellRequest:
-      summary: FLUX Schnell text-to-image input
-      value:
-        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
-        image_size: landscape_16_9
-        num_inference_steps: 4
-        enable_safety_checker: true
-    QueueInProgressExample:
-      summary: In-progress status
-      value:
-        status: IN_PROGRESS
-        logs:
-        - timestamp: '2026-05-25T16:01:02Z'
-          level: INFO
-          message: Loading checkpoint flux-schnell.safetensors
-        - timestamp: '2026-05-25T16:01:04Z'
-          level: INFO
-          message: Step 2/4
-    FluxResultExample:
-      summary: FLUX Schnell output
-      value:
-        images:
-        - url: https://v3.fal.media/files/lion/abc123.png
-          width: 1344
-          height: 768
-          content_type: image/png
-        seed: 271828
-        timings:
-          inference: 0.83
-        has_nsfw_concepts:
-        - false
-        prompt: a futuristic cityscape at sunset, cinematic lighting, ultra-detailed
-    QueueAcceptedExample:
-      summary: Queue acceptance
-      value:
-        request_id: 9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
-        status: IN_QUEUE
-        status_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/status
-        response_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234
-        cancel_url: https://queue.fal.run/fal-ai/flux/schnell/requests/9a2f1c8e-9b1c-4d6f-9e21-7f3d4e5b1234/cancel
-  parameters:
-    RequestId:
-      name: request_id
-      in: path
-      required: true
-      description: Unique identifier for a queued inference job, returned by `submitRequest`.
-      schema:
-        type: string
-        format: uuid
-    ModelOwner:
-      name: model_owner
-      in: path
-      required: true
-      description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
-      schema:
-        type: string
-    ModelName:
-      name: model_name
-      in: path
-      required: true
-      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
-      schema:
-        type: string
+    InferenceRequest:
+      type: object
+      description: 'Model-specific JSON payload. Each model defines its own schema in the model gallery (https://fal.ai/models). Common fields include `prompt`, `image_url`, `seed`, `num_inference_steps`, and `guidance_scale`.
+
+        '
+      additionalProperties: true
+      properties:
+        prompt:
+          type: string
+          description: Natural-language prompt describing the desired output.
+        image_url:
+          type: string
+          format: uri
+          description: Optional reference image URL (commonly an `https://v3.fal.media/...` asset).
+        seed:
+          type: integer
+          description: Optional integer seed for deterministic outputs.
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
+    QueueAcceptedResponse:
+      type: object
+      required:
+      - request_id
+      - status
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - IN_QUEUE
+        response_url:
+          type: string
+          format: uri
+          description: Convenience URL that resolves to the final result once ready.
+        status_url:
+          type: string
+          format: uri
+        cancel_url:
+          type: string
+          format: uri
+        gateway_request_id:
+          type: string
+    InferenceResult:
+      type: object
+      description: 'Model-specific output. Image models typically return an `images[]` array with signed CDN URLs; video models return `video.url`; audio models return `audio.url`. Always includes a `seed` field for reproducibility.
+
+        '
+      additionalProperties: true
   securitySchemes:
     FalKeyAuth:
       type: apiKey

@@ -50,6 +50,20 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
+    InitiateUploadResponse:
+      type: object
+      required:
+      - upload_url
+      - file_url
+      properties:
+        upload_url:
+          type: string
+          format: uri
+          description: Short-lived signed URL. PUT the file bytes here.
+        file_url:
+          type: string
+          format: uri
+          description: Public CDN URL to pass to model APIs (e.g. as `image_url`).
     ErrorResponse:
       type: object
       properties:
@@ -71,31 +85,17 @@ components:
         file_name:
           type: string
           description: Original file name. Used to derive the CDN object name.
-    InitiateUploadResponse:
-      type: object
-      required:
-      - upload_url
-      - file_url
-      properties:
-        upload_url:
-          type: string
-          format: uri
-          description: Short-lived signed URL. PUT the file bytes here.
-        file_url:
-          type: string
-          format: uri
-          description: Public CDN URL to pass to model APIs (e.g. as `image_url`).
   examples:
-    IssuedExample:
-      summary: Signed upload issued
-      value:
-        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
-        file_url: https://v3.fal.media/files/abc/reference.png
     PngImageRequest:
       summary: PNG image upload
       value:
         content_type: image/png
         file_name: reference.png
+    IssuedExample:
+      summary: Signed upload issued
+      value:
+        upload_url: https://v3-uploads.fal.media/files/abc/upload?signature=…
+        file_url: https://v3.fal.media/files/abc/reference.png
   responses:
     ValidationError:
       description: Invalid `content_type` or `file_name`.

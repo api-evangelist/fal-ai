@@ -47,6 +47,21 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  parameters:
+    ModelName:
+      name: model_name
+      in: path
+      required: true
+      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
+      schema:
+        type: string
+    ModelOwner:
+      name: model_owner
+      in: path
+      required: true
+      description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
+      schema:
+        type: string
   schemas:
     ErrorResponse:
       type: object
@@ -74,21 +89,6 @@ components:
         seed:
           type: integer
           description: Optional integer seed for deterministic outputs.
-  parameters:
-    ModelOwner:
-      name: model_owner
-      in: path
-      required: true
-      description: Owning organization of the model (e.g. `fal-ai`, `black-forest-labs`).
-      schema:
-        type: string
-    ModelName:
-      name: model_name
-      in: path
-      required: true
-      description: Model identifier (e.g. `flux/schnell`, `kling-2.5/text-to-video`, `veo-3`).
-      schema:
-        type: string
   responses:
     ValidationError:
       description: The model input failed validation against the per-model schema.
