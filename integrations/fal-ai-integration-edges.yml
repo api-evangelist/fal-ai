@@ -1,42 +1,4 @@
 edges:
-- partner_name: LiteLLM
-  partner: litellm
-  partner_match: router
-  channel: partner-built
-  direction: partner-built
-  type: coverage
-  relationship: system-coverage
-  evidence: https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
-  coverage_role:
-  - provider
-  router_signals:
-    provider:
-      models: 210
-      router_ids:
-      - fal_ai
-      tools_share: 0.0
-      structured_output_share: 0.0
-  matched_by: verified-token-table
-  detected_by: sweep-model-routing.py
-  first_seen: '2026-10-13'
-- partner_name: Cloudflare AI Gateway
-  partner: cloudflare-ai-gateway
-  partner_match: router
-  channel: partner-built
-  direction: partner-built
-  type: coverage
-  relationship: system-coverage
-  evidence: https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/ai-gateway/usage/providers/fal.mdx
-  coverage_role:
-  - provider
-  router_signals:
-    provider:
-      models: null
-      router_ids:
-      - fal
-  matched_by: verified-token-table
-  detected_by: sweep-model-routing.py
-  first_seen: '2026-10-13'
 - partner_name: Pipecat
   partner: pipecat-ai
   partner_match: framework
@@ -114,6 +76,61 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: LiteLLM
+  partner: litellm
+  partner_match: router
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
+  coverage_role:
+  - provider
+  router_signals:
+    provider:
+      models: 210
+      router_ids:
+      - fal_ai
+      tools_share: 0.0
+      structured_output_share: 0.0
+  matched_by: verified-token-table
+  detected_by: sweep-model-routing.py
+  first_seen: '2026-10-13'
+- partner_name: Cloudflare AI Gateway
+  partner: cloudflare-ai-gateway
+  partner_match: router
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/ai-gateway/usage/providers/fal.mdx
+  coverage_role:
+  - provider
+  router_signals:
+    provider:
+      models: null
+      router_ids:
+      - fal
+  matched_by: verified-token-table
+  detected_by: sweep-model-routing.py
+  first_seen: '2026-10-13'
+- partner_name: Terraform (terraform-registry)
+  partner: terraform
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: terraform-registry
+  evidence: https://registry.terraform.io/providers/fal-ai/fal
+  mirror_of: terraform/integrations/terraform-integration-edges.yml
+  apps:
+  - fal-ai/fal
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: infrastructure-as-code provider registry listing
 generated: '2026-10-13'
 method: searched
 checked:
@@ -128,11 +145,12 @@ checked:
 - https://registry.npmjs.org
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
+- terraform/integrations/terraform-integration-edges.yml
 source:
-- https://api.nuget.org/v3
-- https://crates.io/api/v1
-- https://proxy.golang.org
-- https://pypi.org/pypi
 - https://registry.npmjs.org
-- https://repo1.maven.org/maven2
+- https://pypi.org/pypi
 - https://rubygems.org/api/v1
+- https://crates.io/api/v1
+- https://repo1.maven.org/maven2
+- https://api.nuget.org/v3
+- https://proxy.golang.org
