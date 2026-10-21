@@ -131,6 +131,61 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: infrastructure-as-code provider registry listing
+- partner_name: Andreessen Horowitz (a16z)
+  partner: a16z
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://a16z.com/companies/fal-ai/
+  category: vc portfolio participation
+  contract_reference:
+    register: a16z portfolio (a16z.com/portfolio/, the page's own data-companies JSON)
+    standard: null
+    spec_file: null
+    role: vc-portfolio-company
+    registered_name: fal
+    register_id: https://a16z.com/companies/fal-ai/
+    register_country: null
+    register_website: https://fal.ai/
+    matched_domain: fal.ai
+    matched_by: domain
+    signal_note: 'participation only: the venture firm''s own published portfolio lists the company (investment);
+      an ownership and participation record, not conformance or certification'
+    detected_by: sweep-vc-portfolios.py
+    detected: '2026-10-21'
+    year: '2022'
+    status: Active
+    sector: Enterprise;Infra;Seed
+  detected_by: sweep-vc-portfolios.py
+  first_seen: '2026-10-21'
+- partner_name: Sequoia Capital
+  partner: sequoia-capital
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://sequoiacap.com/companies/fal
+  category: vc portfolio participation
+  contract_reference:
+    register: Sequoia Capital companies (sequoiacap.com/companies/<slug>, from the site's sitemap.xml)
+    standard: null
+    spec_file: null
+    role: vc-portfolio-company
+    registered_name: fal
+    register_id: https://sequoiacap.com/companies/fal
+    register_country: null
+    register_website: https://fal.ai/
+    matched_domain: fal.ai
+    matched_by: domain
+    signal_note: 'participation only: the venture firm''s own published portfolio lists the company (investment);
+      an ownership and participation record, not conformance or certification'
+    detected_by: sweep-vc-portfolios.py
+    detected: '2026-10-21'
+  detected_by: sweep-vc-portfolios.py
+  first_seen: '2026-10-21'
 generated: '2026-10-13'
 method: searched
 checked:
@@ -146,6 +201,12 @@ checked:
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
 - terraform/integrations/terraform-integration-edges.yml
+- https://a16z.com/portfolio/
+- https://www.battery.com/company/
+- https://www.battery.com/wp-admin/admin-ajax.php
+- https://www.indexventures.com/companies/
+- https://www.sequoiacap.com/our-companies/
+- https://www.sequoiacap.com/sitemap.xml
 source:
 - https://registry.npmjs.org
 - https://pypi.org/pypi
