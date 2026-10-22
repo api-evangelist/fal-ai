@@ -87,19 +87,6 @@
   relationship: system-coverage
   status: not-a-workflow
   arazzo: null
-- slug: fal-ai-terraform-terraform-registry
-  label: Terraform (terraform-registry)
-  partner: terraform
-  partner_name: Terraform (terraform-registry)
-  category: infrastructure-as-code provider registry listing
-  type: marketplace
-  marketplace: terraform-registry
-  channel: partner-built
-  evidence: https://registry.terraform.io/providers/fal-ai/fal
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: fal-ai-andreessen-horowitz-a16z
   label: Andreessen Horowitz (a16z)
   partner: a16z
@@ -155,5 +142,31 @@
       an ownership and participation record, not conformance or certification'
     detected_by: sweep-vc-portfolios.py
     detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-terraform-terraform-registry
+  label: Terraform (terraform-registry)
+  partner: terraform
+  partner_name: Terraform (terraform-registry)
+  category: infrastructure-as-code provider registry listing
+  type: marketplace
+  marketplace: terraform-registry
+  channel: partner-built
+  evidence: https://registry.terraform.io/providers/fal-ai/fal
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-vercel-own
+  label: Vercel (own)
+  partner: vercel
+  partner_name: Vercel (own)
+  category: AI
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://vercel.com/marketplace/fal
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null

@@ -114,23 +114,6 @@ edges:
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
-- partner_name: Terraform (terraform-registry)
-  partner: terraform
-  partner_match: mirror
-  mirror_match: register
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: terraform-registry
-  evidence: https://registry.terraform.io/providers/fal-ai/fal
-  mirror_of: terraform/integrations/terraform-integration-edges.yml
-  apps:
-  - fal-ai/fal
-  listing_count: 1
-  detected: '2026-10-21'
-  detected_by: mirror-platform-listings.py
-  category: infrastructure-as-code provider registry listing
 - partner_name: Andreessen Horowitz (a16z)
   partner: a16z
   partner_match: register
@@ -186,6 +169,41 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-vc-portfolios.py
   first_seen: '2026-10-21'
+- partner_name: Terraform (terraform-registry)
+  partner: terraform
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: terraform-registry
+  evidence: https://registry.terraform.io/providers/fal-ai/fal
+  mirror_of: terraform/integrations/terraform-integration-edges.yml
+  apps:
+  - fal-ai/fal
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: infrastructure-as-code provider registry listing
+- partner_name: Vercel (own)
+  partner: vercel
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://vercel.com/marketplace/fal
+  mirror_of: vercel/integrations/vercel-integration-edges.yml
+  apps:
+  - fal
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: AI
+  partner_tier: native
 generated: '2026-10-13'
 method: searched
 checked:
@@ -207,6 +225,7 @@ checked:
 - https://www.indexventures.com/companies/
 - https://www.sequoiacap.com/our-companies/
 - https://www.sequoiacap.com/sitemap.xml
+- vercel/integrations/vercel-integration-edges.yml
 source:
 - https://registry.npmjs.org
 - https://pypi.org/pypi
