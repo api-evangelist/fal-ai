@@ -213,3 +213,34 @@
     detected: '2026-10-22'
   status: not-a-workflow
   arazzo: null
+- slug: fal-ai-pub-dev
+  label: pub.dev
+  partner: pub-dev
+  partner_name: pub.dev
+  category: official SDK (Dart/Flutter)
+  type: register
+  channel: package-registry
+  evidence: https://pub.dev/packages/fal_client
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: pub.dev (public registry JSON)
+    spec_file: null
+    language: Dart/Flutter
+    packages:
+    - name: fal_client
+      version: 0.3.0
+      released: '2024-09-11'
+      released_field: published
+      lapsed: true
+      page: https://pub.dev/packages/fal_client
+      repo_leg: not required (verified publisher)
+      publisher_leg: verified-publisher:fal.ai
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
