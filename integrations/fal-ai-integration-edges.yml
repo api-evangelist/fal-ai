@@ -169,41 +169,6 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-vc-portfolios.py
   first_seen: '2026-10-21'
-- partner_name: Terraform (terraform-registry)
-  partner: terraform
-  partner_match: mirror
-  mirror_match: register
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: terraform-registry
-  evidence: https://registry.terraform.io/providers/fal-ai/fal
-  mirror_of: terraform/integrations/terraform-integration-edges.yml
-  apps:
-  - fal-ai/fal
-  listing_count: 1
-  detected: '2026-10-21'
-  detected_by: mirror-platform-listings.py
-  category: infrastructure-as-code provider registry listing
-- partner_name: Vercel (own)
-  partner: vercel
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://vercel.com/marketplace/fal
-  mirror_of: vercel/integrations/vercel-integration-edges.yml
-  apps:
-  - fal
-  listing_count: 1
-  detected: '2026-10-22'
-  detected_by: mirror-platform-listings.py
-  category: AI
-  partner_tier: native
 - partner_name: Raycast
   partner: raycast
   partner_match: domain
@@ -280,6 +245,74 @@ edges:
     detected: '2026-10-22'
   detected_by: sweep-php-dart-elixir-package-registries.py
   first_seen: '2026-10-22'
+- partner_name: Terraform (terraform-registry)
+  partner: terraform
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: terraform-registry
+  evidence: https://registry.terraform.io/providers/fal-ai/fal
+  mirror_of: terraform/integrations/terraform-integration-edges.yml
+  apps:
+  - fal-ai/fal
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: infrastructure-as-code provider registry listing
+- partner_name: Vercel (own)
+  partner: vercel
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://vercel.com/marketplace/fal
+  mirror_of: vercel/integrations/vercel-integration-edges.yml
+  apps:
+  - fal
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: AI
+  partner_tier: native
+- partner_name: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: hugging-face-hub
+  evidence: https://huggingface.co/fal
+  mirror_of: hugging-face/integrations/hugging-face-integration-edges.yml
+  apps:
+  - fal/cosmos-openvid-1m
+  - fal/image-generation-prompts
+  - fal/cosmos-imagenet
+  - fal/prompt-enhancement-specbench
+  - fal/MiniMax-H3-Realism-People-LoRA
+  - fal/Qwen-Image-Edit-2511-Multiple-Angles-LoRA
+  - fal/FLUX.2-dev-Turbo
+  - fal/flux-klein-9b-virtual-tryon-lora
+  - fal/LTX-2.3-3DREAL-LoRA
+  - fal/virtual-tryoff-lora
+  - fal/ltx2.3-audio-reactive-lora
+  - fal/AuraSR-v2
+  - fal/imgsys
+  - fal/realtime-stable-diffusion
+  - fal/realtime-stable-diffusion-local
+  listing_count: 3
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Hugging Face Hub datasets
+  badges:
+  - Verified publisher (Hugging Face verified organisation)
 generated: '2026-10-13'
 method: searched
 checked:
@@ -307,6 +340,7 @@ checked:
 - https://hex.pm/api
 - https://packagist.org/packages
 - https://pub.dev/api
+- hugging-face/integrations/hugging-face-integration-edges.yml
 source:
 - https://registry.npmjs.org
 - https://pypi.org/pypi

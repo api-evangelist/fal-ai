@@ -144,32 +144,6 @@
     detected: '2026-10-21'
   status: not-a-workflow
   arazzo: null
-- slug: fal-ai-terraform-terraform-registry
-  label: Terraform (terraform-registry)
-  partner: terraform
-  partner_name: Terraform (terraform-registry)
-  category: infrastructure-as-code provider registry listing
-  type: marketplace
-  marketplace: terraform-registry
-  channel: partner-built
-  evidence: https://registry.terraform.io/providers/fal-ai/fal
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: fal-ai-vercel-own
-  label: Vercel (own)
-  partner: vercel
-  partner_name: Vercel (own)
-  category: AI
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://vercel.com/marketplace/fal
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: fal-ai-raycast
   label: Raycast
   partner: raycast
@@ -242,5 +216,44 @@
       24 months'
     detected_by: sweep-php-dart-elixir-package-registries.py
     detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-terraform-terraform-registry
+  label: Terraform (terraform-registry)
+  partner: terraform
+  partner_name: Terraform (terraform-registry)
+  category: infrastructure-as-code provider registry listing
+  type: marketplace
+  marketplace: terraform-registry
+  channel: partner-built
+  evidence: https://registry.terraform.io/providers/fal-ai/fal
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-vercel-own
+  label: Vercel (own)
+  partner: vercel
+  partner_name: Vercel (own)
+  category: AI
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://vercel.com/marketplace/fal
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: fal-ai-hugging-face-hugging-face-hub
+  label: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_name: Hugging Face (hugging-face-hub)
+  category: Hugging Face Hub datasets
+  type: marketplace
+  marketplace: hugging-face-hub
+  channel: partner-built
+  evidence: https://huggingface.co/fal
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null
